@@ -5,7 +5,7 @@ import os
 def main():
     data_path = os.getenv("OUTPUT_PATH", "data/")
     tickers = [
-        "ABBV","CAH","NUE","PPG","SHW","ALB","CAT","GWW","ECL","SPGI"
+        "ABBV"  # ,"CAH","NUE","PPG","SHW","ALB","CAT","GWW","ECL","SPGI"
         
     ]
 
