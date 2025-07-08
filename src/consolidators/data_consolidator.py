@@ -6,6 +6,7 @@ from src.consolidators.stock_price_consolidator import StockPriceConsolidator
 from src.consolidators.balance_sheet_consolidator import BalanceSheetConsolidator
 from src.consolidators.cashflow_consolidator import CashflowConsolidator
 from src.rules.dividend_rules import DividendRules
+from src.rules.value_rules import ValueRules
 from src.data.parquet_storage import ParquetStorage
 
 class DataConsolidator:
@@ -13,11 +14,8 @@ class DataConsolidator:
         self.storage = ParquetStorage(data_path)
 
     def consolidate(self, ticker: str):
-        """
-        Consolidate data from multiple sources into a single DataFrame.
-        This method should be implemented to read from various data sources,
-        process the data, and return a consolidated DataFrame.
-        """
+
+        # create the consolidator objects
         bs = BalanceSheetConsolidator(self.storage)
         cf = CashflowConsolidator(self.storage)
         ps = StockPriceConsolidator(self.storage)
@@ -39,8 +37,13 @@ class DataConsolidator:
         dv_rules = DividendRules()
         df = dv_rules.dividend_yield_rule(df)
         df = dv_rules.dividend_growth_rule(df)
+        v_rules = ValueRules()
+        df = v_rules.dcf_ddm_value_rule(df) # todo:  find a way to introduce growth rates
+        df = v_rules.pe_value_rule(df) # todo:   P/E v Peers and PEG
 
         # tidy and store
         df["symbol"] = ticker
         df.sort_values('fiscalDateEnding')
         self.storage.write_df(df, "CONSOLIDATED", partition_cols=["symbol"], index=False)
+
+        print(df.columns)

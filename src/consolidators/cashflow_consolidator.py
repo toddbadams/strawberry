@@ -24,14 +24,14 @@ class CashflowConsolidator:
         df['capitalExpenditures'] = pd.to_numeric(df['capitalExpenditures'], errors="coerce")
 
         # Calculate free cashflow:    FCF = Operating Cash Flow – Capital Expenditures
-        df['freeCashflow'] = (df['operatingCashflow'] - df['capitalExpenditures'])
+        df['free_cashflow'] = (df['operatingCashflow'] - df['capitalExpenditures'])
 
         # free cashflow for last 12 months (TTM)
-        df['freeCashflowTTM'] = df['freeCashflow'].rolling(window=4).sum()
+        df['free_cashflow_TTM'] = df['free_cashflow'].rolling(window=4).sum()
 
         # free cashflow per share for last 12 months 
-        df["freeCashflowPerShareTTM"] = (df['freeCashflowTTM'] / df['sharesOutstanding']).round(2)
+        df["free_cashflow_ps_TTM"] = (df['free_cashflow_TTM'] / df['sharesOutstanding']).round(2)
        
         # Remove columns that are not needed
-        df.drop(columns=['operatingCashflow', 'capitalExpenditures', 'freeCashflow'], inplace=True)      
+        df.drop(columns=['operatingCashflow', 'capitalExpenditures', 'free_cashflow'], inplace=True)      
         return df
