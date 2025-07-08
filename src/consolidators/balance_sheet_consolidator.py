@@ -16,7 +16,7 @@ class BalanceSheetConsolidator:
         
         # shares outstanding
         df.rename(columns={'commonStockSharesOutstanding': 'sharesOutstanding'}, inplace=True)
-        self._column_to_numeric(df, 'sharesOutstanding') 
+        df['sharesOutstanding'] = pd.to_numeric(df['sharesOutstanding'], errors="coerce")
 
         #  year and quarter
         df["year"] = df["fiscalDateEnding"].dt.year

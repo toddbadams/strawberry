@@ -10,6 +10,7 @@ class StockPriceConsolidator:
 
     def consolidate(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
         ps = self.storage.read_df("TIME_SERIES_MONTHLY_ADJUSTED", ticker)
+        
         # convert date
         ps['date'] = pd.to_datetime(ps['date'])  
 
