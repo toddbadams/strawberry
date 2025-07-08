@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Streamlit: Debug app.py",
+      "type": "python",
+      "request": "launch",
+      "module": "streamlit",
+      "args": [
+        "run",                // streamlit command
+        "app.py",             // path to your Streamlit script
+        "--server.port=8501", // optional: set port
+        "--server.headless=true"
+      ],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
