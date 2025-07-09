@@ -1,42 +1,11 @@
 import os
 import streamlit as st
 import pandas as pd
-import altair as alt
 
-from src.data.parquet_storage import ParquetStorage
-import src.streamlit.streamlit_plots as plots
+from src.parquet.parquet_storage import ParquetStorage
+import src.altair_graphs.altair_grapher as plots
 
-def raw_metrics(tickers):
-    ticker = st.sidebar.selectbox("Select Ticker", tickers)
-    metrics = ['Company', 
-               'Dividend Growth', 'Dividend Return', 'Dividend Yield', 
-               'DCF/DDM Value', 'P/E Value',
-               'Health', 'Moat']
-    metric = st.sidebar.selectbox("Select Rule", metrics)
-    df_ticker = ps.read_df("consolidated", ticker).set_index('fiscalDateEnding')
-    co_ticker = ps.read_df("overview", ticker)
 
-    if metric == metrics[0]:
-        sl_plotter.overview_table(co_ticker)
-
-    elif metric == metrics[1]:
-        st.header("Dividend Growth")
-        st.text("Annual dividend increase of at least 0.5 percent over the past 5–10 years.")
-        sl_plotter.dividend_growth_plot(df_ticker)
-        sl_plotter.dividend_table(df_ticker)
-
-    elif metric == metrics[2]:
-        st.header("Dividend Return")
-        st.text("(Current yield) + (5 yr average dividend growth rate) > 12 %.")
-        sl_plotter.dividend_return_plot(df_ticker)
-        sl_plotter.dividend_table(df_ticker)
-
-    elif metric == metrics[3]:
-        st.header("Dividend Yield")
-        st.text("Dividend yield at least 1 σ (standard deviation) above its 5-year historical average.")
-        sl_plotter.yield_z_score_plot(df_ticker)
-        sl_plotter.high_relative_yield_plot(df_ticker)
-        sl_plotter.dividend_table(df_ticker)
 
 
 def load_overview_data():
@@ -47,7 +16,7 @@ ov = load_overview_data()
 tickers = sorted(ov['symbol'].unique())
 data_path = os.getenv("OUTPUT_PATH", "data/")
 ps = ParquetStorage(data_path)
-sl_plotter = plots.StreamLitPlotter()
+sl_plotter = plots.AltairGrapher()
 
 st.set_page_config(
     page_title="Dividend-Focused Portfolio Dashboard",
