@@ -1,5 +1,5 @@
 
-from src.financial_data_extractor import FinancialDataExtractor
+from src.alpha_vantage.financial_data_injestor import FinancialDataInjestor
 import os
 
 def main():
@@ -18,7 +18,8 @@ def main():
 
     for ticker in tickers:
         print(f"extracting ticker: {ticker}")
-        FinancialDataExtractor(av_api_key,data_path,ticker,av_url).extract()
+        if not FinancialDataInjestor(av_api_key,data_path,ticker,av_url).extract():
+            break
 
 if __name__ == "__main__":
     main()
