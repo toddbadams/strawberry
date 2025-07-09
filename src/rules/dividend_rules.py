@@ -28,7 +28,7 @@ class DividendRules:
         df[f"dividendTTM"] = df["dividend"].rolling(window=4).sum()
 
         # Dividend yield 
-        df['dividend_yield'] = df['dividendTTM'] / df['sharePrice']
+        df['dividend_yield'] = df['dividendTTM'] / df['share_price']
 
         # 20-quarter rolling (5-year) stats
         df['yield_historical_mean_5y'] = df['dividend_yield'].rolling(window=20, min_periods=1).mean()

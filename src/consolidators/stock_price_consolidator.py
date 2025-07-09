@@ -9,23 +9,26 @@ class StockPriceConsolidator:
 
 
     def consolidate(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
-        ps = self.storage.read_df("TIME_SERIES_MONTHLY_ADJUSTED", ticker)
+        ps = self.storage.read_df('TIME_SERIES_MONTHLY_ADJUSTED', ticker)
         
+        # get required columns
+        ps = ps[['date', '5. adjusted close']]
+        
+        # rename columns
+        ps.rename(columns={'date': 'qtr_end_date',
+                           '5. adjusted close': 'share_price'}, inplace=True)
+
         # convert date
-        ps['date'] = pd.to_datetime(ps['date'])  
+        ps['qtr_end_date'] = pd.to_datetime(ps['qtr_end_date'])  
+        
+        # convert to number
+        ps['share_price'] = pd.to_numeric(ps['share_price'], errors='coerce')
 
         # get adjusted closing price at end of quarter
         price_q = (
-            ps.set_index("date")
-            .resample("Q")["5. adjusted close"].last()
+            ps.set_index('qtr_end_date')
+            .resample('Q')['share_price'].last()
             .reset_index()
-            .rename(columns={"date": "fiscalDateEnding", "5. adjusted close": "sharePrice"})
         )
-        price_q["sharePrice"] = pd.to_numeric(price_q["sharePrice"], errors="coerce")
 
-        # merge
-        df = df.merge(price_q[["fiscalDateEnding", "sharePrice"]],on="fiscalDateEnding", how="left")
-       
-        #df['sharePrice_avg_5Y'] = df['sharePrice'].rolling(window=20).mean()
-        #df['sharePrice_avg_10Y'] = df['sharePrice'].rolling(window=40).mean()
-        return df
+        return df.merge(ps, on='qtr_end_date', how='left')

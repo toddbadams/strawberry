@@ -43,7 +43,8 @@ class DataConsolidator:
 
         # tidy and store
         df["symbol"] = ticker
-        df.sort_values('fiscalDateEnding')
+        df.sort_values('qtr_end_date')
         self.storage.write_df(df, "CONSOLIDATED", partition_cols=["symbol"], index=False)
 
         print(df.columns)
+        print(df.info())

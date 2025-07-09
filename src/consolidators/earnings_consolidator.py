@@ -1,25 +1,28 @@
 import pandas as pd
 from src.data.parquet_storage import ParquetStorage
 
-
 class EarningsConsolidator:
 
     def __init__(self, ps: ParquetStorage):
         self.storage = ps
 
-
     def consolidate(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
-        er = self.storage.read_df("EARNINGS", ticker)
+        er = self.storage.read_df('EARNINGS', ticker)
+
         # get required columns
-        er_sel = er[["fiscalDateEnding", "reportedEPS", "estimatedEPS", "surprisePercentage"]].copy()
+        er = er[['fiscalDateEnding', 'reportedEPS', 'estimatedEPS', 'surprisePercentage']].copy()
+
+        # rename reportedEPS to EPS
+        er = er.rename(columns={'fiscalDateEnding': 'qtr_end_date', 
+                                'reportedEPS': 'eps',
+                                'estimatedEPS': 'estimated_eps',
+                                'surprisePercentage': 'surprise_eps_pct'})
 
         # convert date
-        er_sel['fiscalDateEnding'] = pd.to_datetime(er_sel['fiscalDateEnding'])  
+        er['qtr_end_date'] = pd.to_datetime(er['qtr_end_date'])  
 
         # convert numbers
-        for col in ["reportedEPS", "estimatedEPS", "surprisePercentage"]:
-            er_sel[col] = pd.to_numeric(er_sel[col], errors="coerce")
+        for col in ['eps', 'estimated_eps', 'surprise_eps_pct']:
+            er[col] = pd.to_numeric(er[col], errors='coerce')
 
-        # merge
-        df = df.merge(er_sel, on="fiscalDateEnding", how="left")
-        return df
+        return df.merge(er, on='qtr_end_date', how='left')
