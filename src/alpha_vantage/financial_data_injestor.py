@@ -1,9 +1,9 @@
 import pandas as pd
-from src.data.alpha_vantage_api import AlphaVantageAPI
-from src.data.parquet_storage import ParquetStorage
+from src.alpha_vantage.alpha_vantage_api import AlphaVantageAPI
+from src.parquet.parquet_storage import ParquetStorage
 
 
-class FinancialDataExtractor:
+class FinancialDataInjestor:
     """
     High-level extractor of financial data via AlphaVantageAPI and storing to ParquetStorage.
     """
@@ -33,7 +33,7 @@ class FinancialDataExtractor:
         df['symbol'] = self.symbol
         self.storage.write_df(df, table_name, partition_cols=['symbol'], index=False)
 
-    def __fetch_historical_dividends(self):
+    def __fetch_historical_dividends(self) -> bool:
         """
         Fetches historical dividend data for the symbol and stores it in Parquet format.
         """
@@ -42,16 +42,22 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Dividenss already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         data = data['data']
         self.__extract(data, name)
+        return True
 
     def read_historical_dividends(self) -> pd.DataFrame:
         return self.storage.read_df("DIVIDENDS", filters=[('symbol', '=', self.symbol)])
 
-    def __fetch_monthly_adjusted_time_series(self):
+    def __fetch_monthly_adjusted_time_series(self) -> bool:
         """
         This API returns monthly adjusted time series (last trading day of each month, monthly open, monthly high, monthly low, 
         monthly close, monthly adjusted close, monthly volume, monthly dividend) of the equity specified, covering 20+ years of 
@@ -62,20 +68,26 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Time series already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         data = data['Monthly Adjusted Time Series']
         df = pd.DataFrame.from_dict(data, orient="index")
         df = df.reset_index()
         df.rename(columns={'index': 'date'}, inplace=True)
         df['symbol'] = self.symbol
         self.storage.write_df(df, name, partition_cols=['symbol'], index=False)
+        return True
 
     def read_monthly_adjusted_time_series(self) -> pd.DataFrame:
         return self.storage.read_df("TIME_SERIES_MONTHLY_ADJUSTED", filters=[('symbol', '=', self.symbol)])
 
-    def __fetch_insider_transactions(self):
+    def __fetch_insider_transactions(self) -> bool:
         """
         This API returns the latest and historical insider transactions made by key stakeholders 
         (e.g., founders, executives, board members, etc.) of a specific company.
@@ -85,15 +97,21 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Insider transactions already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         self.__extract(data['data'], name)
+        return True
 
     def read_insider_transactions(self) -> pd.DataFrame:
         return self.storage.read_df("INSIDER_TRANSACTIONS", filters=[('symbol', '=', self.symbol)])
 
-    def __fetch_company_overview(self):
+    def __fetch_company_overview(self) -> bool:
         """
         This API returns the company information, financial ratios, and other key metrics for the 
         equity specified. Data is generally refreshed on the same day a company reports its latest 
@@ -104,15 +122,21 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Overview already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         self.__extract(data, name)
+        return True
 
     def read_company_overview(self) -> pd.DataFrame:
         return self.storage.read_df("OVERVIEW", filters=[('symbol', '=', self.symbol)])
 
-    def __fetch_income_statements(self):
+    def __fetch_income_statements(self) -> bool:
         """
         This API returns the annual and quarterly income statements for the company of interest, with 
         normalized fields mapped to GAAP and IFRS taxonomies of the SEC. Data is generally refreshed on 
@@ -123,15 +147,21 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Income statement already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         self.__extract(data['quarterlyReports'], name)
+        return True
 
     def read_income_statements(self) -> pd.DataFrame:
         return self.storage.read_df("INCOME_STATEMENT", filters=[('symbol', '=', self.symbol)])
 
-    def __fetch_balance_sheets(self):
+    def __fetch_balance_sheets(self) -> bool:
         """
         This API returns the annual and quarterly balance sheets for the company of interest, with normalized 
         fields mapped to GAAP and IFRS taxonomies of the SEC. Data is generally refreshed on the same day a 
@@ -142,15 +172,21 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Balance sheet already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         self.__extract(data['quarterlyReports'], name)
+        return True
 
     def read_balance_sheets(self) -> pd.DataFrame:
         return self.storage.read_df("BALANCE_SHEET", filters=[('symbol', '=', self.symbol)])
 
-    def __fetch_cash_flow_statements(self):
+    def __fetch_cash_flow_statements(self) -> bool:
         """
         This API returns the annual and quarterly cash flow for the company of interest, with normalized fields mapped 
         to GAAP and IFRS taxonomies of the SEC. Data is generally refreshed on the same day a company reports its 
@@ -161,15 +197,21 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Cashflow already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         self.__extract(data['quarterlyReports'], name)
+        return True
 
     def read_cash_flow_statements(self) -> pd.DataFrame:
         return self.storage.read_df("CASH_FLOW", filters=[('symbol', '=', self.symbol)])     
 
-    def __fetch_earnings(self):
+    def __fetch_earnings(self) -> bool:
         """
         This API returns the annual and quarterly earnings (EPS) for the company of interest. 
         Quarterly data also includes analyst estimates and surprise metrics.
@@ -179,10 +221,16 @@ class FinancialDataExtractor:
         # Check if data already exists to avoid unnecessary API calls
         # Note: The storage.exists method checks for the existence of data for the given symbol.
         if self.storage.exists(name, self.symbol):
-            return
+            print(f"Earnings already exist: {self.symbol}")
+            return True
         
         data = self.api.fetch(name, self.symbol)
+        # ensure we have data to proceed
+        if data == None:
+            return False
+        
         self.__extract(data['quarterlyEarnings'], name)
+        return True
 
     def read_earnings(self) -> pd.DataFrame:
         return self.storage.read_df("EARNINGS", filters=[('symbol', '=', self.symbol)])     
@@ -191,11 +239,20 @@ class FinancialDataExtractor:
         """
         Extracts all financial data for the symbol.
         """
-        self.__fetch_historical_dividends()
-        self.__fetch_monthly_adjusted_time_series()
-        self.__fetch_insider_transactions()
-        self.__fetch_company_overview()
-        self.__fetch_income_statements()
-        self.__fetch_balance_sheets()
-        self.__fetch_cash_flow_statements()
-        self.__fetch_earnings()
+        if not self.__fetch_historical_dividends():
+            return False
+        if not self.__fetch_monthly_adjusted_time_series():
+            return False
+        if not self.__fetch_insider_transactions():
+            return False
+        if not self.__fetch_company_overview():
+            return False
+        if not self.__fetch_income_statements():
+            return False
+        if not self.__fetch_balance_sheets():
+            return False
+        if not self.__fetch_cash_flow_statements():
+            return False
+        if not self.__fetch_earnings():
+            return False
+        return True
