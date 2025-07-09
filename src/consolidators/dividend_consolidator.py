@@ -1,5 +1,5 @@
 import pandas as pd
-from src.data.parquet_storage import ParquetStorage
+from src.parquet.parquet_storage import ParquetStorage
 
 
 class DividendConsolidator:
@@ -33,6 +33,10 @@ class DividendConsolidator:
             .sum()
             .reset_index()
         )
+        
+        # Compound annual dividend growth rate over the past 5 years
+        df['qtr_growth'] = (df['dividend'] / df['dividend'].shift(20))**(1/20) - 1
+        df['dividend_growth_rate_5y'] = (1 + df['qtr_growth'])**4 - 1
 
         return df.merge(dv, on="qtr_end_date", how="left")
    

@@ -1,3 +1,4 @@
+import pandas as pd
 from src.consolidators.dividend_consolidator import DividendConsolidator
 from src.consolidators.earnings_consolidator import EarningsConsolidator
 from src.consolidators.income_statement_consolidator import IncomeStatementConsolidator
@@ -5,15 +6,13 @@ from src.consolidators.insiders_consolidator import InsiderConsolidator
 from src.consolidators.stock_price_consolidator import StockPriceConsolidator
 from src.consolidators.balance_sheet_consolidator import BalanceSheetConsolidator
 from src.consolidators.cashflow_consolidator import CashflowConsolidator
-from src.rules.dividend_rules import DividendRules
-from src.rules.value_rules import ValueRules
-from src.data.parquet_storage import ParquetStorage
+from src.parquet.parquet_storage import ParquetStorage
 
 class DataConsolidator:
-    def __init__(self, data_path: str):
-        self.storage = ParquetStorage(data_path)
+    def __init__(self, storage: ParquetStorage):
+        self.storage = storage
 
-    def consolidate(self, ticker: str):
+    def consolidate(self, ticker: str) -> pd.DataFrame:
 
         # create the consolidator objects
         bs = BalanceSheetConsolidator(self.storage)
@@ -33,18 +32,9 @@ class DataConsolidator:
         df = inc.consolidate(df, ticker)
         df = ins.consolidate(df, ticker)
 
-        # apply rules
-        dv_rules = DividendRules()
-        df = dv_rules.dividend_yield_rule(df)
-        df = dv_rules.dividend_growth_rule(df)
-        v_rules = ValueRules()
-        df = v_rules.dcf_ddm_value_rule(df) # todo:  find a way to introduce growth rates
-        df = v_rules.pe_value_rule(df) # todo:   P/E v Peers and PEG
-
-        # tidy and store
+        # tidy 
         df["symbol"] = ticker
         df.sort_values('qtr_end_date')
-        self.storage.write_df(df, "CONSOLIDATED", partition_cols=["symbol"], index=False)
 
-        print(df.columns)
-        print(df.info())
+        return df
+

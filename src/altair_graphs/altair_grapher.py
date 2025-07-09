@@ -5,7 +5,7 @@ import pandas as pd
 from pandas import DataFrame
 
 
-class StreamLitPlotter:
+class AltairGrapher:
 
     def __init__(self):
         self.line_palette = [
@@ -36,7 +36,7 @@ class StreamLitPlotter:
 
     def __year_start_rules(self, df_plot: pd.DataFrame):
         # Create year-start lines
-        years = pd.DatetimeIndex(df_plot['fiscalDateEnding']).year.unique()
+        years = pd.DatetimeIndex(df_plot['qtr_end_date']).year.unique()
         year_starts = pd.DataFrame({
             'year_start': pd.to_datetime([f"{y}-01-01" for y in years])
         })
@@ -56,82 +56,10 @@ class StreamLitPlotter:
         )
         return zero_line
 
-    def high_relative_yield_plot(self, df: DataFrame):
-        cols = ['dividend_yield', 'yield_historical_mean_5y']
-        title = "Dividend yield vs historical average"
-        date_col = "fiscalDateEnding"
-        df_plot = df[cols].reset_index().melt(date_col, var_name='metric', value_name='value')
-        rule_years = self.__year_start_rules(df_plot)
-
-        # line graph for dividend yield and historical average
-        line = (
-            alt.Chart(df_plot)
-                .mark_line()
-                .encode(
-                    x=alt.X('fiscalDateEnding:T', 
+    def __QuarterEndX(self) -> alt.X:
+        return alt.X('qtr_end_date:T', 
                             title='Date', 
-                            axis=alt.Axis(format='%Y', tickCount='year', labelAngle=0)),
-                    y=alt.Y('value:Q', 
-                            title='Percentage', 
-                            axis=alt.Axis(format='.2%')),
-                    color=alt.Color('metric:N', 
-                                    legend=None, 
-                                    scale=alt.Scale(domain=cols, range=self.line_palette)),
-                    strokeDash=alt.condition(
-                        alt.datum.metric == cols[1],
-                        alt.value([6, 4]),
-                        alt.value([0])
-                    )
-                )
-        )
-
-        chart = (alt.layer(rule_years, line)
-                .properties(height=500, width=500, title=title)
-                .configure_legend(disable=True)
-        )
-        st.altair_chart(chart, use_container_width=True)
-    
-    def yield_z_score_plot(self, df: DataFrame):
-        cols = ['yield_zscore']
-        title = "Dividend Yield Z-Score"
-        df_plot = (
-            df[cols]
-            .reset_index()
-            .melt('fiscalDateEnding', var_name='metric', value_name='value')
-        )
-
-        rule_years = self.__year_start_rules(df_plot)
-        buy_line = self.__horizontal_line(1, self.buy_sell_palette[3])
-        strong_buy_line = self.__horizontal_line(2, self.buy_sell_palette[2])
-        sell_line = self.__horizontal_line(-1, self.buy_sell_palette[1])
-        strong_sell_line = self.__horizontal_line(-2, self.buy_sell_palette[0])
-
-        # Z-score line
-        line = (
-            alt.Chart(df_plot)
-            .mark_point(filled=True, size=150)
-            .encode(
-                x=alt.X('fiscalDateEnding:T', 
-                        title='Date', 
-                        axis=alt.Axis(format='%Y', tickCount='year', labelAngle=0)),
-                y=alt.Y('value:Q', 
-                        title='Z Score', 
-                        axis=alt.Axis(format='.2')),
-                    color=alt.Color('metric:N', 
-                                    legend=None, 
-                                    scale=alt.Scale(domain=cols, range=self.line_palette)),
-                tooltip=[
-                    alt.Tooltip('fiscalDateEnding:T', title='Date'),
-                    alt.Tooltip('value:N', title='Z-Score', format='.2')
-                ]
-            )
-        )
-        
-        chart = (alt.layer(strong_buy_line, buy_line, strong_sell_line, sell_line, rule_years, line)
-                .properties(height=500, title=title)
-                .configure_legend(disable=True)
-        )
-        st.altair_chart(chart, use_container_width=True)
+                            axis=alt.Axis(format='%Y', tickCount='year', labelAngle=0))
 
 
     def yield_z_score_plot2(self, df: DataFrame):

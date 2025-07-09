@@ -1,5 +1,5 @@
 import pandas as pd
-from src.data.parquet_storage import ParquetStorage
+from src.parquet.parquet_storage import ParquetStorage
 
 class EarningsConsolidator:
 

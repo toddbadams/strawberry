@@ -1,12 +1,14 @@
 import pandas as pd
-from src.data.parquet_storage import ParquetStorage
+from src.parquet.parquet_storage import ParquetStorage
 
 class HealthRules:
 
-    def __init__(self, earnings_to_fcf_lower_threshold: float,
-                 earnings_to_fcf_upper_threshold: float):
+    def __init__(self, earnings_to_fcf_lower_threshold: float = 0.4,
+                 earnings_to_fcf_upper_threshold: float = 0.6,
+                 peg_upper_threshold: float = 1.0):
         self.earnings_to_fcf_lower_threshold = earnings_to_fcf_lower_threshold
         self.earnings_to_fcf_upper_threshold = earnings_to_fcf_upper_threshold
+        self.peg_upper_threshold = peg_upper_threshold
 
     def cash_conversion_rule(self, df: pd.DataFrame) -> pd.DataFrame:
 
@@ -20,7 +22,7 @@ class HealthRules:
     def growth_adjusted_valuation_rule(self, df: pd.DataFrame) -> pd.DataFrame:
 
         df['peg_ratio'] = df['pe_ratio'] / df['projected_EPS_growth_rate']
-        df['rule_peg'] = df['peg_ratio'] < 1.0
+        df['rule_peg'] = df['peg_ratio'] < self.peg_upper_threshold 
         return
     
     def earnings_premium_rule(self, df: pd.DataFrame, bond_yield: float) -> pd.DataFrame:
