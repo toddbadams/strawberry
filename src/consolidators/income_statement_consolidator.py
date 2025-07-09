@@ -12,15 +12,16 @@ class IncomeStatementConsolidator:
         inc = self.storage.read_df("INCOME_STATEMENT", ticker)
 
         # get required columns
-        inc_sel = inc[["fiscalDateEnding", "netIncome", "ebit", "ebitda"]].copy()
+        inc = inc[["fiscalDateEnding", "netIncome", "ebit", "ebitda"]].copy()
 
+        # rename columns
+        inc.rename(columns={'fiscalDateEnding': 'qtr_end_date',
+                           'netIncome': 'net_income'}, inplace=True)
         # convert date
-        inc_sel['fiscalDateEnding'] = pd.to_datetime(inc_sel['fiscalDateEnding'])  
+        inc['qtr_end_date'] = pd.to_datetime(inc['qtr_end_date'])  
 
         # conver numbers
-        for col in ["netIncome", "ebit", "ebitda"]:
-            inc_sel[col] = pd.to_numeric(inc_sel[col], errors="coerce")
+        for col in ["net_income", "ebit", "ebitda"]:
+            inc[col] = pd.to_numeric(inc[col], errors="coerce")
 
-        # merge
-        df = df.merge(inc_sel, on="fiscalDateEnding", how="left")
-        return df
+        return df.merge(inc, on="qtr_end_date", how="left")

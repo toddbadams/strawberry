@@ -12,25 +12,27 @@ class DividendConsolidator:
         dv = self.storage.read_df("DIVIDENDS", ticker)
 
         # get required columns
-        dv = dv[["ex_dividend_date", "amount"]].copy()
+        dv = dv[["ex_dividend_date", "amount"]]        
 
-        # calc the fiscal date ending of each quarter
-        dv['ex_dividend_date'] = pd.to_datetime(dv['ex_dividend_date'])  
-        dv["fiscalDateEnding"] = (dv["ex_dividend_date"] + pd.offsets.QuarterEnd(0)) - pd.offsets.QuarterEnd()
+        # rename columns
+        dv.rename(columns={'ex_dividend_date': 'date',
+                           'amount': 'dividend'}, inplace=True)
 
-        # convert to number        
-        dv['amount'] = pd.to_numeric(dv['amount'], errors="coerce")
+        # convert date
+        dv['date'] = pd.to_datetime(dv['date'])  
+        
+        # convert to number
+        dv['dividend'] = pd.to_numeric(dv['dividend'], errors='coerce')
 
-        # sum the dividen amounts per quarter
-        div_agg = (
-            dv.groupby("fiscalDateEnding")["amount"]
+        # calc the fiscal date ending of each quarter 
+        dv["qtr_end_date"] = (dv["date"] + pd.offsets.QuarterEnd(0)) - pd.offsets.QuarterEnd()
+
+        # sum the dividends per quarter
+        dv = (
+            dv.groupby("qtr_end_date")["dividend"]
             .sum()
             .reset_index()
-            .rename(columns={"amount": "dividend"})
         )
 
-        # merge on fiscalDateEnding
-        df = df.merge(div_agg, on="fiscalDateEnding", how="left")
-        return df
-
-    
+        return df.merge(dv, on="qtr_end_date", how="left")
+   

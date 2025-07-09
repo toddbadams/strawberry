@@ -12,26 +12,29 @@ class CashflowConsolidator:
 
         # get required columns
         cf = cf[['fiscalDateEnding', 'operatingCashflow', 'capitalExpenditures']]
+        
+        # rename columns
+        cf.rename(columns={'fiscalDateEnding': 'qtr_end_date',
+                           'operatingCashflow': 'operating_cashflow',
+                           'capitalExpenditures': 'capital_expenditures'}, inplace=True)
 
         # convert date
-        cf['fiscalDateEnding'] = pd.to_datetime(cf['fiscalDateEnding'])  
-
-        # merge columns
-        df = df.merge(cf, on="fiscalDateEnding", how="left")
+        cf['qtr_end_date'] = pd.to_datetime(cf['qtr_end_date'])  
 
         # conver to numbers
-        df['operatingCashflow'] = pd.to_numeric(df['operatingCashflow'], errors="coerce")
-        df['capitalExpenditures'] = pd.to_numeric(df['capitalExpenditures'], errors="coerce")
+        cf['operating_cashflow'] = pd.to_numeric(cf['operating_cashflow'], errors="coerce")
+        cf['capital_expenditures'] = pd.to_numeric(cf['capital_expenditures'], errors="coerce")
 
         # Calculate free cashflow:    FCF = Operating Cash Flow – Capital Expenditures
-        df['free_cashflow'] = (df['operatingCashflow'] - df['capitalExpenditures'])
+        cf['free_cashflow'] = (cf['operating_cashflow'] - cf['capital_expenditures'])
 
         # free cashflow for last 12 months (TTM)
-        df['free_cashflow_TTM'] = df['free_cashflow'].rolling(window=4).sum()
+        cf['free_cashflow_TTM'] = cf['free_cashflow'].rolling(window=4).sum()
+
+        # merge 
+        df = df.merge(cf, on="qtr_end_date", how="left")
 
         # free cashflow per share for last 12 months 
-        df["free_cashflow_ps_TTM"] = (df['free_cashflow_TTM'] / df['sharesOutstanding']).round(2)
+        df["free_cashflow_ps_TTM"] = (df['free_cashflow_TTM'] / df['shares_outstanding']).round(2)
        
-        # Remove columns that are not needed
-        df.drop(columns=['operatingCashflow', 'capitalExpenditures', 'free_cashflow'], inplace=True)      
         return df

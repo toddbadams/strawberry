@@ -85,7 +85,7 @@ class ValueRules:
 
         # DCF valuation
         df['fair_value_dcf'] = self.__calc_dcf_per_share(cashflow_series = df['free_cashflow_ps_TTM'], 
-                                                        shares_series = df['sharePrice'],
+                                                        shares_series = df['share_price'],
                                                         high_growth_rate = cf_high_gr, 
                                                         high_growth_years = cf_high_gy, 
                                                         terminal_growth_rate = terminal_growth_rate)
@@ -98,7 +98,7 @@ class ValueRules:
         df['fair_value_blended'] = (df['fair_value_dcf'] +  df['fair_value_ddm'])/2
 
         # fair value gap
-        df['fair_value_gap_pct'] = (df['fair_value_blended'] - df['sharePrice']) / df['fair_value_blended']
+        df['fair_value_gap_pct'] = (df['fair_value_blended'] - df['share_price']) / df['fair_value_blended']
 
         # under value rule    
         df['rule_undervalued_stock'] = df['fair_value_gap_pct'] <= self.undervalue_thr
@@ -107,11 +107,9 @@ class ValueRules:
     def pe_value_rule(seld, df: pd.DataFrame) -> pd.DataFrame:
 
         # P/E ratio
-        df['pe_ratio'] = df['sharePrice'] / df['reportedEPS']
+        df['pe_ratio'] = df['share_price'] / df['eps']
 
         # P/E Vs Peers  - to do, need to find a way to put peer P/E ratio's into the df
-
-        # PEG Ratio - to do, need to calc projected_EPS_growth_rate
         
         # PE valuation rule - todo
 
