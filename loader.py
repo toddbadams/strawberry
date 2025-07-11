@@ -2,7 +2,7 @@
 import logging
 import os
 import sys
-from prefect import flow, task, get_run_logger
+#from prefect import flow, task, get_run_logger
 import csv
 from src.alpha_vantage.price_injestor import PriceInjestor
 from src.consolidators.value_consolidator import ValueConsolidator
