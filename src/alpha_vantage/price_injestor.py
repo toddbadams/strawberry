@@ -3,7 +3,7 @@ import pandas as pd
 from src.parquet.parquet_storage import ParquetStorage
 from src.alpha_vantage.alpha_vantage_api import AlphaVantageAPI
 
-class Injestor():
+class PriceInjestor():
     def __init__(self, alpha_vantage: AlphaVantageAPI, storage: ParquetStorage, logger: logging.Logger):
         self.alpha_vantage = alpha_vantage
         self.storage = storage
@@ -29,7 +29,9 @@ class Injestor():
             return False
                 
         # create data frame and store
-        df = pd.DataFrame([data]) if attr is None else pd.DataFrame(data[attr])
+        df = pd.DataFrame.from_dict(data[attr], orient="index")
+        df = df.reset_index()
+        df.rename(columns={'index': 'date'}, inplace=True)
         df['symbol'] = ticker
         self.storage.write_df(df, name, partition_cols=['symbol'], index=False)
         self.logger.info(f"Table {name} ingested for {ticker}.")

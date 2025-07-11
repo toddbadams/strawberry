@@ -11,9 +11,11 @@ class InsiderConsolidator:
 
 
     def consolidate(self, df: pd.DataFrame, name: str, ticker: str) -> pd.DataFrame:
-        ins = self.storage.read_df(name, ticker)
-        if ins is None:
+        # if the file does not exist, return the incomming DataFrame
+        if not self.storage.exists(name, ticker):
             return df
+        
+        ins = self.storage.read_df(name, ticker)
         
         # convert date
         ins['transaction_date'] = pd.to_datetime(ins['transaction_date'], errors='coerce')  

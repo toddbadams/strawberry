@@ -10,6 +10,10 @@ class CashflowConsolidator:
         self.logger = logger
 
     def consolidate(self, df: pd.DataFrame, name: str, ticker: str) -> pd.DataFrame:
+        # if the file does not exist, return the incomming DataFrame
+        if not self.storage.exists(name, ticker):
+            return df
+        
         cf = self.storage.read_df(name, ticker)
 
         # get required columns

@@ -11,6 +11,10 @@ class StockPriceConsolidator:
 
 
     def consolidate(self, df: pd.DataFrame, name: str, ticker: str) -> pd.DataFrame:
+        # if the file does not exist, return the incomming DataFrame
+        if not self.storage.exists(name, ticker):
+            return df
+        
         ps = self.storage.read_df(name, ticker)
         
         # get required columns

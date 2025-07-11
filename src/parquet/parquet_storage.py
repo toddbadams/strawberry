@@ -50,5 +50,8 @@ class ParquetStorage:
             return False
 
         # Recursively delete the partition folder and its contents
-        shutil.rmtree(partition_dir)
-        return True
+        try:
+            shutil.rmtree(partition_dir)
+            return True
+        except Exception:
+            return False
