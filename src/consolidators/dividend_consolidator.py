@@ -1,15 +1,17 @@
 import pandas as pd
+import logging
 from src.parquet.parquet_storage import ParquetStorage
 
 
 class DividendConsolidator:
 
-    def __init__(self, ps: ParquetStorage):
+    def __init__(self, ps: ParquetStorage, logger: logging.Logger):
         self.storage = ps
+        self.logger = logger
 
         
-    def consolidate(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
-        dv = self.storage.read_df("DIVIDENDS", ticker)
+    def consolidate(self, df: pd.DataFrame, name: str, ticker: str) -> pd.DataFrame:
+        dv = self.storage.read_df(name, ticker)
 
         # get required columns
         dv = dv[["ex_dividend_date", "amount"]]        
@@ -26,30 +28,24 @@ class DividendConsolidator:
 
         # calc the fiscal date ending of each quarter 
         dv["qtr_end_date"] = (dv["date"] + pd.offsets.QuarterEnd(0)) - pd.offsets.QuarterEnd()
-
-        # sum the dividends per quarter
-        dv = (
-            dv.groupby("qtr_end_date")["dividend"]
-            .sum()
-            .reset_index()
-        )
         
         # Compound annual dividend growth rate over the past 5 years
-        df['qtr_growth'] = (df['dividend'] / df['dividend'].shift(20))**(1/20) - 1
-        df['dividend_growth_rate_5y'] = (1 + df['qtr_growth'])**4 - 1
+        dv['qtr_growth'] = (dv['dividend'] / dv['dividend'].shift(20))**(1/20) - 1
+        dv['dividend_growth_rate_5y'] = (1 + dv['qtr_growth'])**4 - 1
         
         # Calculate TTM using trailing 4-period sum (current + previous 3)
-        df[f"dividendTTM"] = df["dividend"].rolling(window=4).sum()
+        dv[f"dividendTTM"] = dv["dividend"].rolling(window=4).sum()
 
         # Dividend yield 
-        df['dividend_yield'] = df['dividendTTM'] / df['share_price']
+        dv['dividend_yield'] = dv['dividendTTM'] / df['share_price']
 
         # 20-quarter rolling (5-year) stats
-        df['yield_historical_mean_5y'] = df['dividend_yield'].rolling(window=20, min_periods=1).mean()
-        df['yield_historical_std_5y'] = df['dividend_yield'].rolling(window=20, min_periods=1).std()
+        dv['yield_historical_mean_5y'] = dv['dividend_yield'].rolling(window=20, min_periods=1).mean()
+        dv['yield_historical_std_5y'] = dv['dividend_yield'].rolling(window=20, min_periods=1).std()
 
         # Z-score  
-        df['yield_zscore'] = (df['dividend_yield'] - df['yield_historical_mean_5y']) / df['yield_historical_std_5y']
-
+        dv['yield_zscore'] = (dv['dividend_yield'] - dv['yield_historical_mean_5y']) / dv['yield_historical_std_5y']
+        
+        self.logger.info(f"Table {name} consolidated for {ticker}.")
         return df.merge(dv, on="qtr_end_date", how="left")
    

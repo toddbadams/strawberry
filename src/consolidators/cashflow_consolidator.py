@@ -1,14 +1,16 @@
 import pandas as pd
+import logging
 from src.parquet.parquet_storage import ParquetStorage
 
 
 class CashflowConsolidator:
 
-    def __init__(self, ps: ParquetStorage):
+    def __init__(self, ps: ParquetStorage, logger: logging.Logger):
         self.storage = ps
+        self.logger = logger
 
-    def consolidate(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
-        cf = self.storage.read_df("CASH_FLOW", ticker)
+    def consolidate(self, df: pd.DataFrame, name: str, ticker: str) -> pd.DataFrame:
+        cf = self.storage.read_df(name, ticker)
 
         # get required columns
         cf = cf[['fiscalDateEnding', 'operatingCashflow', 'capitalExpenditures']]
@@ -22,19 +24,17 @@ class CashflowConsolidator:
         cf['qtr_end_date'] = pd.to_datetime(cf['qtr_end_date'])  
 
         # conver to numbers
-        cf['operating_cashflow'] = pd.to_numeric(cf['operating_cashflow'], errors="coerce")
-        cf['capital_expenditures'] = pd.to_numeric(cf['capital_expenditures'], errors="coerce")
+        for col in ["operating_cashflow", "capital_expenditures"]:
+            cf[col] = pd.to_numeric(cf[col], errors="coerce")
 
         # Calculate free cashflow:    FCF = Operating Cash Flow – Capital Expenditures
         cf['free_cashflow'] = (cf['operating_cashflow'] - cf['capital_expenditures'])
 
         # free cashflow for last 12 months (TTM)
         cf['free_cashflow_TTM'] = cf['free_cashflow'].rolling(window=4).sum()
-
-        # merge 
-        df = df.merge(cf, on="qtr_end_date", how="left")
-
+        
         # free cashflow per share for last 12 months 
-        df["free_cashflow_ps_TTM"] = (df['free_cashflow_TTM'] / df['shares_outstanding']).round(2)
-       
-        return df
+        cf["free_cashflow_ps_TTM"] = (cf['free_cashflow_TTM'] / df['shares_outstanding']).round(2)
+
+        self.logger.info(f"Table {name} consolidated for {ticker}.")       
+        return df.merge(cf, on="qtr_end_date", how="left")
