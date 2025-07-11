@@ -1,5 +1,6 @@
 
 from pathlib import Path
+import shutil
 import pandas as pd
 from typing import Optional
 
@@ -38,3 +39,16 @@ class ParquetStorage:
             return pd.read_parquet(str(root), engine=self.engine)
         except (FileNotFoundError, OSError, pd.errors.EmptyDataError):
             return None
+        
+    def remove_partition_by_symbol(self, table_name: str, symbol: str) -> bool:
+        """
+        Permanently delete the partition directory for a given symbol.
+        Returns True if the directory was found and removed, False otherwise.
+        """
+        partition_dir = self.__table_root(table_name) / f"symbol={symbol}"
+        if not partition_dir.is_dir():
+            return False
+
+        # Recursively delete the partition folder and its contents
+        shutil.rmtree(partition_dir)
+        return True

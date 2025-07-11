@@ -106,8 +106,7 @@ class ValueRules:
         
     def pe_value_rule(seld, df: pd.DataFrame) -> pd.DataFrame:
 
-        # P/E ratio
-        df['pe_ratio'] = df['share_price'] / df['eps']
+
 
         # P/E Vs Peers  - to do, need to find a way to put peer P/E ratio's into the df
         
