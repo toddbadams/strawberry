@@ -4,6 +4,8 @@ import os
 import sys
 from prefect import flow, task, get_run_logger
 import csv
+from src.alpha_vantage.price_injestor import PriceInjestor
+from src.consolidators.value_consolidator import ValueConsolidator
 from src.alpha_vantage.injestor import Injestor
 from src.alpha_vantage.alpha_vantage_api import AlphaVantageAPI
 from src.parquet.parquet_storage import ParquetStorage
@@ -49,7 +51,8 @@ class Loader:
             return False
         if not i.injest('OVERVIEW', None, ticker):
             return False
-        if not i.injest('TIME_SERIES_MONTHLY_ADJUSTED', 'Monthly Adjusted Time Series', ticker):
+        p = PriceInjestor(self.api, self.storage, self.logger)
+        if not p.injest('TIME_SERIES_MONTHLY_ADJUSTED', 'Monthly Adjusted Time Series', ticker):
             return False
 
         return True
@@ -61,7 +64,8 @@ class Loader:
 
         # if the consolidated table exists, overwrite it
         if self.storage.exists(table_name, ticker):
-            self.storage.remove_partition_by_symbol(table_name, ticker)
+             if not self.storage.remove_partition_by_symbol(table_name, ticker):
+                 return False
         
         df = BalanceSheetConsolidator(self.storage, self.logger).consolidate('BALANCE_SHEET', ticker)
         df = CashflowConsolidator(self.storage, self.logger).consolidate(df, 'CASH_FLOW', ticker)
@@ -70,12 +74,16 @@ class Loader:
         df = EarningsConsolidator(self.storage, self.logger).consolidate(df, 'EARNINGS', ticker)
         df = IncomeStatementConsolidator(self.storage, self.logger).consolidate(df, 'INCOME_STATEMENT', ticker)
         df = InsiderConsolidator(self.storage, self.logger).consolidate(df, 'INSIDER_TRANSACTIONS', ticker)
+        df = ValueConsolidator(self.logger).consolidate(df)
 
         # tidy 
         df["symbol"] = ticker
         df.sort_values('qtr_end_date')
         df.reset_index()
         self.storage .write_df(df, table_name, partition_cols=["symbol"], index=False)
+        ## let's write a CSV file for ease of validating
+        path = f"{self.data_path}/{table_name}/symbol={ticker}/{table_name}_{ticker}.csv"
+        df.to_csv(path, index=False, header=True, encoding='utf-8')
         return True
 
     #@flow
@@ -86,5 +94,4 @@ class Loader:
                 self.logger.warning(f"Failed to load ticker: {ticker}. Stopping further processing.")
                 break
             self.consolidate_ticker(ticker)
-
 Loader().run()

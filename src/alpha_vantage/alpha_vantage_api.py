@@ -24,7 +24,6 @@ class AlphaVantageAPI:
             "apikey": self.api_key,
             "datatype": datatype,
         }
-        rate_limit_prefix = '{\n    "Information": "We have detected your API key as '
         resp = requests.get(self.base_url, params=params)
         resp.raise_for_status()
         data = resp.json()

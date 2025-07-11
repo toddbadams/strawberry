@@ -10,7 +10,11 @@ class BalanceSheetConsolidator:
         self.logger = logger
   
 
-    def consolidate(self, name: str, ticker: str) -> pd.DataFrame:               
+    def consolidate(self, name: str, ticker: str) -> pd.DataFrame:
+        # if the file does not exist, return the incomming DataFrame
+        if not self.storage.exists(name, ticker):
+            return df
+                       
         df = self.storage.read_df(name, ticker)
 
         # get required columns
