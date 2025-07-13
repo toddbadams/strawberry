@@ -1,0 +1,26 @@
+{
+    "qtr_end_date": {
+        "type": "DateColumn",
+        "label": "Quarter Date Ending",
+        "help": "The last day of the reporting quarter",
+        "format": "iso8601"
+    },
+    "dividend_yield": {
+        "type": "NumberColumn",
+        "label": "Dividend Yield",
+        "help": "The dividends yield for the last twelve months",
+        "format": "percent"
+    },
+    "yield_historical_mean_5y": {
+        "type": "NumberColumn",
+        "label": "5yr Dividend Yield Average",
+        "help": "The dividends yield average for the last 5 years",
+        "format": "percent"
+    },
+    "yield_zscore": {
+        "type": "NumberColumn",
+        "label": "Z Scopre",
+        "help": "Number of standard deviations the current dividend yield is from its 5-year mean. Sell (< –1), Hold (–1 to 1), Buy (> 1).",
+        "format": "%.2f"
+    }
+}
