@@ -24,10 +24,9 @@ class Loader:
     def __init__(self):
         api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
         url =  os.getenv("ALPHA_VANTAGE_URL")
-        data_path = os.getenv("OUTPUT_PATH", "data/")
+        self.data_path = os.getenv("OUTPUT_PATH", "data/")
         self.api = AlphaVantageAPI(api_key, url)
-        self.storage = ParquetStorage(data_path)
-        self.data_path = data_path
+        self.storage = ParquetStorage(self.data_path)
         #self.logger = get_run_logger() 
         factory = LoggerFactory()
         self.logger = factory.create_logger(__name__)

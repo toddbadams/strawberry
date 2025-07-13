@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Streamlit: Debug App",
+      "type": "debugpy",
+      "request": "launch",
+      // Invoke the streamlit module under your Python
+      "module": "streamlit",
+      "args": ["run", "${workspaceFolder}/app.py"],
+
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    }
+  ]
+}
