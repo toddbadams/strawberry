@@ -82,7 +82,7 @@ class Loader:
         self.storage .write_df(df, table_name, partition_cols=["symbol"], index=False)
         ## let's write a CSV file for ease of validating
         path = f"{self.data_path}/{table_name}/symbol={ticker}/{table_name}_{ticker}.csv"
-        df.to_csv(path, index=False, header=True, encoding='utf-8')
+        # df.to_csv(path, index=False, header=True, encoding='utf-8')
         return True
 
     #@flow

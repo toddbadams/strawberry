@@ -43,6 +43,9 @@ class DividendConsolidator:
         # Dividend yield 
         dv['dividend_yield'] = dv['dividendTTM'] / df['share_price']
 
+        # Dividend yield 
+        dv['dividend_chowder_yield'] = dv['dividend_yield'] + dv['dividend_growth_rate_5y']
+
         # 20-quarter rolling (5-year) stats
         dv['yield_historical_mean_5y'] = dv['dividend_yield'].rolling(window=20, min_periods=1).mean()
         dv['yield_historical_std_5y'] = dv['dividend_yield'].rolling(window=20, min_periods=1).std()
