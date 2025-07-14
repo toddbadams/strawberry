@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 import streamlit as st
 import pandas as pd
-import json
 
 from src.parquet.parquet_storage import ParquetStorage
 from src.logger_factory import LoggerFactory
