@@ -3,6 +3,8 @@ from turtle import st
 import pandas as pd
 import altair as alt
 
+from src.ui.rule import RuleChartConfig
+
 class YearChart:
 
     LINE_PALETTE = [
@@ -54,25 +56,25 @@ class YearChart:
         ).encode( y=alt.Y('y:Q') )
         return zero_line
     
-    def plot(self, ticker: str, title: str, metrics: list[str], y_label: str = '') -> alt.LayerChart:
+    def plot(self, ticker: str, config: RuleChartConfig) -> alt.LayerChart:
         date_col = 'qtr_end_date'
 
         # Melt DataFrame into long form for Altair
         try:
             df_plot = self.df.melt(
                 id_vars=[date_col],
-                value_vars=metrics,
+                value_vars=config.metrics,
                 var_name='metric',
                 value_name='value'
             )
         except KeyError as e:
-            m = f"{title}: Missing column for {ticker} for melt: {e}"
+            m = f"{config.title}: Missing column for {ticker} for melt: {e}"
             self.logger.error(m)
             # Return an empty chart with a message
             return self.blank(m)
 
         if df_plot.empty:
-            m = f"{title}: No data available for {ticker}."
+            m = f"{config.title}: No data available for {ticker}."
             self.logger.warning(m)
             return self.blank(m)
 
@@ -85,16 +87,16 @@ class YearChart:
             .mark_line()
             .encode(
                 x=alt.X(f'{date_col}:T', axis=alt.Axis(format='%Y-Q%q', title='Quarter')),
-                y=alt.Y('value:Q', title=y_label, axis=alt.Axis(format='.2')),
+                y=alt.Y('value:Q', title=config.y_label, axis=alt.Axis(format='.2')),
                 color=alt.Color('metric:N', title='Metric', scale=alt.Scale(range=self.LINE_PALETTE),
                                 legend=alt.Legend(
                                     orient='bottom',       # 📌 move legend to the bottom
-                                    columns= len(metrics), # 📌 force a single-row legend
+                                    columns= len(config.metrics), # 📌 force a single-row legend
                                     labelLimit=150         # 📌 truncate labels at 150px
                                 )),
                 tooltip=[
                     alt.Tooltip(f'{date_col}:T', title='Date'),
-                    alt.Tooltip('value:Q', format='.2', title=y_label),
+                    alt.Tooltip('value:Q', format=config.y_axis_format, title=config.y_label),
                     alt.Tooltip('metric:N', title='Metric')
                 ]
             )
@@ -103,7 +105,7 @@ class YearChart:
 
         # Layer and finalize chart
         chart = alt.layer(rule_layer, line_layer)
-        chart = chart.properties(height=450, title=title)
+        chart = chart.properties(height=450, title=config.title)
         chart = chart.configure_title(
             fontSize=20,
             anchor='start',
@@ -115,7 +117,7 @@ class YearChart:
             strokeWidth=1,
             stroke="#ccdbdc",
         )
-        self.logger.info(f"{title} Rendered for {ticker}.")
+        self.logger.info(f"{config.title} Rendered for {ticker}.")
         return chart
     
 

@@ -1,0 +1,7 @@
+[theme]
+base="dark"
+primaryColor="#1E90FF"         # Dodger Blue
+backgroundColor="#0D1117"      # GitHub dark
+secondaryBackgroundColor="#161B22"
+textColor="#FFFFFF"
+font="sans serif"

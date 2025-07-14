@@ -1,38 +1,96 @@
 [
   {
     "head": "Dividend Growth",
-    "subhead": "Looking for at least 5% annual dividend growth."
+    "subhead": "Looking for at least 5% annual dividend growth.",
+    "charts": [{
+      "title": "Compound annual dividend growth rate over the past 5 years",
+      "metrics": ["dividend_growth_rate_5y"],
+      "metric_labels": ["dividend_growth_rate_5y"],
+      "y_label": "yeild %",
+      "y_axis_format": ".2%"
+    }]
   },
   {
     "head": "Dividend Chowder",
-    "subhead": "A growing dividend = rising income and often signals financial health."
+    "subhead": "A growing dividend = rising income and often signals financial health.",
+    "charts": [{
+      "title": "Dividend Yield + 5-Year Dividend Growth Rate",
+      "metrics": ["dividend_chowder_yield"],
+      "metric_labels": ["dividend_chowder_yield"],
+      "y_label": "yeild %",
+      "y_axis_format": ".2%"
+    }]
   },
   {
     "head": "Dividend Yield",
-    "subhead": "Buy when the yield is high vs. historical average."
+    "subhead": "Buy when the yield is high vs. historical average.",
+    "charts": [{
+      "title": "Dividend Yield vs. 5-Year Historical Average",
+      "metrics": ["dividend_yield", "yield_historical_mean_5y"],
+      "metric_labels": ["dividend_yield", "yield_historical_mean_5y"],
+      "y_label": "yeild %",
+      "y_axis_format": ".2%"
+    }, {
+      "title": "Dividend Yield Z Score",
+      "metrics": ["yield_zscore"],
+      "metric_labels": ["yield_zscore"],
+      "y_label": "yeild %",
+      "y_axis_format": ".2%"
+    }]
   },
   {
     "head": "DCF/DDM Value",
-    "subhead": "Looking for a current share price at least 20 % below your blended DCF / DDM fair-value estimate."
+    "subhead": "Looking for a current share price at least 20 % below your blended DCF / DDM fair-value estimate.",
+    "charts": [{
+      "title": "DCF and DDM value estimates (per share)",
+      "metrics": ["fair_value_dcf", "fair_value_ddm", "fair_value_blended", "share_price"],
+      "metric_labels": ["fair_value_dcf", "fair_value_ddm", "fair_value_blended", "share_price"],
+      "y_label": "yeild %",
+      "y_axis_format": ".2&"
+    }]
   },
   {
-    "head": "P/E Value",
-    "subhead": ""
+    "head": "P/E & PEG",
+    "subhead": "Lower P/E can mean undervaluation.",
+    "charts": [{
+      "title": "P/E and PEG Ratios",
+      "metrics": ["pe_ratio", "peg_ratio"],
+      "metric_labels": ["pe_ratio", "peg_ratio"],
+      "y_label": "ratio",
+      "y_axis_format": ".2"
+    }]
   },
   {
-    "head": "Health Cash Conversion",
-    "subhead": ""
+    "head": "Cash Conversion",
+    "subhead": "Earnings-to-free-cash-flow ratio between 0.4 and 0.6 signals efficient cash conversion.",
+    "charts": [{
+      "title": "Earnings-to-free-cash-flow ratio",
+      "metrics": ["ebitda_to_fcflow"],
+      "metric_labels": ["ebitda_to_fcflow"],
+      "y_label": "ratio",
+      "y_axis_format": ".2"
+    }]
   },
   {
-    "head": "Health PEG",
-    "subhead": ""
+    "head": "Earning Premium",
+    "subhead": "Earnings yield should exceed the 10-yr bond yield by at least 2%.",
+    "charts": [{
+      "title": "Earnings Yield",
+      "metrics": ["earnings_yield"],
+      "metric_labels": ["earnings_yield"],
+      "y_label": "yeild %",
+      "y_axis_format": ".2%"
+    }]
   },
   {
-    "head": "Health Earning Premium",
-    "subhead": ""
-  },
-  {
-    "head": "Health Debt Cushion",
-    "subhead": ""
+    "head": "Debt Cushion",
+    "subhead": "Total debt should be no more than 50% of fair-value equity.",
+    "charts": [{
+      "title": "Debt to fair-value equity ratio",
+      "metrics": ["debt_to_equity_fv"],
+      "metric_labels": ["debt_to_equity_fv"],
+      "y_label": "ratio",
+      "y_axis_format": ".2"
+    }]
   }
 ]
