@@ -1,9 +1,11 @@
 
-import logging
+import pandas as pd
 import os
-import sys
 #from prefect import flow, task, get_run_logger
-import csv
+
+from config.env_loader import EnvLoader
+from src.consolidators.consolidator import Consolidator
+from config.rule_config_loader import RuleConfigLoader
 from src.alpha_vantage.price_injestor import PriceInjestor
 from src.consolidators.value_consolidator import ValueConsolidator
 from src.alpha_vantage.injestor import Injestor
@@ -22,14 +24,11 @@ from src.parquet.parquet_storage import ParquetStorage
 
 class Loader:
     def __init__(self):
-        api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
-        url =  os.getenv("ALPHA_VANTAGE_URL")
-        self.data_path = os.getenv("OUTPUT_PATH", "data/")
-        self.api = AlphaVantageAPI(api_key, url)
-        self.storage = ParquetStorage(self.data_path)
+        env = EnvLoader().load()
+        self.api = AlphaVantageAPI(env.alpha_vantage_api_key, env.alpha_vantage_url)
+        self.storage = ParquetStorage(env.output_path)
         #self.logger = get_run_logger() 
-        factory = LoggerFactory()
-        self.logger = factory.create_logger(__name__)
+        self.logger = LoggerFactory().factory.create_logger(__name__)
 
     #@task
     def load_ticker(self, ticker: str) -> bool:
@@ -53,7 +52,7 @@ class Loader:
         p = PriceInjestor(self.api, self.storage, self.logger)
         if not p.injest('TIME_SERIES_MONTHLY_ADJUSTED', 'Monthly Adjusted Time Series', ticker):
             return False
-
+        
         return True
 
     #@task
@@ -83,6 +82,26 @@ class Loader:
         ## let's write a CSV file for ease of validating
         path = f"{self.data_path}/{table_name}/symbol={ticker}/{table_name}_{ticker}.csv"
         # df.to_csv(path, index=False, header=True, encoding='utf-8')
+        return True
+    
+
+    def consolidate_tickers2(self, ticker: str) -> bool:
+        self.logger.info(f"Consolidating ticker: {ticker}")
+        table_name = 'CONSOLIDATED'
+        
+        cl = RuleConfigLoader(self.config_path, self.logger)
+        tables = cl.load_table_consolidation_config()
+        df = pd.DataFrame()
+        consolidator = Consolidator(self.storage, self.logger)
+        for table in tables:
+            df = consolidator.run(df, table, ticker)
+
+
+        # tidy 
+        df["symbol"] = ticker
+        df.sort_values('qtr_end_date')
+        df.reset_index()
+        self.storage .write_df(df, table_name, partition_cols=["symbol"], index=False)
         return True
 
     #@flow

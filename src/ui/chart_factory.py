@@ -5,7 +5,7 @@ import pandas as pd
 import altair as alt
 
 from src.ui.year_chart import YearChart
-from src.ui.rule import RuleConfig
+from config.rule_char_config import RuleConfig
 
 
 class ConsoiidatedDataChartFactory:
@@ -22,12 +22,12 @@ class ConsoiidatedDataChartFactory:
     def chart(self, rule: RuleConfig, ticker: str) -> list[alt.Chart]:
         self.logger.info(f"{rule.head} Rendered for {ticker}.")
         df = self.df[self.df["symbol"] == ticker].copy().reset_index()
-        c = YearChart(df, self.logger)
+        yc = YearChart(df, self.logger)
 
         charts = []
 
         for chart in rule.charts:
-            c = c.plot(ticker = ticker, config=chart)
+            c = yc.plot(ticker = ticker, config=chart)
             charts.append(c)
 
         return charts
