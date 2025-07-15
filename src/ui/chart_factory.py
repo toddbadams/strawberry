@@ -5,7 +5,7 @@ import pandas as pd
 import altair as alt
 
 from src.ui.year_chart import YearChart
-from config.rule_char_config import RuleConfig
+from src.config.config_loader  import RuleConfig
 
 
 class ConsoiidatedDataChartFactory:

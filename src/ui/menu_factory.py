@@ -5,7 +5,7 @@ from streamlit_option_menu import option_menu
 import streamlit_shadcn_ui as ui
 import pandas as pd
 import altair as alt
-from config.rule_config_loader import RuleConfigLoader
+from src.config.config_loader import ConfigLoader
 from src.ui.chart_factory import ConsoiidatedDataChartFactory
 
 class MenuFactory: 
@@ -25,7 +25,7 @@ class MenuFactory:
         self.chart_factory = ConsoiidatedDataChartFactory(consolidated_df, self.logger)
 
         # Load rules config 
-        cl = RuleConfigLoader(self.config_path, self.logger)
+        cl = ConfigLoader(self.logger)
         self.rules = cl.load_rules()
         
         # will be set in run()

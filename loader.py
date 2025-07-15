@@ -1,34 +1,26 @@
 
 import pandas as pd
-import os
 #from prefect import flow, task, get_run_logger
 
-from config.env_loader import EnvLoader
+from src.consolidators.column_calc import ColumnCalculator
 from src.consolidators.consolidator import Consolidator
-from config.rule_config_loader import RuleConfigLoader
+from src.config.config_loader import ConfigLoader
 from src.alpha_vantage.price_injestor import PriceInjestor
-from src.consolidators.value_consolidator import ValueConsolidator
 from src.alpha_vantage.injestor import Injestor
 from src.alpha_vantage.alpha_vantage_api import AlphaVantageAPI
 from src.parquet.parquet_storage import ParquetStorage
 from src.logger_factory import LoggerFactory
 from src.ticker_loader import TickerLoader
-from src.consolidators.dividend_consolidator import DividendConsolidator
-from src.consolidators.earnings_consolidator import EarningsConsolidator
-from src.consolidators.income_statement_consolidator import IncomeStatementConsolidator
-from src.consolidators.insiders_consolidator import InsiderConsolidator
-from src.consolidators.stock_price_consolidator import StockPriceConsolidator
-from src.consolidators.balance_sheet_consolidator import BalanceSheetConsolidator
-from src.consolidators.cashflow_consolidator import CashflowConsolidator
 from src.parquet.parquet_storage import ParquetStorage
 
 class Loader:
     def __init__(self):
-        env = EnvLoader().load()
-        self.api = AlphaVantageAPI(env.alpha_vantage_api_key, env.alpha_vantage_url)
-        self.storage = ParquetStorage(env.output_path)
+        self.logger = LoggerFactory().create_logger(__name__)
+        self.config_loader = ConfigLoader(self.logger)
+        self.env = self.config_loader.environment()
+        self.api = AlphaVantageAPI(self.env.alpha_vantage_api_key, self.env.alpha_vantage_url)
+        self.storage = ParquetStorage(self.env.output_path)
         #self.logger = get_run_logger() 
-        self.logger = LoggerFactory().factory.create_logger(__name__)
 
     #@task
     def load_ticker(self, ticker: str) -> bool:
@@ -55,47 +47,18 @@ class Loader:
         
         return True
 
-    #@task
-    def consolidate_ticker(self, ticker: str) -> bool:
-        self.logger.info(f"Consolidating ticker: {ticker}")
-        table_name = 'CONSOLIDATED'
-
-        # if the consolidated table exists, overwrite it
-        if self.storage.exists(table_name, ticker):
-             if not self.storage.remove_partition_by_symbol(table_name, ticker):
-                 return False
-        
-        df = BalanceSheetConsolidator(self.storage, self.logger).consolidate('BALANCE_SHEET', ticker)
-        df = CashflowConsolidator(self.storage, self.logger).consolidate(df, 'CASH_FLOW', ticker)
-        df = StockPriceConsolidator(self.storage, self.logger).consolidate(df, 'TIME_SERIES_MONTHLY_ADJUSTED', ticker)
-        df = DividendConsolidator(self.storage, self.logger).consolidate(df, 'DIVIDENDS', ticker)
-        df = EarningsConsolidator(self.storage, self.logger).consolidate(df, 'EARNINGS', ticker)
-        df = IncomeStatementConsolidator(self.storage, self.logger).consolidate(df, 'INCOME_STATEMENT', ticker)
-        df = InsiderConsolidator(self.storage, self.logger).consolidate(df, 'INSIDER_TRANSACTIONS', ticker)
-        df = ValueConsolidator(self.logger).consolidate(df)
-
-        # tidy 
-        df["symbol"] = ticker
-        df.sort_values('qtr_end_date')
-        df.reset_index()
-        self.storage .write_df(df, table_name, partition_cols=["symbol"], index=False)
-        ## let's write a CSV file for ease of validating
-        path = f"{self.data_path}/{table_name}/symbol={ticker}/{table_name}_{ticker}.csv"
-        # df.to_csv(path, index=False, header=True, encoding='utf-8')
-        return True
-    
-
-    def consolidate_tickers2(self, ticker: str) -> bool:
+    def consolidate_tickers(self, ticker: str) -> bool:
         self.logger.info(f"Consolidating ticker: {ticker}")
         table_name = 'CONSOLIDATED'
         
-        cl = RuleConfigLoader(self.config_path, self.logger)
-        tables = cl.load_table_consolidation_config()
+        tables = self.config_loader.load_table_consolidation_config()
         df = pd.DataFrame()
         consolidator = Consolidator(self.storage, self.logger)
         for table in tables:
             df = consolidator.run(df, table, ticker)
 
+        # run colum level calculations to enrich the consolidated dataset
+        df = ColumnCalculator(self.logger).run(df, ticker)
 
         # tidy 
         df["symbol"] = ticker
@@ -106,10 +69,10 @@ class Loader:
 
     #@flow
     def run(self):
-        tickers = TickerLoader(self.data_path, self.logger).run()
+        tickers = TickerLoader(self.env.output_path, self.logger).run()
         for ticker in tickers:
             if not self.load_ticker(ticker):
                 self.logger.warning(f"Failed to load ticker: {ticker}. Stopping further processing.")
                 break
-            self.consolidate_ticker(ticker)
+            self.consolidate_tickers(ticker)
 Loader().run()
