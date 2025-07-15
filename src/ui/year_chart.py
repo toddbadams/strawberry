@@ -3,7 +3,7 @@ from turtle import st
 import pandas as pd
 import altair as alt
 
-from src.ui.rule import RuleChartConfig
+from config.rule_char_config import RuleChartConfig
 
 class YearChart:
 

@@ -1,15 +1,19 @@
 import requests
+import logging
 
 class AlphaVantageAPI:
     """
     Simple client for Alpha Vantage REST API.
     """
 
-    def __init__(self, api_key: str, base_url: str = "https://www.alphavantage.co/query"):
+    def __init__(self, api_key: str,
+                 logger: logging.Logger, 
+                 base_url: str = "https://www.alphavantage.co/query"):
         self.api_key = api_key
         self.base_url = base_url
         self.api_limit = 25
         self.calls = 0
+        self.logger = logger
 
     def fetch(self, function: str, symbol: str, datatype: str = "json") -> dict:
         # do not exceed api limit

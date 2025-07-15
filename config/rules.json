@@ -7,7 +7,9 @@
       "metrics": ["dividend_growth_rate_5y"],
       "metric_labels": ["dividend_growth_rate_5y"],
       "y_label": "yeild %",
-      "y_axis_format": ".2%"
+      "y_axis_format": ".2%",
+      "buy": null,
+      "sell": null
     }]
   },
   {
@@ -18,7 +20,9 @@
       "metrics": ["dividend_chowder_yield"],
       "metric_labels": ["dividend_chowder_yield"],
       "y_label": "yeild %",
-      "y_axis_format": ".2%"
+      "y_axis_format": ".2%",
+      "buy": null,
+      "sell": null
     }]
   },
   {
@@ -29,13 +33,17 @@
       "metrics": ["dividend_yield", "yield_historical_mean_5y"],
       "metric_labels": ["dividend_yield", "yield_historical_mean_5y"],
       "y_label": "yeild %",
-      "y_axis_format": ".2%"
+      "y_axis_format": ".2%",
+      "buy": 1.0,
+      "sell": -1.0
     }, {
       "title": "Dividend Yield Z Score",
       "metrics": ["yield_zscore"],
       "metric_labels": ["yield_zscore"],
       "y_label": "yeild %",
-      "y_axis_format": ".2%"
+      "y_axis_format": ".2%",
+      "buy": null,
+      "sell": null
     }]
   },
   {
@@ -46,7 +54,9 @@
       "metrics": ["fair_value_dcf", "fair_value_ddm", "fair_value_blended", "share_price"],
       "metric_labels": ["fair_value_dcf", "fair_value_ddm", "fair_value_blended", "share_price"],
       "y_label": "yeild %",
-      "y_axis_format": ".2&"
+      "y_axis_format": ".2&",
+      "buy": null,
+      "sell": null
     }]
   },
   {
@@ -57,7 +67,9 @@
       "metrics": ["pe_ratio", "peg_ratio"],
       "metric_labels": ["pe_ratio", "peg_ratio"],
       "y_label": "ratio",
-      "y_axis_format": ".2"
+      "y_axis_format": ".2",
+      "buy": null,
+      "sell": null
     }]
   },
   {
@@ -68,7 +80,9 @@
       "metrics": ["ebitda_to_fcflow"],
       "metric_labels": ["ebitda_to_fcflow"],
       "y_label": "ratio",
-      "y_axis_format": ".2"
+      "y_axis_format": ".2",
+      "buy": null,
+      "sell": null
     }]
   },
   {
@@ -79,7 +93,9 @@
       "metrics": ["earnings_yield"],
       "metric_labels": ["earnings_yield"],
       "y_label": "yeild %",
-      "y_axis_format": ".2%"
+      "y_axis_format": ".2%",
+      "buy": null,
+      "sell": null
     }]
   },
   {
@@ -90,7 +106,9 @@
       "metrics": ["debt_to_equity_fv"],
       "metric_labels": ["debt_to_equity_fv"],
       "y_label": "ratio",
-      "y_axis_format": ".2"
+      "y_axis_format": ".2",
+      "buy": null,
+      "sell": null
     }]
   }
 ]
