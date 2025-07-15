@@ -1,0 +1,21 @@
+[
+    {
+        "name": "BALANCE_SHEET",
+        "attribute":"quarterlyReports"
+    },{
+        "name": "CASH_FLOW",
+        "attribute":"quarterlyReports"
+    },{
+        "name": "DIVIDENDS",
+        "attribute":"data"
+    },{
+        "name": "EARNINGS",
+        "attribute":"quarterlyEarnings"
+    },{
+        "name": "INCOME_STATEMENT",
+        "attribute":"quarterlyReports"
+    },{
+        "name": "INSIDER_TRANSACTIONS_MODIFIED",
+        "attribute":"data"
+    }
+]

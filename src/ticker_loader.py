@@ -20,5 +20,5 @@ class TickerLoader:
                 if row:  # skip empty rows
                     tickers.append(row[0])
         
-        self.logger.info(f"Loaded {len(tickers)} tickers from {path}: {tickers}")
+        self.logger.info(f"Loaded {len(tickers)} tickers from {path}")
         return tickers

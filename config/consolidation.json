@@ -34,14 +34,14 @@
             "type": "number"
         }]
     },{
-        "name": "DIVIDENDS_MODIFIED",
+        "name": "DIVIDENDS",
         "columns": [{
             "in_name": "ex_dividend_date",
             "out_name": "qtr_end_date",
             "type": "date"
         },{
             "in_name": "amount",
-            "out_name": "shares_outstanding",
+            "out_name": "dividend",
             "type": "number"
         }]
     },{
@@ -83,18 +83,22 @@
             "type": "number"
         }]
     },{
-        "name": "INSIDER_TRANSACTIONS_MODIFIED",
+        "name": "INSIDER_TRANSACTIONS",
         "columns": [{
             "in_name": "transaction_date",
             "out_name": "qtr_end_date",
             "type": "date"
         },{
             "in_name": "acquisition_or_disposal",
+            "out_name": "acquisition_or_disposal",
+            "type": "object"
+        },{
+            "in_name": "shares",
             "out_name": "insider_shares",
             "type": "number"
         }]
     },{
-        "name": "TIME_SERIES_MONTHLY_ADJUSTED_MODIFIED",
+        "name": "TIME_SERIES_MONTHLY_ADJUSTED",
         "columns": [{
             "in_name": "date",
             "out_name": "qtr_end_date",
