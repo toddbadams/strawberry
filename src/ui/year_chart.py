@@ -7,6 +7,8 @@ from src.config.config_loader import RuleChartConfig
 
 class YearChart:
 
+    CHART_HEIGHT = 450
+
     LINE_PALETTE = [
              "#006d9f", # blue
              "#ffa600", # gold
@@ -34,7 +36,7 @@ class YearChart:
         self.df = df
         self.logger = logger
       
-    def year_start_rules(self, df_plot: pd.DataFrame) -> alt.Chart:
+    def _year_start_rules(self, df_plot: pd.DataFrame) -> alt.Chart:
         # Create year-start lines
         years = pd.DatetimeIndex(df_plot['qtr_end_date']).year.unique()
         year_starts = pd.DataFrame({
@@ -43,10 +45,33 @@ class YearChart:
                 
         return (
             alt.Chart(year_starts)
-            .mark_rule(color='lightgray', strokeDash=[2,2], opacity=0.7)
+            .mark_rule(color='lightgray', strokeDash=[2,2], opacity=0.3)
             .encode(x='year_start:T')
         )
-     
+    
+    def _alternate_year_shade(self, df_plot: pd.DataFrame) -> alt.Chart:
+        # Build shading periods for every other year
+        years = sorted(pd.DatetimeIndex(df_plot['qtr_end_date']).year.unique())
+        periods = []
+        for idx, yr in enumerate(years):
+            # shade every even-indexed year block
+            if idx % 2 == 0:
+                start = pd.to_datetime(f"{yr}-01-01")
+                end = pd.to_datetime(f"{yr + 1}-01-01")
+                periods.append({'start': start, 'end': end})
+        shade_df = pd.DataFrame(periods)
+        return (
+            alt.Chart(shade_df)
+            .mark_rect(opacity=0.1, fill='lightgray')
+            .encode(
+                x=alt.X('start:T'),
+                x2='end:T',
+                # span full vertical extent
+                y=alt.value(0),
+                y2=alt.value(self.CHART_HEIGHT)
+            )
+        )
+    
     def blank(self, title: str) -> alt.Chart:
         return alt.Chart().mark_text(text=title, color='red').properties(title=title)
     
@@ -56,7 +81,9 @@ class YearChart:
         ).encode( y=alt.Y('y:Q') )
         return zero_line
     
-    def plot(self, ticker: str, config: RuleChartConfig) -> alt.LayerChart:
+    def plot(self, ticker: str, config: RuleChartConfig, 
+             range_years: int | None = None  # 1, 3, 5, 10; None for all
+             ) -> alt.LayerChart:
         date_col = 'qtr_end_date'
 
         # Melt DataFrame into long form for Altair
@@ -78,8 +105,20 @@ class YearChart:
             self.logger.warning(m)
             return self.blank(m)
 
+        # Apply range filter if specified
+        if range_years is not None:
+            max_date = df_plot[date_col].max()
+            min_date = max_date - pd.DateOffset(years=range_years)
+            df_plot = df_plot[df_plot[date_col] >= min_date]
+
+            if df_plot.empty:
+                msg = f"{config.title}: No data in the last {range_years} years for {ticker}."
+                self.logger.warning(msg)
+                return self.blank(msg)
+            
         # Generate year boundary rules
-        rule_layer = self.year_start_rules(df_plot)
+        shade_layer = self._alternate_year_shade(df_plot)
+        rule_layer = self._year_start_rules(df_plot)
 
         # Build main line layer
         line_layer = (
@@ -104,7 +143,7 @@ class YearChart:
         )
 
         # Layer and finalize chart
-        chart = alt.layer(rule_layer, line_layer)
+        chart = alt.layer(shade_layer, rule_layer, line_layer)
         chart = chart.properties(height=450, title=config.title)
         chart = chart.configure_title(
             fontSize=20,

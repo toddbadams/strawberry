@@ -10,7 +10,6 @@ from src.alpha_vantage.injestor import Injestor
 from src.alpha_vantage.alpha_vantage_api import AlphaVantageAPI
 from src.parquet.parquet_storage import ParquetStorage
 from src.logger_factory import LoggerFactory
-from src.ticker_loader import TickerLoader
 from src.parquet.parquet_storage import ParquetStorage
 
 class Loader:
@@ -27,20 +26,11 @@ class Loader:
         self.logger.info(f"extracting ticker: {ticker}")
 
         i = Injestor(self.api, self.storage, self.logger)
-        if not i.injest('DIVIDENDS', 'data', ticker):
-            return False
-        if not i.injest('INSIDER_TRANSACTIONS', 'data', ticker):
-            return False
-        if not i.injest('EARNINGS', 'quarterlyEarnings', ticker):
-            return False
-        if not i.injest('CASH_FLOW', 'quarterlyReports', ticker):
-            return False
-        if not i.injest('BALANCE_SHEET', 'quarterlyReports', ticker):
-            return False
-        if not i.injest('INCOME_STATEMENT', 'quarterlyReports', ticker):
-            return False
-        if not i.injest('OVERVIEW', None, ticker):
-            return False
+        tables = self.config_loader.load_acquisition_config()
+        for table in tables:
+            if not i.injest(table.name, table.attribute, ticker):
+                return False
+
         p = PriceInjestor(self.api, self.storage, self.logger)
         if not p.injest('TIME_SERIES_MONTHLY_ADJUSTED', 'Monthly Adjusted Time Series', ticker):
             return False
@@ -69,10 +59,11 @@ class Loader:
 
     #@flow
     def run(self):
-        tickers = TickerLoader(self.env.output_path, self.logger).run()
+        tickers = self.config_loader.load_tickers()
         for ticker in tickers:
             if not self.load_ticker(ticker):
                 self.logger.warning(f"Failed to load ticker: {ticker}. Stopping further processing.")
                 break
             self.consolidate_tickers(ticker)
+
 Loader().run()

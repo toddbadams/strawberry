@@ -15,7 +15,7 @@
         "name": "INCOME_STATEMENT",
         "attribute":"quarterlyReports"
     },{
-        "name": "INSIDER_TRANSACTIONS_MODIFIED",
+        "name": "INSIDER_TRANSACTIONS",
         "attribute":"data"
     }
 ]

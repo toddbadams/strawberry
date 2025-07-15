@@ -1,6 +1,8 @@
 import pandas as pd
 import logging
 
+from src.consolidators.dcf_calculator import DCFCalculator
+from src.consolidators.ddm_calculator import DDMCalculator
 from src.consolidators.eps_projection import EPSProjection
 
 class ColumnCalculator:
@@ -9,6 +11,9 @@ class ColumnCalculator:
         self.logger = logger
 
     def run(self, df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+        # sort by date
+        df.sort_values('qtr_end_date')
+        df.reset_index()
 
         # Calculate free cashflow:    FCF = operating Cash Flow – Capital Expenditures
         df['free_cashflow'] = (df['operating_cashflow'] - df['capital_expenditures'])
@@ -16,14 +21,14 @@ class ColumnCalculator:
         # free cashflow for last 12 months (TTM)
         df['free_cashflow_TTM'] = df['free_cashflow'].rolling(window=4).sum()
         
-        # free cashflow pdf share for last 12 months 
-        df["free_cashflow_df_TTM"] = (df['free_cashflow_TTM'] / df['shares_outstanding']).round(2)
+        # free cashflow ps share for last 12 months 
+        df["free_cashflow_ps_TTM"] = (df['free_cashflow_TTM'] / df['shares_outstanding']).round(2)
                 
         # Compound annual dividend growth rate ovdf the past 5 years
         df['qtr_growth'] = (df['dividend'] / df['dividend'].shift(20))**(1/20) - 1
         df['dividend_growth_rate_5y'] = (1 + df['qtr_growth'])**4 - 1
         
-        # Calculate TTM using trailing 4-pdfiod sum (current + previous 3)
+        # Calculate TTM using trailing 4-period sum (current + previous 3)
         df["dividendTTM"] = df["dividend"].rolling(window=4).sum()
 
         # Dividend yield 
@@ -60,6 +65,19 @@ class ColumnCalculator:
 
         # Compute cumulative sum of quarterly insider_shares
         df['cumulative_insider_shares'] = df['insider_shares'].cumsum()
+
+        # DCF valuation
+        df['fair_value_dcf'] = DCFCalculator().calc(cashflow_series = df['free_cashflow_ps_TTM'], 
+                                                        shares_series = df['share_price'])
+
+        # DDM valuation
+        df['fair_value_ddm'] = DDMCalculator().calc(dividend_series = df['dividend'])
+
+        # DCF / DDM blended value
+        df['fair_value_blended'] = (df['fair_value_dcf'] +  df['fair_value_ddm']) / 2
+
+        # fair value gap
+        df['fair_value_gap_pct'] = (df['fair_value_blended'] - df['share_price']) / df['fair_value_blended']
 
         self.logger.info(f"Column calculations completed for {ticker}.")
         return df

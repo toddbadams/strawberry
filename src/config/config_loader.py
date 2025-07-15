@@ -4,6 +4,12 @@ import os
 from dataclasses import dataclass, field
 from typing import Optional
 from pathlib import Path
+import csv
+
+@dataclass
+class AcquisitionTableConfig:
+    name: str
+    attribute: str
 
 @dataclass
 class RuleChartConfig:
@@ -83,6 +89,18 @@ class ConfigLoader:
             rules.append(rule_card)
 
         return rules
+           
+    def load_acquisition_config(self) -> list[AcquisitionTableConfig]:
+        p = os.path.join(self.env.config_path, "acquisition.json")
+        with open(p, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        tables = []
+
+        for item in data:
+            tables.append(AcquisitionTableConfig(name=item["name"], attribute=item["attribute"]))
+
+        return tables
     
     def load_table_consolidation_config(self) -> list[ConsolidationTableConfig]:
         p = os.path.join(self.env.config_path, "consolidation.json")
@@ -97,6 +115,20 @@ class ConfigLoader:
 
         return tables
 
+    def load_tickers(self) -> list[str]:
+        tickers: list[str] = []
+        path = os.path.join(self.env.config_path, "tickers.csv")
+        
+        self.logger.info(f"Loading tickers from {path}.")
+        with open(path, newline="") as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if row:  # skip empty rows
+                    tickers.append(row[0])
+        
+        self.logger.info(f"Loaded {len(tickers)} tickers from {path}")
+        return tickers
+    
     # Helper to fetch required vars and raise if missing
     def _get_env_var(self, name: str) -> str:
         value = os.getenv(name)
