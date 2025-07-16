@@ -29,10 +29,10 @@ class ColumnCalculator:
         df['dividend_growth_rate_5y'] = (1 + df['qtr_growth'])**4 - 1
         
         # Calculate TTM using trailing 4-period sum (current + previous 3)
-        df["dividendTTM"] = df["dividend"].rolling(window=4).sum()
+        df["dividend_ttm"] = df["dividend"].rolling(window=4).sum()
 
         # Dividend yield 
-        df['dividend_yield'] = df['dividendTTM'] / df['share_price']
+        df['dividend_yield'] = df['dividend_ttm'] / df['share_price']
 
         # chowder rule: Dividend yield + dividen growth rate
         df['dividend_chowder_yield'] = df['dividend_yield'] + df['dividend_growth_rate_5y']
@@ -46,7 +46,8 @@ class ColumnCalculator:
 
         # total debt to fair value equity
         df['fair_value_equity'] = df['shares_outstanding'] * df['share_price']
-        df['debt_to_equity_fv'] = (df['short_term_debt'] + df['long_term_debt']) / df['fair_value_equity']
+        df['total_debt'] = df['short_term_debt'] + df['long_term_debt']
+        df['debt_to_equity_fv'] = (df['total_debt']) / df['fair_value_equity']
 
         # P/E ratio
         df['pe_ratio'] = df['share_price'] / df['eps']
@@ -78,6 +79,10 @@ class ColumnCalculator:
 
         # fair value gap
         df['fair_value_gap_pct'] = (df['fair_value_blended'] - df['share_price']) / df['fair_value_blended']
+
+        # Net Income Adjusted
+        # normalized tax rate is 0.15  TBD: extract to config
+        df['net_income_adj'] = df['income_before_tax'] - (0.15 * df['income_before_tax'])
 
         self.logger.info(f"Column calculations completed for {ticker}.")
         return df

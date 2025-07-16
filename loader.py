@@ -2,6 +2,7 @@
 import pandas as pd
 #from prefect import flow, task, get_run_logger
 
+from src.consolidators.dividend_scoring import DividendScoring
 from src.consolidators.column_calc import ColumnCalculator
 from src.consolidators.consolidator import Consolidator
 from src.config.config_loader import ConfigLoader
@@ -31,6 +32,7 @@ class Loader:
             if not i.injest(table.name, table.attribute, ticker):
                 return False
 
+        # Pricing API is very different shape, so we have a special injector
         p = PriceInjestor(self.api, self.storage, self.logger)
         if not p.injest('TIME_SERIES_MONTHLY_ADJUSTED', 'Monthly Adjusted Time Series', ticker):
             return False
@@ -49,6 +51,7 @@ class Loader:
 
         # run colum level calculations to enrich the consolidated dataset
         df = ColumnCalculator(self.logger).run(df, ticker)
+        df = DividendScoring().apply(df)
 
         # tidy 
         df["symbol"] = ticker
