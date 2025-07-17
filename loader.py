@@ -2,6 +2,7 @@
 import pandas as pd
 #from prefect import flow, task, get_run_logger
 
+from src.consolidators.alpha_pulse import AlphaPulseScoring
 from src.consolidators.dividend_scoring import DividendScoring
 from src.consolidators.column_calc import ColumnCalculator
 from src.consolidators.consolidator import Consolidator
@@ -52,6 +53,7 @@ class Loader:
         # run colum level calculations to enrich the consolidated dataset
         df = ColumnCalculator(self.logger).run(df, ticker)
         df = DividendScoring().apply(df)
+        df = AlphaPulseScoring().apply(df)
 
         # tidy 
         df["symbol"] = ticker

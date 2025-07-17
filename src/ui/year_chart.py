@@ -144,7 +144,7 @@ class YearChart:
 
         # Layer and finalize chart
         chart = alt.layer(shade_layer, rule_layer, line_layer)
-        chart = chart.properties(height=450, title=config.title)
+        chart = chart.properties(height=500) #, title=config.title)
         chart = chart.configure_title(
             fontSize=20,
             anchor='start',

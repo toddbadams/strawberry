@@ -43,7 +43,7 @@ class Consolidator:
         df.set_index(date_col, inplace=True)
 
         # Resample to quarter-end, taking the last available record
-        quarterly_last = df['share_price'].resample('Q').last()
+        quarterly_last = df['share_price'].resample('QE').last()
 
         # Build result DataFrame
         df = (

@@ -58,7 +58,17 @@ class ConsolidationTableConfig:
     
     def number_out_names(self) -> list[str]:
         return [col.out_name for col in self.columns if col.type == "number"]
-    
+
+@dataclass
+class DividendScoreParameter:
+    name: str
+    description: str
+    raw_column_name: str
+    raw_value: float
+    score_column_name: str
+    score_value: float
+    weight: int
+
 class ConfigLoader:
 
     def __init__(self, logger: logging.Logger):
@@ -129,6 +139,41 @@ class ConfigLoader:
         self.logger.info(f"Loaded {len(tickers)} tickers from {path}")
         return tickers
     
+    def load_dividend_params(self) -> list[DividendScoreParameter]:
+        p = os.path.join(self.env.config_path, "dividend_score.json")
+        with open(p, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        params = []
+
+        for item in data:
+            params.append(DividendScoreParameter(name=item["name"],
+                                                 description=item["description"],
+                                                 raw_column_name=item["raw_column_name"],
+                                                 raw_value=0,
+                                                 score_column_name=item["score_column_name"],
+                                                 score_value=0,
+                                                 weight=item["weight"]))
+
+        return params
+
+    def load_dividend_score_rules(self) -> list[RuleConfig]:
+        p = os.path.join(self.env.config_path, "dividend_score_rules.json")
+        with open(p, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        rules = []
+
+        for item in data:
+            charts = [RuleChartConfig(**chart) for chart in item["charts"]]
+            rule_card = RuleConfig(
+                head=item["head"],
+                subhead=item["subhead"],
+                charts=charts
+            )
+            rules.append(rule_card)
+
+        return rules
     # Helper to fetch required vars and raise if missing
     def _get_env_var(self, name: str) -> str:
         value = os.getenv(name)
