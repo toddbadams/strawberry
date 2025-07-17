@@ -7,19 +7,20 @@ import pandas as pd
 import altair as alt
 from src.config.config_loader import ConfigLoader
 from src.ui.chart_factory import ConsoiidatedDataChartFactory
+from src.ui.dividend_score import DividendScoreDashboard
 
 class MenuFactory: 
 
     def __init__(self, tickers: list[str], 
                  consolidated_df: pd.DataFrame, 
                  overview_df: pd.DataFrame,
-                 config_path: str, 
+                 config_loader: ConfigLoader, 
                  logger: logging.Logger):
         self.tickers = tickers
         self.logger = logger
         self.consolidated_df = consolidated_df
         self.overview_df = overview_df
-        self.config_path = config_path
+        self.config_loader = config_loader
 
         # chart factory
         self.chart_factory = ConsoiidatedDataChartFactory(consolidated_df, self.logger)
@@ -76,14 +77,23 @@ class MenuFactory:
         self.logger.info(f"Default menu item.")
         self.selected_ticker = None
         return []
+    
+    def dividend_score_item(self):
+        DividendScoreDashboard(tickers=self.tickers, 
+                               consolidated_df=self.consolidated_df,
+                               overview_df=self.overview_df,
+                               config_loader=self.config_loader,
+                               logger=self.logger).render()
+        return []
 
     def run(self): 
         # Map each menu item to it's function
         mapping = {
-            "Rules": self.rules_item,
-            "Top Buys": self.top_buys_item,
-            "Rule Timeline": self.rule_timeline_item,
-            "Data Table": self.default_item
+          #  "Rules": self.rules_item,
+          #  "Top Buys": self.top_buys_item,
+            "Dividends": self.dividend_score_item
+          #  "Rule Timeline": self.rule_timeline_item,
+          #  "Data Table": self.default_item
         }
 
         with st.sidebar:

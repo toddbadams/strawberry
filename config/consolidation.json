@@ -6,6 +6,10 @@
             "out_name": "qtr_end_date",
             "type": "date"
         },{
+            "in_name": "totalAssets",
+            "out_name": "total_assets",
+            "type": "number"
+        },{
             "in_name": "commonStockSharesOutstanding",
             "out_name": "shares_outstanding",
             "type": "number"
@@ -85,6 +89,10 @@
             "in_name": "fiscalDateEnding",
             "out_name": "qtr_end_date",
             "type": "date"
+        },{
+            "in_name": "totalRevenue",
+            "out_name": "revenue",
+            "type": "number"
         },{
             "in_name": "netIncome",
             "out_name": "net_income",

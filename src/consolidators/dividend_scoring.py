@@ -20,35 +20,35 @@ class DividendScoring:
         self.cash_dividend_coverage_calc = ScoreCalculator(min_ratio=0, max_ratio=5,   min_score=20, max_score=100, ascending=True)
 
     def apply(self, df: pd.DataFrame) -> pd.DataFrame:
-        # Earnings Payout Ratio
+        # 1. Earnings Payout Ratio
         df['earnings_payout_ratio'] = (df['dividend'] / df['net_income_adj']) * 100
         df['earnings_payout_ratio_score'] = self.earnings_payout_ratio_calc.calculate(df['earnings_payout_ratio'])
 
-        # Free Cash Flow Payout Ratio
+        # 2. Free Cash Flow Payout Ratio
         df['fcf_payout_ratio'] = (df['dividend'] / df['free_cashflow']) * 100
         df['fcf_payout_ratio_score'] = self.fcf_payout_ratio_calc.calculate(df['fcf_payout_ratio'])
 
-        # Debt-to-Equity Ratio
+        # 3. Debt-to-Equity Ratio
         df['debt_to_equity_ratio'] = (df['total_debt'] / df['total_shareholder_equity']) * 100
         df['debt_to_equity_ratio_score'] = self.debt_to_equity_ratio_calc.calculate(df['debt_to_equity_ratio'])
 
-        # Interest Coverage Ratio
+        # 4. Interest Coverage Ratio
         df['interest_coverage_ratio'] = (df['ebit'] / df['interest_expense']) * 100
         df['interest_coverage_ratio_score'] = self.interest_coverage_ratio_calc.calculate(df['interest_coverage_ratio'])
 
-        # Free Cash Flow Volatility Ratio
+        # 5. Free Cash Flow Volatility Ratio
         df['fcf_volatility_ratio'] = (df['free_cashflow'].std() / df['free_cashflow'].mean()) * 100
         df['fcf_volatility_ratio_score'] = self.fcf_volatility_ratio_calc.calculate(df['fcf_volatility_ratio'])
 
-        # Dividend Growth Streak (TTM)
+        # 6. Dividend Growth Streak (TTM)
         df['dividend_ttm_growth_streak'] = DividendGrowthStreak().transform(df['dividend_ttm'])
         df['dividend_ttm_growth_streak_score'] = self.growth_streak_calc.calculate(df['dividend_ttm_growth_streak'])
 
-        # Quick Ratio
+        # 7. Quick Ratio
         df['quick_ratio'] = ((df['cash_and_cash_equivalents'] + df['current_net_receivables']) / df['current_liabilities']) * 100
         df['quick_ratio_score'] = self.quick_ratio_calc.calculate(df['quick_ratio'])
 
-        # Cash Dividend Coverage
+        # 8. Cash Dividend Coverage
         df['cash_dividend_coverage'] = CashDividendCoverageCalculator(
             df['cash_and_cash_equivalents'], df['dividend']
         ).compute()
