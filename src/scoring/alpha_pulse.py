@@ -1,5 +1,5 @@
 import pandas as pd
-from src.consolidators.score_calc import ScoreCalculator
+from .score_calc import ScoreCalculator
 
 class AlphaPulseScoring:
     """

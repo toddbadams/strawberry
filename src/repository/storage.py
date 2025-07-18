@@ -16,8 +16,8 @@ class ParquetStorage:
     def __table_root(self, table_name: str) -> Path:
         return self.data_path / f"{table_name}"
 
-    def exists(self, table_name: str, symbol: str) -> bool:
-        partition_dir = self.__table_root(table_name) / f"symbol={symbol}"
+    def exists(self, table_name: Path, ticker: str) -> bool:
+        partition_dir = table_name / Path(f"symbol={ticker}")
         if not partition_dir.is_dir():
             return False
         return any(partition_dir.glob("*.parquet"))
@@ -27,9 +27,9 @@ class ParquetStorage:
         root.parent.mkdir(parents=True, exist_ok=True)
         df.to_parquet(str(root), engine=self.engine, partition_cols=partition_cols, index=index)
 
-    def read_df(self, table_name: str, symbol: Optional[str] = None) -> pd.DataFrame:
+    def read_df(self, table_name: str, ticker: Optional[str] = None) -> pd.DataFrame:
         root = self.__table_root(table_name) 
-        root = root / f"symbol={symbol}" if symbol else root
+        root = root / f"symbol={ticker}" if ticker else root
         # If the directory (or file) doesn’t exist, bail out with None
         if not root.exists():
             return None
@@ -40,12 +40,12 @@ class ParquetStorage:
         except (FileNotFoundError, OSError, pd.errors.EmptyDataError):
             return None
         
-    def remove_partition_by_symbol(self, table_name: str, symbol: str) -> bool:
+    def remove_partition_by_symbol(self, table_name: str, ticker: str) -> bool:
         """
         Permanently delete the partition directory for a given symbol.
         Returns True if the directory was found and removed, False otherwise.
         """
-        partition_dir = self.__table_root(table_name) / f"symbol={symbol}"
+        partition_dir = self.__table_root(table_name) / f"symbol={ticker}"
         if not partition_dir.is_dir():
             return False
 

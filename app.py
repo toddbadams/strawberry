@@ -1,9 +1,7 @@
-import os
-from pathlib import Path
 import streamlit as st
 import pandas as pd
 
-from src.parquet.parquet_storage import ParquetStorage
+from parquet.storage import ParquetStorage
 from src.logger_factory import LoggerFactory
 from src.ui.menu_factory import MenuFactory
 from src.config.config_loader import ConfigLoader
@@ -37,9 +35,9 @@ class App:
 
   def startup(self):
     # page configuration
-    st.set_page_config(page_title="Dividend-Focused Portfolio Dashboard",
+    st.set_page_config(page_title="Strawberry",
                       layout="wide",              
-                      initial_sidebar_state="auto",
+                      initial_sidebar_state="expanded",
                       page_icon=":strawberry:")
 
     # sidebar configuration

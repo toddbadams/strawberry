@@ -8,8 +8,9 @@
       "metric_labels": ["dividend_growth_rate_5y"],
       "y_label": "yeild %",
       "y_axis_format": ".2%",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   },
   {
@@ -21,8 +22,9 @@
       "metric_labels": ["dividend_chowder_yield"],
       "y_label": "yeild %",
       "y_axis_format": ".2%",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   },
   {
@@ -34,16 +36,18 @@
       "metric_labels": ["dividend_yield", "yield_historical_mean_5y"],
       "y_label": "yeild %",
       "y_axis_format": ".2%",
-      "buy": 1.0,
-      "sell": -1.0
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }, {
       "title": "Dividend Yield Z Score",
       "metrics": ["yield_zscore"],
       "metric_labels": ["yield_zscore"],
       "y_label": "yeild %",
       "y_axis_format": ".2%",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   },
   {
@@ -55,8 +59,9 @@
       "metric_labels": ["fair_value_dcf", "fair_value_ddm", "fair_value_blended", "share_price"],
       "y_label": "yeild %",
       "y_axis_format": ".2&",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   },
   {
@@ -68,8 +73,9 @@
       "metric_labels": ["pe_ratio", "peg_ratio"],
       "y_label": "ratio",
       "y_axis_format": ".2",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   },
   {
@@ -81,8 +87,9 @@
       "metric_labels": ["ebitda_to_fcflow"],
       "y_label": "ratio",
       "y_axis_format": ".2",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   },
   {
@@ -94,8 +101,9 @@
       "metric_labels": ["earnings_yield"],
       "y_label": "yeild %",
       "y_axis_format": ".2%",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   },
   {
@@ -107,8 +115,9 @@
       "metric_labels": ["debt_to_equity_fv"],
       "y_label": "ratio",
       "y_axis_format": ".2",
-      "buy": null,
-      "sell": null
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
     }]
   }
 ]

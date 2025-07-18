@@ -1,65 +1,171 @@
 [
   {
+    "name": "Combinded Dividend Score",
+    "description": "How likely a company is to maintain its dividend over a full economic cycle.",
+    "raw_column_name": null,
+    "score_column_name": "dividend_score",
+    "weight": 100,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": "d",
+      "y_axis_min": 0.0,
+      "y_axis_max": 100.0,
+      "x_axis_range": 10
+    }
+  },{
     "name": "Earnings Payout Ratio",
     "description": "Assesses dividend affordability from profits by comparing dividends to adjusted net income.",
     "raw_column_name": "earnings_payout_ratio",
     "score_column_name": "earnings_payout_ratio_score",
-    "weight": 15
+    "weight": 15,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Free Cash Flow Payout Ratio",
     "description": "Evaluates dividends against real cash flow by comparing dividends to free cash flow.",
     "raw_column_name": "fcf_payout_ratio",
     "score_column_name": "fcf_payout_ratio_score",
-    "weight": 15
+    "weight": 15,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Debt-to-Equity Ratio",
     "description": "Measures financial leverage by comparing total debt to shareholder equity.",
     "raw_column_name": "debt_to_equity_ratio",
     "score_column_name": "debt_to_equity_ratio_score",
-    "weight": 10
+    "weight": 10,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Interest Coverage Ratio",
     "description": "Gauges ability to service debt by comparing EBIT to interest expense.",
     "raw_column_name": "interest_coverage_ratio",
     "score_column_name": "interest_coverage_ratio_score",
-    "weight": 10
+    "weight": 10,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Cash Flow Volatility",
     "description": "Rewards predictable cash flow by computing the standard deviation-to-mean ratio of free cash flow over a trailing window.",
     "raw_column_name": "fcf_volatility_pct",
     "score_column_name": "fcf_volatility_pct_score",
-    "weight": 10
+    "weight": 10,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Dividend Growth Streak",
     "description": "Counts consecutive years of dividend-per-share growth to capture dividend commitment.",
     "raw_column_name": "dividend_growth_streak",
     "score_column_name": "dividend_growth_streak_score",
-    "weight": 10
+    "weight": 10,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Revenue Drawdown in Recessions",
     "description": "Measures resilience by calculating peak-to-trough revenue decline during stressed periods.",
     "raw_column_name": "revenue_drawdown_pct",
     "score_column_name": "revenue_drawdown_pct_score",
-    "weight": 10
+    "weight": 10,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Quick Ratio",
     "description": "Assesses short-term liquidity by comparing (cash + receivables) to current liabilities.",
     "raw_column_name": "quick_ratio",
     "score_column_name": "quick_ratio_score",
-    "weight": 5
+    "weight": 5,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   },
   {
     "name": "Cash Dividend Coverage",
     "description": "Evaluates cash cushion by determining how many years of dividends are covered by cash on hand.",
     "raw_column_name": "cash_dividend_coverage_years",
     "score_column_name": "cash_dividend_coverage_years_score",
-    "weight": 5
+    "weight": 5,
+    "chart": {
+      "title": "Composite dividend score over time",
+      "metrics": ["dividend_score"],
+      "metric_labels": ["dividend score"],
+      "y_label": "",
+      "y_axis_format": ".0",
+      "y_axis_min": 0.0,
+      "y_axis_max": 1.0,
+      "x_axis_range": 10
+    }
   }
 ]

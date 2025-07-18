@@ -63,5 +63,5 @@ class ScoreCalculator:
         high = max(self.min_score, self.max_score)
         clipped = np.clip(raw, low, high)
 
-        return pd.Series(clipped, index=ratios.index, name=ratios.name)
+        return pd.Series(clipped, index=ratios.index, name=ratios.name).round(0)
 

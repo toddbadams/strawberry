@@ -7,7 +7,7 @@
       "request": "launch",
       // Invoke the streamlit module under your Python
       "module": "streamlit",
-      "args": ["run", "${workspaceFolder}/app.py"],
+      "args": ["run", "${workspaceFolder}/demo_app.py"],
 
       "console": "integratedTerminal",
       "env": {

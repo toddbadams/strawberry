@@ -1,5 +1,5 @@
 import pandas as pd
-from src.parquet.parquet_storage import ParquetStorage
+from parquet.storage import ParquetStorage
 
 class HealthRules:
 

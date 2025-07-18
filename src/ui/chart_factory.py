@@ -5,7 +5,7 @@ import pandas as pd
 import altair as alt
 
 from src.ui.year_chart import YearChart
-from src.config.config_loader  import RuleConfig
+from config.RuleConfig  import RuleConfig
 
 
 class ConsoiidatedDataChartFactory:
@@ -40,8 +40,8 @@ class ConsoiidatedDataChartFactory:
         )
         return options[choice]
    
-    def chart(self, rule: RuleConfig, ticker: str, range_years: int | None) -> list[alt.Chart]:
-        self.logger.info(f"{rule.head} rendered for {ticker} (range: {range_years or 'all'}).")
+    def chart(self, rule: RuleConfig, ticker: str) -> list[alt.Chart]:
+        self.logger.info(f"{rule.head} rendered for {ticker}.")
         df_t = self.df[self.df['symbol'] == ticker].copy().reset_index(drop=True)
         yc = YearChart(df_t, self.logger)
 
@@ -49,9 +49,7 @@ class ConsoiidatedDataChartFactory:
         for chart_conf in rule.charts:
             c = yc.plot(
                 ticker=ticker,
-                config=chart_conf,
-                range_years=range_years
-            )
+                config=chart_conf)
             charts.append(c)
         return charts
 
@@ -60,10 +58,10 @@ class ConsoiidatedDataChartFactory:
         self.subhead.markdown(f"_{rule_card.subhead}_")
 
         # Date range selector control
-        range_years = self._select_date_range()
+       # x = self._select_date_range()
 
         # Generate charts
-        charts = self.chart(rule=rule_card, ticker=ticker, range_years=range_years)
+        charts = self.chart(rule=rule_card, ticker=ticker)
 
         if charts:
             self.chart_slot1.altair_chart(charts[0], use_container_width=True)

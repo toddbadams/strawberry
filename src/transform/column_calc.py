@@ -1,9 +1,9 @@
 import pandas as pd
 import logging
 
-from src.consolidators.dcf_calculator import DCFCalculator
-from src.consolidators.ddm_calculator import DDMCalculator
-from src.consolidators.eps_projection import EPSProjection
+from .dcf_calculator import DCFCalculator
+from .ddm_calculator import DDMCalculator
+from .eps_projection import EPSProjection
 
 class ColumnCalculator:
 

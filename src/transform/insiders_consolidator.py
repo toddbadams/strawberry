@@ -1,6 +1,6 @@
 import pandas as pd
 import logging
-from src.parquet.parquet_storage import ParquetStorage
+from parquet.storage import ParquetStorage
 
 
 class InsiderConsolidator:

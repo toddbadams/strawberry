@@ -1,11 +1,11 @@
 import pandas as pd
 import logging
 
-from src.config.config_loader import ConsolidationTableConfig
-from src.parquet.parquet_storage import ParquetStorage
+import config as config
+from repository.storage import ParquetStorage
 
 
-class Consolidator:
+class StockTransformer:
 
     def __init__(self, ps: ParquetStorage, logger: logging.Logger):
         self.storage = ps
@@ -53,7 +53,7 @@ class Consolidator:
         )
         return df
         
-    def run(self, df: pd.DataFrame, config: ConsolidationTableConfig, ticker: str) -> pd.DataFrame:
+    def run(self, df: pd.DataFrame, config: config.ConsolidationTableConfig, ticker: str) -> pd.DataFrame:
         # if the file does not exist, return the incomming DataFrame
         if not self.storage.exists(config.name, ticker):
             self.logger.warning(f"Acquisition table: {config.name} does NOT exist, cannot consolidate")
@@ -86,7 +86,7 @@ class Consolidator:
         if config.name == 'TIME_SERIES_MONTHLY_ADJUSTED':
             df2 = self._pricing_transform(df2, dates[0])
               
-        self.logger.info(f"Table {config.name} consolidated for {ticker}.")
+        self.logger.info(f"Table {config.name} transformed for {ticker}.")
         return df2 if df.empty else df.merge(df2, on=dates[0], how="left")
 
    

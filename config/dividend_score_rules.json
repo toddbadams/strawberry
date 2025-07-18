@@ -1,10 +1,10 @@
 [
   {
-    "head": "Composite Dividend Score",
-    "subhead": "how likely a company is to maintain its dividend over a full economic cycle",
+    "head": "Dividend Score",
+    "subhead": "How likely a company is to maintain its dividend over a full economic cycle",
     "charts": [{
       "title": "Composite dividend score over time",
-      "metrics": ["dividend_safety_score"],
+      "metrics": ["dividend_score"],
       "metric_labels": ["dividend score"],
       "y_label": "",
       "y_axis_format": ".0",

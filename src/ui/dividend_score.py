@@ -3,8 +3,10 @@ import streamlit as st
 import streamlit_shadcn_ui as ui
 import pandas as pd
 
-from src.config.config_loader import ConfigLoader, RuleConfig
+from config.RuleConfig import RuleConfig
+from src.config.config_loader import ConfigLoader
 from src.ui.chart_factory import ConsoiidatedDataChartFactory
+from src.ui.year_chart import YearChart
 
 
 class DividendScoreDashboard:
@@ -52,6 +54,7 @@ class DividendScoreDashboard:
         self.row3_cols = st.columns([1])
         with self.row3_cols[0]:
             self.chart = st.empty
+            self.table = st.empty
 
     def render(self):
         self.logger.info("Dividend score dashboard selected.")
@@ -68,6 +71,7 @@ class DividendScoreDashboard:
 
         # filter the consolidate table        
         df = self.consolidated_df[self.consolidated_df['symbol'] == self.selected_ticker].copy().reset_index(drop=True)
+        yc = YearChart(df, self.logger)
 
         # display selected ticker details
         overview_row = self.overview_df.loc[self.overview_df["symbol"] == self.selected_ticker].iloc[0]
@@ -81,20 +85,19 @@ class DividendScoreDashboard:
 
         # Main Area
         with self.row2_cols[0]:
-            ui.metric_card(
-                title="Composite Score",
-                content=f"{dividend_score} / 100",
-                description="how likely a company is to maintain its dividend over a full economic cycle",
-                key="card0")
+            st.metric(
+                label="Composite Score",
+                value=f"{dividend_score} / 100",
+                help="How likely a company is to maintain its dividend over a full economic cycle.",
+                border=True)
         with self.row2_cols[1]:
             st.table(self.params_df)
 
         # Chart
         with self.row3_cols[0]:
             st.markdown(f"## {self.rule.head}")
-            self.chart = st.altair_chart(self.chart_factory.chart(rule=self.rule, 
-                                                                  ticker=self.selected_ticker,
-                                                                  range_years=10)[0])
+            self.chart = st.altair_chart(yc.plot(ticker=self.selected_ticker, config=self.params[0].chart))
+            self.table = st.dataframe(df)
 
         return
 
