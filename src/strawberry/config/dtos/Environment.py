@@ -6,8 +6,14 @@ from pathlib import Path
 class Environment:
     alpha_vantage_api_key: str
     alpha_vantage_url: str
-    acquisition_path: Path
-    output_path: Path
-    config_path: Path
     openapi_api_key: str
     env: str
+    data_root: Path
+    acquisition_folder: Path
+    validated_folder: Path
+    transformed_folder: Path
+    scored_folder: Path
+    signals_folder: Path
+    prediction_folder: Path
+    evaluation_folder: Path
+    config_path: Path

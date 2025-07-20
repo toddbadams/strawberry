@@ -2,10 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Acquisition",
+      "name": "Acquire",
       "type": "python",                    // ← use the Python extension’s debugger
       "request": "launch",
-      "module": "strawberry.acquisition.acq",
+      "module": "strawberry.acquisition.acquire",
+      "justMyCode": true,
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    },
+    {
+      "name": "Validate",
+      "type": "python",                    // ← use the Python extension’s debugger
+      "request": "launch",
+      "module": "strawberry.acquisition.validate",
       "justMyCode": true,
       "console": "integratedTerminal",
       "env": {

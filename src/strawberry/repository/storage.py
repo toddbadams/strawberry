@@ -1,42 +1,85 @@
-
+from datetime import datetime
 from pathlib import Path
 import shutil
 import pandas as pd
 from typing import Optional
 
+from strawberry.logging.logger_factory import LoggerFactory
+from strawberry.config.config_loader import ConfigLoader
+
 class ParquetStorage:
-    """
-    Utility for partitioned Parquet read/write.
-    """
 
-    def __init__(self, data_path: str):
-        self.data_path = Path(data_path)
+    def __init__(self, folder: str):
+        logger = LoggerFactory().create_logger(__name__)
+        loader = ConfigLoader(logger)
+        self.env = loader.environment()
         self.engine: str = "pyarrow"
+        self.folder = folder
 
-    def __table_root(self, table_name: str) -> Path:
-        return self.data_path / f"{table_name}"
+    def _table_path(self, table_name: str) -> Path:
+        return self.env.data_root / self.folder / f"{table_name}"
+    
+    def _partition_path(self, table_name: str, partition_name: str) -> Path:
+        return self._table_path(table_name) / Path(f"symbol={partition_name}")
+    
+    def last_update(self, table_name: str, partition_name: str = None) -> datetime:
+        """
+        Return the most recent modification datetime of parquet files
+        for a given table, optionally scoped to a symbol partition.
+        """
+        # Determine search directory: either table root or specific partition
+        if partition_name:
+            search_path = self._partition_path(table_name, partition_name)
+        else:
+            search_path = self._table_path(table_name)
 
-    def exists(self, table_name: Path, ticker: str) -> bool:
-        partition_dir = self.__table_root(table_name) / Path(f"symbol={ticker}")
-        if not partition_dir.is_dir():
+        # If path doesn't exist, nothing to update
+        if not search_path.exists():
+            return None
+
+        # Gather parquet files
+        files = []
+        # If a single parquet file at the root
+        if search_path.is_file() and search_path.suffix == ".parquet":
+            files = [search_path]
+        else:
+            files = list(search_path.glob("**/*.parquet"))
+
+        if not files:
+            return None
+
+        # Select most recent modification time
+        latest_mtime = max(f.stat().st_mtime for f in files)
+        return datetime.fromtimestamp(latest_mtime)
+
+    def exists(self, table_name: str, ticker: str = None) -> bool:
+        # If a ticker was provided, look in its partition sub‑dir
+        p = self._partition_path(table_name, ticker) if ticker is not None else self._table_path(table_name)
+
+        if not p.is_dir():
             return False
-        return any(partition_dir.glob("*.parquet"))
+
+        # Any .parquet files present?
+        return any(p.glob("*.parquet"))
 
     def write_df(self, df: pd.DataFrame, table_name: str, partition_cols: list[str] = None, index: bool = False):
-        root = self.__table_root(table_name)
+        root = self._table_path(table_name)
         root.parent.mkdir(parents=True, exist_ok=True)
         df.to_parquet(str(root), engine=self.engine, partition_cols=partition_cols, index=index)
 
-    def read_df(self, table_name: str, ticker: Optional[str] = None) -> pd.DataFrame:
-        root = self.__table_root(table_name) 
-        root = root / f"symbol={ticker}" if ticker else root
+    def read_df(self, table_name: str, ticker: Optional[str] = None) -> pd.DataFrame:        # Base directory for this table
+        table_dir = self._table_path(table_name)
+
+        # If a ticker was provided, look in its partition sub‑dir
+        partition_dir = table_dir / Path(f"symbol={ticker}") if ticker is not None else table_dir
+
         # If the directory (or file) doesn’t exist, bail out with None
-        if not root.exists():
+        if not partition_dir.exists():
             return None
 
         # Otherwise attempt to read; guard against any parquet errors too
         try:
-            return pd.read_parquet(str(root), engine=self.engine)
+            return pd.read_parquet(str(partition_dir), engine=self.engine)
         except (FileNotFoundError, OSError, pd.errors.EmptyDataError):
             return None
         
@@ -45,7 +88,7 @@ class ParquetStorage:
         Permanently delete the partition directory for a given symbol.
         Returns True if the directory was found and removed, False otherwise.
         """
-        partition_dir = self.__table_root(table_name) / f"symbol={ticker}"
+        partition_dir = self._table_path(table_name) / f"symbol={ticker}"
         if not partition_dir.is_dir():
             return False
 

@@ -19,7 +19,8 @@
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": "fiscalDateEnding"
     },{
         "name": "CASH_FLOW",
         "attribute":"quarterlyReports",
@@ -37,7 +38,8 @@
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": "fiscalDateEnding"
     },{
         "name": "DIVIDENDS",
         "attribute":"data",
@@ -47,7 +49,8 @@
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": "ex_dividend_date"
 
     },{
         "name": "EARNINGS",
@@ -59,7 +62,8 @@
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": "fiscalDateEnding"
 
     },{
         "name": "INCOME_STATEMENT",
@@ -77,7 +81,8 @@
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": "fiscalDateEnding"
 
     },{
         "name": "INSIDER_TRANSACTIONS",
@@ -89,7 +94,8 @@
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": "transaction_date"
 
     },{
         "name": "OVERVIEW",
@@ -117,15 +123,18 @@
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": null
     },{
         "name": "TIME_SERIES_MONTHLY_ADJUSTED",
         "attribute": "Monthly Adjusted Time Series",
-        "columns": [],
+        "columns": ["1. open", "2. high", "3. low", "4. close", 
+                    "5. adjusted close", "6. volume", "7. dividend amount"],
         "injestor": "PriceInjestor",
         "frequency": "quarterly",
         "release_day_rule": "end_of_month_after_quarter",
         "release_time": "08:30",
-        "timezone": "US/Eastern"
+        "timezone": "US/Eastern",
+        "date_column": "date"
     }
 ]

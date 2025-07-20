@@ -13,12 +13,18 @@ class ConfigLoader:
         self.logger = logger
         self.env = dto.Environment(
             alpha_vantage_api_key = self._get_env_var('ALPHA_VANTAGE_API_KEY'),
-            alpha_vantage_url       = self._get_env_var('ALPHA_VANTAGE_URL'),
-            acquisition_path        = self._get_env_var('ACQUISITION_PATH'),
-            output_path             = Path(self._get_env_var('OUTPUT_PATH')),
-            config_path             = Path(self._get_env_var('CONFIG_PATH')),
-            openapi_api_key         = self._get_env_var('OPENAPI_API_KEY'),
-            env                     = self._get_env_var('ENV')
+            alpha_vantage_url     = self._get_env_var('ALPHA_VANTAGE_URL'),
+            openapi_api_key       = self._get_env_var('OPENAPI_API_KEY'),
+            env                   = self._get_env_var('ENV'),
+            data_root             = Path(self._get_env_var('DATA_ROOT')),
+            acquisition_folder    = Path(self._get_env_var('ACQUISITION_FOLDER')),
+            validated_folder      = Path(self._get_env_var('VALIDATED_FOLDER')),
+            transformed_folder    = Path(self._get_env_var('TRANSFORMED_FOLDER')),
+            scored_folder         = Path(self._get_env_var('SCORED_FOLDER')),
+            signals_folder        = Path(self._get_env_var('SIGNALS_FOLDER')),
+            prediction_folder     = Path(self._get_env_var('PREDICTION_FOLDER')),
+            evaluation_folder     = Path(self._get_env_var('EVALUATION_FOLDER')),
+            config_path           = Path(self._get_env_var('CONFIG_FOLDER'))
         )
 
     def load_rules(self) -> list[dto.RuleConfig]:
@@ -48,7 +54,9 @@ class ConfigLoader:
 
         for item in data:
             tables.append(dto.AcquisitionTableConfig(name=item["name"], attribute=item["attribute"],
-                                           columns=item["columns"], injestor=item["injestor"]))
+                                           columns=item["columns"], injestor=item["injestor"],
+                                           release_time=item["release_time"], timezone=item["timezone"],
+                                           frequency=item["frequency"], date_column=item["date_column"]))
 
         return tables
     
@@ -122,6 +130,7 @@ class ConfigLoader:
             rules.append(rule_card)
 
         return rules
+    
     # Helper to fetch required vars and raise if missing
     def _get_env_var(self, name: str) -> str:
         value = os.getenv(name)
