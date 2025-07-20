@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 
 from parquet.storage import ParquetStorage
-from src.logger_factory import LoggerFactory
+from logging.logger_factory import LoggerFactory
 from src.ui.menu_factory import MenuFactory
-from src.config.config_loader import ConfigLoader
+from strawberry.config.config_loader import ConfigLoader
 
 class App:
 

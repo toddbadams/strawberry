@@ -47,7 +47,8 @@ class ConfigLoader:
         tables = []
 
         for item in data:
-            tables.append(dto.AcquisitionTableConfig(name=item["name"], attribute=item["attribute"]))
+            tables.append(dto.AcquisitionTableConfig(name=item["name"], attribute=item["attribute"],
+                                           columns=item["columns"], injestor=item["injestor"]))
 
         return tables
     

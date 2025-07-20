@@ -2,16 +2,36 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Streamlit: Debug App",
-      "type": "debugpy",
+      "name": "Debug Acquisition",
+      "type": "python",                    // ← use the Python extension’s debugger
       "request": "launch",
-      // Invoke the streamlit module under your Python
-      "module": "streamlit",
-      "args": ["run", "${workspaceFolder}/demo_app.py"],
-
+      "module": "strawberry.acquisition.acq",
+      "justMyCode": true,
       "console": "integratedTerminal",
       "env": {
-        "PYTHONPATH": "${workspaceFolder}"
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    },
+    {
+      "name": "Debug UI",
+      "type": "python",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "${workspaceFolder}/src/ui/app.py"],
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    },
+    {
+      "name": "Acq Data Viewer",
+      "type": "python",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "${workspaceFolder}/src/strawberry/acquisition/data_viewer.py"],
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
       }
     }
   ]

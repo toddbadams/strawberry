@@ -17,7 +17,7 @@ class ParquetStorage:
         return self.data_path / f"{table_name}"
 
     def exists(self, table_name: Path, ticker: str) -> bool:
-        partition_dir = table_name / Path(f"symbol={ticker}")
+        partition_dir = self.__table_root(table_name) / Path(f"symbol={ticker}")
         if not partition_dir.is_dir():
             return False
         return any(partition_dir.glob("*.parquet"))

@@ -1,21 +1,131 @@
 [
     {
         "name": "BALANCE_SHEET",
-        "attribute":"quarterlyReports"
+        "attribute":"quarterlyReports",
+        "columns": ["fiscalDateEnding", "reportedCurrency", "totalAssets",
+                "totalCurrentAssets", "cashAndCashEquivalentsAtCarryingValue", "cashAndShortTermInvestments",
+                "inventory", "currentNetReceivables", "totalNonCurrentAssets",
+                "propertyPlantEquipment", "accumulatedDepreciationAmortizationPPE", "intangibleAssets",
+                "intangibleAssetsExcludingGoodwill", "goodwill", "investments",
+                "longTermInvestments", "shortTermInvestments", "otherCurrentAssets",
+                "otherNonCurrentAssets", "totalLiabilities", "totalCurrentLiabilities",
+                "currentAccountsPayable", "deferredRevenue", "currentDebt",
+                "shortTermDebt", "totalNonCurrentLiabilities", "capitalLeaseObligations",
+                "longTermDebt", "currentLongTermDebt", "longTermDebtNoncurrent",
+                "shortLongTermDebtTotal", "otherCurrentLiabilities", "otherNonCurrentLiabilities",
+                "totalShareholderEquity", "treasuryStock", "retainedEarnings",
+                "commonStock", "commonStockSharesOutstanding"],
+        "injestor": "Injestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
     },{
         "name": "CASH_FLOW",
-        "attribute":"quarterlyReports"
+        "attribute":"quarterlyReports",
+        "columns": ["fiscalDateEnding", "reportedCurrency", "operatingCashflow",
+                "paymentsForOperatingActivities", "proceedsFromOperatingActivities", "changeInOperatingLiabilities",
+                "changeInOperatingAssets", "depreciationDepletionAndAmortization", "capitalExpenditures",
+                "changeInReceivables", "changeInInventory", "profitLoss",
+                "cashflowFromInvestment", "cashflowFromFinancing", "proceedsFromRepaymentsOfShortTermDebt",
+                "paymentsForRepurchaseOfCommonStock", "paymentsForRepurchaseOfEquity", "paymentsForRepurchaseOfPreferredStock",
+                "dividendPayout", "dividendPayoutCommonStock", "dividendPayoutPreferredStock",
+                "proceedsFromIssuanceOfCommonStock", "proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet", "proceedsFromIssuanceOfPreferredStock",
+                "proceedsFromRepurchaseOfEquity", "proceedsFromSaleOfTreasuryStock", "changeInCashAndCashEquivalents",
+                "changeInExchangeRate", "netIncome"],
+        "injestor": "Injestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
     },{
         "name": "DIVIDENDS",
-        "attribute":"data"
+        "attribute":"data",
+        "columns": ["ex_dividend_date", "declaration_date", "record_date",
+                "payment_date", "amount"],
+        "injestor": "Injestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
+
     },{
         "name": "EARNINGS",
-        "attribute":"quarterlyEarnings"
+        "attribute":"quarterlyEarnings",
+        "columns": ["fiscalDateEnding", "reportedDate", "reportedEPS",
+                "estimatedEPS", "surprise", "surprisePercentage",
+                "reportTime"],
+        "injestor": "Injestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
+
     },{
         "name": "INCOME_STATEMENT",
-        "attribute":"quarterlyReports"
+        "attribute":"quarterlyReports",
+        "columns": ["fiscalDateEnding", "reportedCurrency", "grossProfit",
+                "totalRevenue", "costOfRevenue", "costofGoodsAndServicesSold",
+                "operatingIncome", "sellingGeneralAndAdministrative", "researchAndDevelopment",
+                "operatingExpenses", "investmentIncomeNet", "netInterestIncome",
+                "interestIncome", "interestExpense", "nonInterestIncome",
+                "otherNonOperatingIncome", "depreciation", "depreciationAndAmortization",
+                "incomeBeforeTax", "incomeTaxExpense", "interestAndDebtExpense",
+                "netIncomeFromContinuingOperations", "comprehensiveIncomeNetOfTax", "ebit",
+                "ebitda", "netIncome"],
+        "injestor": "Injestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
+
     },{
         "name": "INSIDER_TRANSACTIONS",
-        "attribute":"data"
+        "attribute":"data",
+        "columns": [ "transaction_date", "ticker", "executive",
+                "executive_title", "security_type", "acquisition_or_disposal",
+                "shares", "share_price"],
+        "injestor": "Injestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
+
+    },{
+        "name": "OVERVIEW",
+        "attribute": null,
+        "columns": ["Symbol", "AssetType", "Name",
+                "Description", "CIK", "Exchange",
+                "Currency", "Country", "Sector",
+                "Industry", "Address", "OfficialSite",
+                "FiscalYearEnd", "LatestQuarter", "MarketCapitalization",
+                "EBITDA", "PERatio", "PEGRatio",
+                "BookValue", "DividendPerShare", "DividendYield",
+                "EPS", "RevenuePerShareTTM", "ProfitMargin",
+                "OperatingMarginTTM", "ReturnOnAssetsTTM", "ReturnOnEquityTTM",
+                "RevenueTTM", "GrossProfitTTM", "DilutedEPSTTM",
+                "QuarterlyEarningsGrowthYOY", "QuarterlyRevenueGrowthYOY", "AnalystTargetPrice",
+                "AnalystRatingStrongBuy", "AnalystRatingBuy", "AnalystRatingHold",
+                "AnalystRatingSell", "AnalystRatingStrongSell", "TrailingPE",
+                "ForwardPE", "PriceToSalesRatioTTM", "PriceToBookRatio",
+                "EVToRevenue", "EVToEBITDA", "Beta",
+                "52WeekHigh", "52WeekLow", "50DayMovingAverage",
+                "200DayMovingAverage", "SharesOutstanding", "SharesFloat",
+                "PercentInsiders", "PercentInstitutions", "DividendDate",
+                "ExDividendDate"],
+        "injestor": "Injestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
+    },{
+        "name": "TIME_SERIES_MONTHLY_ADJUSTED",
+        "attribute": "Monthly Adjusted Time Series",
+        "columns": [],
+        "injestor": "PriceInjestor",
+        "frequency": "quarterly",
+        "release_day_rule": "end_of_month_after_quarter",
+        "release_time": "08:30",
+        "timezone": "US/Eastern"
     }
 ]

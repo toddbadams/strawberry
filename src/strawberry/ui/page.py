@@ -1,5 +1,5 @@
 from src.config.config_loader import ConfigLoader
-from src.logger_factory import LoggerFactory
+from logging.logger_factory import LoggerFactory
 import pandas as pd
 from abc import ABC, abstractmethod
 
