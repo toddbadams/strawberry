@@ -15,17 +15,17 @@ class App:
         self.logger = factory.create_logger(__name__)
 
         # configuration
-        self.config_loader = ConfigLoader(self.logger)
+        self.config = ConfigLoader(self.logger)
 
-        # root path
-        self.root = self.config_loader.env.output_path / self.config_loader.env.acquisition_path
-        self.storage = ParquetStorage(self.root)
+        # repositories
+        self.acq_store = ParquetStorage(self.config.env.acquisition_folder)
+        self.val_store = ParquetStorage(self.config.env.validated_folder)
 
         # acquisition tables
-        self.tables = self.config_loader.load_acquisition_config()
+        self.acq_tables = self.config.load_acquisition_config()
 
         # table name /  tickers / data frame
-        self.table_name = None
+        self.selected_table = None
         self.tickers = None
         self.selected_ticker = None
         self.df = None
@@ -34,7 +34,7 @@ class App:
         # header area
         header_cols = st.columns([3, 1, 1])
         with header_cols[0]:
-            st.header(self.table_name)
+            st.header(self.selected_table)
 
         # ticker selection box
         with header_cols[1]:
@@ -64,26 +64,28 @@ class App:
         self.ticker_event_handler(next_tkr)
 
     def table_event_handler(self, table_name: str):    
-        self.table_name = table_name
+        self.selected_table = table_name
         self.tickers = self.get_tickers(table_name)
         st.session_state.selected_ticker = self.tickers[0]
         self.ticker_event_handler(self.tickers[0])    
 
     def ticker_event_handler(self, ticker: str):
         self.selected_ticker = ticker
-        self.df = self.storage.read_df(self.table_name, self.selected_ticker)
+        self.df = self.acq_store.read_df(self.selected_table, self.selected_ticker)
         self.render()
 
-
-    def get_tickers(self, base_dir: str) -> list[str]:
+    def _table_path(self, table_name: str) -> Path:
+        return self.config.env.data_root / self.config.env.acquisition_folder / Path(table_name)
+    
+    def get_tickers(self, table_name: str) -> list[str]:
         """
         Given a path like 'BALANCE_SHEET', find all subdirectories named
         'symbol=XXX' and return ['XXX', ...].
         """
-        base_path = Path(self.root) / base_dir
+        base_path = self._table_path(table_name)
 
         if not base_path.is_dir():
-            raise ValueError(f"{base_dir!r} is not a valid directory")
+            raise ValueError(f"{table_name!r} is not a valid directory")
 
         symbols: list[str] = []
         for sub in base_path.iterdir():
@@ -96,12 +98,10 @@ class App:
         return symbols
 
     def validation_button(self):
-        st.write("validation")
-        base_path = Path("validation")
-        v = self.storage.read_df(base_path)
+        v = self.val_store.read_df("validation")
         st.dataframe(v, use_container_width=True, height=1000)
 
-        t = self.storage.read_df(Path("TICKERS_TO_TRANSFORM"))
+        t = self.val_store.read_df("TICKERS_TO_TRANSFORM")
         st.dataframe(t, use_container_width=True, height=1000)
 
     def startup(self):
@@ -115,7 +115,7 @@ class App:
         # build pages dict: name -> render(name)
         pages: dict[str, callable] = {
                 cfg.name: partial(self.table_event_handler, cfg.name)
-                for cfg in self.tables
+                for cfg in self.acq_tables
             }
 
         # add the special handler for your monthly-adjusted time series

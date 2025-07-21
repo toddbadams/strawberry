@@ -11,7 +11,7 @@ class ParquetStorage:
 
     def __init__(self, folder: str):
         logger = LoggerFactory().create_logger(__name__)
-        loader = ConfigLoader(logger)
+        loader = ConfigLoader()
         self.env = loader.environment()
         self.engine: str = "pyarrow"
         self.folder = folder
@@ -98,3 +98,23 @@ class ParquetStorage:
             return True
         except Exception:
             return False
+        
+    def get_tickers(self, table_name: str) -> list[str]:
+        """
+        Given a path like 'BALANCE_SHEET', find all subdirectories named
+        'symbol=XXX' and return ['XXX', ...].
+        """
+        base_path = self._table_path(table_name)
+
+        if not base_path.is_dir():
+            raise ValueError(f"{table_name!r} is not a valid directory")
+
+        symbols: list[str] = []
+        for sub in base_path.iterdir():
+            name = sub.name
+            if sub.is_dir() and name.startswith("symbol="):
+                # split on the first '=' and take the right side
+                symbol = name.split("=", 1)[1]
+                symbols.append(symbol)
+
+        return symbols

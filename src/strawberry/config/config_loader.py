@@ -5,12 +5,13 @@ from pathlib import Path
 import csv
 
 from . import dtos as dto
+from strawberry.logging.logger_factory import LoggerFactory
 
 
 class ConfigLoader:
 
-    def __init__(self, logger: logging.Logger):
-        self.logger = logger
+    def __init__(self):
+        self.logger = LoggerFactory().create_logger(__name__)
         self.env = dto.Environment(
             alpha_vantage_api_key = self._get_env_var('ALPHA_VANTAGE_API_KEY'),
             alpha_vantage_url     = self._get_env_var('ALPHA_VANTAGE_URL'),
@@ -45,20 +46,12 @@ class ConfigLoader:
 
         return rules
            
-    def load_acquisition_config(self) -> list[dto.AcquisitionTableConfig]:
+    def load_acquisition_config(self) -> dto.AcquisitionConfig:
         p = os.path.join(self.env.config_path, "acquisition.json")
-        with open(p, "r", encoding="utf-8") as f:
-            data = json.load(f)
-
-        tables = []
-
-        for item in data:
-            tables.append(dto.AcquisitionTableConfig(name=item["name"], attribute=item["attribute"],
-                                           columns=item["columns"], injestor=item["injestor"],
-                                           release_time=item["release_time"], timezone=item["timezone"],
-                                           frequency=item["frequency"], date_column=item["date_column"]))
-
-        return tables
+        # Use the top-level AcquisitionConfig loader to parse tables
+        acquisition_config = dto.AcquisitionConfig.load_from_file(p)
+        self.logger.info(f"Loaded {len(acquisition_config.tables)} acquisition table configs from {p}")
+        return acquisition_config
     
     def load_table_consolidation_config(self) -> list[dto.ConsolidationTableConfig]:
         p = os.path.join(self.env.config_path, "consolidation.json")
@@ -140,3 +133,4 @@ class ConfigLoader:
             
     def environment(self) -> dto.Environment:
         return self.env
+

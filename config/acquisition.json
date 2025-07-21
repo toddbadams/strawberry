@@ -1,140 +1,957 @@
-[
+{
+  "defaults": {
+    "injestor": "Injestor",
+    "frequency": "quarterly",
+    "releaseDayRule": "endOfMonthAfterQuarter",
+    "releaseTime": "08:30",
+    "timezone": "US/Eastern"
+  },
+  "tables": [
     {
-        "name": "BALANCE_SHEET",
-        "attribute":"quarterlyReports",
-        "columns": ["fiscalDateEnding", "reportedCurrency", "totalAssets",
-                "totalCurrentAssets", "cashAndCashEquivalentsAtCarryingValue", "cashAndShortTermInvestments",
-                "inventory", "currentNetReceivables", "totalNonCurrentAssets",
-                "propertyPlantEquipment", "accumulatedDepreciationAmortizationPPE", "intangibleAssets",
-                "intangibleAssetsExcludingGoodwill", "goodwill", "investments",
-                "longTermInvestments", "shortTermInvestments", "otherCurrentAssets",
-                "otherNonCurrentAssets", "totalLiabilities", "totalCurrentLiabilities",
-                "currentAccountsPayable", "deferredRevenue", "currentDebt",
-                "shortTermDebt", "totalNonCurrentLiabilities", "capitalLeaseObligations",
-                "longTermDebt", "currentLongTermDebt", "longTermDebtNoncurrent",
-                "shortLongTermDebtTotal", "otherCurrentLiabilities", "otherNonCurrentLiabilities",
-                "totalShareholderEquity", "treasuryStock", "retainedEarnings",
-                "commonStock", "commonStockSharesOutstanding"],
-        "injestor": "Injestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": "fiscalDateEnding"
-    },{
-        "name": "CASH_FLOW",
-        "attribute":"quarterlyReports",
-        "columns": ["fiscalDateEnding", "reportedCurrency", "operatingCashflow",
-                "paymentsForOperatingActivities", "proceedsFromOperatingActivities", "changeInOperatingLiabilities",
-                "changeInOperatingAssets", "depreciationDepletionAndAmortization", "capitalExpenditures",
-                "changeInReceivables", "changeInInventory", "profitLoss",
-                "cashflowFromInvestment", "cashflowFromFinancing", "proceedsFromRepaymentsOfShortTermDebt",
-                "paymentsForRepurchaseOfCommonStock", "paymentsForRepurchaseOfEquity", "paymentsForRepurchaseOfPreferredStock",
-                "dividendPayout", "dividendPayoutCommonStock", "dividendPayoutPreferredStock",
-                "proceedsFromIssuanceOfCommonStock", "proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet", "proceedsFromIssuanceOfPreferredStock",
-                "proceedsFromRepurchaseOfEquity", "proceedsFromSaleOfTreasuryStock", "changeInCashAndCashEquivalents",
-                "changeInExchangeRate", "netIncome"],
-        "injestor": "Injestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": "fiscalDateEnding"
-    },{
-        "name": "DIVIDENDS",
-        "attribute":"data",
-        "columns": ["ex_dividend_date", "declaration_date", "record_date",
-                "payment_date", "amount"],
-        "injestor": "Injestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": "ex_dividend_date"
-
-    },{
-        "name": "EARNINGS",
-        "attribute":"quarterlyEarnings",
-        "columns": ["fiscalDateEnding", "reportedDate", "reportedEPS",
-                "estimatedEPS", "surprise", "surprisePercentage",
-                "reportTime"],
-        "injestor": "Injestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": "fiscalDateEnding"
-
-    },{
-        "name": "INCOME_STATEMENT",
-        "attribute":"quarterlyReports",
-        "columns": ["fiscalDateEnding", "reportedCurrency", "grossProfit",
-                "totalRevenue", "costOfRevenue", "costofGoodsAndServicesSold",
-                "operatingIncome", "sellingGeneralAndAdministrative", "researchAndDevelopment",
-                "operatingExpenses", "investmentIncomeNet", "netInterestIncome",
-                "interestIncome", "interestExpense", "nonInterestIncome",
-                "otherNonOperatingIncome", "depreciation", "depreciationAndAmortization",
-                "incomeBeforeTax", "incomeTaxExpense", "interestAndDebtExpense",
-                "netIncomeFromContinuingOperations", "comprehensiveIncomeNetOfTax", "ebit",
-                "ebitda", "netIncome"],
-        "injestor": "Injestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": "fiscalDateEnding"
-
-    },{
-        "name": "INSIDER_TRANSACTIONS",
-        "attribute":"data",
-        "columns": [ "transaction_date", "ticker", "executive",
-                "executive_title", "security_type", "acquisition_or_disposal",
-                "shares", "share_price"],
-        "injestor": "Injestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": "transaction_date"
-
-    },{
-        "name": "OVERVIEW",
-        "attribute": null,
-        "columns": ["Symbol", "AssetType", "Name",
-                "Description", "CIK", "Exchange",
-                "Currency", "Country", "Sector",
-                "Industry", "Address", "OfficialSite",
-                "FiscalYearEnd", "LatestQuarter", "MarketCapitalization",
-                "EBITDA", "PERatio", "PEGRatio",
-                "BookValue", "DividendPerShare", "DividendYield",
-                "EPS", "RevenuePerShareTTM", "ProfitMargin",
-                "OperatingMarginTTM", "ReturnOnAssetsTTM", "ReturnOnEquityTTM",
-                "RevenueTTM", "GrossProfitTTM", "DilutedEPSTTM",
-                "QuarterlyEarningsGrowthYOY", "QuarterlyRevenueGrowthYOY", "AnalystTargetPrice",
-                "AnalystRatingStrongBuy", "AnalystRatingBuy", "AnalystRatingHold",
-                "AnalystRatingSell", "AnalystRatingStrongSell", "TrailingPE",
-                "ForwardPE", "PriceToSalesRatioTTM", "PriceToBookRatio",
-                "EVToRevenue", "EVToEBITDA", "Beta",
-                "52WeekHigh", "52WeekLow", "50DayMovingAverage",
-                "200DayMovingAverage", "SharesOutstanding", "SharesFloat",
-                "PercentInsiders", "PercentInstitutions", "DividendDate",
-                "ExDividendDate"],
-        "injestor": "Injestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": null
-    },{
-        "name": "TIME_SERIES_MONTHLY_ADJUSTED",
-        "attribute": "Monthly Adjusted Time Series",
-        "columns": ["1. open", "2. high", "3. low", "4. close", 
-                    "5. adjusted close", "6. volume", "7. dividend amount"],
-        "injestor": "PriceInjestor",
-        "frequency": "quarterly",
-        "release_day_rule": "end_of_month_after_quarter",
-        "release_time": "08:30",
-        "timezone": "US/Eastern",
-        "date_column": "date"
+      "name": "BALANCE_SHEET",
+      "attribute": "quarterlyReports",
+      "primaryKey": ["fiscalDateEnding"],
+      "columns": [
+        {
+          "name": "fiscalDateEnding",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "reportedCurrency",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalAssets",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalCurrentAssets",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "cashAndCashEquivalentsAtCarryingValue",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "cashAndShortTermInvestments",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "inventory",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "currentNetReceivables",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalNonCurrentAssets",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "propertyPlantEquipment",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "accumulatedDepreciationAmortizationPPE",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "intangibleAssets",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "intangibleAssetsExcludingGoodwill",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "goodwill",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "investments",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "longTermInvestments",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "shortTermInvestments",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "otherCurrentAssets",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "otherNonCurrentAssets",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalLiabilities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalCurrentLiabilities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "currentAccountsPayable",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "deferredRevenue",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "currentDebt",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "shortTermDebt",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalNonCurrentLiabilities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "capitalLeaseObligations",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "longTermDebt",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "currentLongTermDebt",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "longTermDebtNoncurrent",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "shortLongTermDebtTotal",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "otherCurrentLiabilities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "otherNonCurrentLiabilities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalShareholderEquity",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "treasuryStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "retainedEarnings",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "commonStock",
+          "type": "int",
+          "nullable": false
+        },
+        {
+          "name": "commonStockSharesOutstanding",
+          "type": "int",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "CASH_FLOW",
+      "attribute": "quarterlyReports",
+      "primaryKey": ["fiscalDateEnding"],
+      "columns": [
+        {
+          "name": "fiscalDateEnding",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "reportedCurrency",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "operatingCashflow",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "paymentsForOperatingActivities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "proceedsFromOperatingActivities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "changeInOperatingLiabilities",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "changeInOperatingAssets",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "depreciationDepletionAndAmortization",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "capitalExpenditures",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "changeInReceivables",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "changeInInventory",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "profitLoss",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "cashflowFromInvestment",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "cashflowFromFinancing",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "proceedsFromRepaymentsOfShortTermDebt",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "paymentsForRepurchaseOfCommonStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "paymentsForRepurchaseOfEquity",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "paymentsForRepurchaseOfPreferredStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "dividendPayout",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "dividendPayoutCommonStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "dividendPayoutPreferredStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "proceedsFromIssuanceOfCommonStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "proceedsFromIssuanceOfPreferredStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "proceedsFromRepurchaseOfEquity",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "proceedsFromSaleOfTreasuryStock",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "changeInCashAndCashEquivalents",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "changeInExchangeRate",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "netIncome",
+          "type": "float",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "DIVIDENDS",
+      "attribute": "data",
+      "primaryKey": ["ex_dividend_date"],
+      "columns": [
+        {
+          "name": "ex_dividend_date",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "declaration_date",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "record_date",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "payment_date",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "amount",
+          "type": "float",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "EARNINGS",
+      "attribute": "quarterlyEarnings",
+      "primaryKey": ["fiscalDateEnding"],
+      "columns": [
+        {
+          "name": "fiscalDateEnding",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "reportedDate",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "reportedEPS",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "estimatedEPS",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "surprise",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "surprisePercentage",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "reportTime",
+          "type": "string",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "INCOME_STATEMENT",
+      "attribute": "quarterlyReports",
+      "primaryKey": ["fiscalDateEnding"],
+      "columns": [
+        {
+          "name": "fiscalDateEnding",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "reportedCurrency",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "grossProfit",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "totalRevenue",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "costOfRevenue",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "costofGoodsAndServicesSold",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "operatingIncome",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "sellingGeneralAndAdministrative",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "researchAndDevelopment",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "operatingExpenses",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "investmentIncomeNet",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "netInterestIncome",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "interestIncome",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "interestExpense",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "nonInterestIncome",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "otherNonOperatingIncome",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "depreciation",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "depreciationAndAmortization",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "incomeBeforeTax",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "incomeTaxExpense",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "interestAndDebtExpense",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "netIncomeFromContinuingOperations",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "comprehensiveIncomeNetOfTax",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "ebit",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "ebitda",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "netIncome",
+          "type": "float",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "INSIDER_TRANSACTIONS",
+      "attribute": "data",
+      "primaryKey": ["transaction_date"],
+      "columns": [
+        {
+          "name": "transaction_date",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "ticker",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "executive",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "executive_title",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "security_type",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "acquisition_or_disposal",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "shares",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "share_price",
+          "type": "float",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "OVERVIEW",
+      "attribute": null,
+      "primaryKey": [],
+      "columns": [
+        {
+          "name": "Symbol",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "AssetType",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "CIK",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Exchange",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Currency",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Country",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Sector",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Industry",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "Address",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "OfficialSite",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "FiscalYearEnd",
+          "type": "string",
+          "nullable": false
+        },
+        {
+          "name": "LatestQuarter",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "MarketCapitalization",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "EBITDA",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "PERatio",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "PEGRatio",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "BookValue",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "DividendPerShare",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "DividendYield",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "EPS",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "RevenuePerShareTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "ProfitMargin",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "OperatingMarginTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "ReturnOnAssetsTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "ReturnOnEquityTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "RevenueTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "GrossProfitTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "DilutedEPSTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "QuarterlyEarningsGrowthYOY",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "QuarterlyRevenueGrowthYOY",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "AnalystTargetPrice",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "AnalystRatingStrongBuy",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "AnalystRatingBuy",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "AnalystRatingHold",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "AnalystRatingSell",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "AnalystRatingStrongSell",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "TrailingPE",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "ForwardPE",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "PriceToSalesRatioTTM",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "PriceToBookRatio",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "EVToRevenue",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "EVToEBITDA",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "Beta",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "52WeekHigh",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "52WeekLow",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "50DayMovingAverage",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "200DayMovingAverage",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "SharesOutstanding",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "SharesFloat",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "PercentInsiders",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "PercentInstitutions",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "DividendDate",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        },
+        {
+          "name": "ExDividendDate",
+          "type": "date",
+          "format": "yyyy-MM-dd",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "TIME_SERIES_MONTHLY_ADJUSTED",
+      "attribute": "Monthly Adjusted Time Series",
+      "primaryKey": ["date"],
+      "injestor": "PriceInjestor",
+      "frequency": "monthly",
+      "columns": [
+        {
+          "name": "1. open",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "2. high",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "3. low",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "4. close",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "5. adjusted close",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "6. volume",
+          "type": "float",
+          "nullable": false
+        },
+        {
+          "name": "7. dividend amount",
+          "type": "float",
+          "nullable": false
+        }
+      ]
     }
-]
+  ]
+}

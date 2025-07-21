@@ -19,8 +19,8 @@ class Validate:
 
         self.logger = logger
         self.env = env
-        self.read_storage = ParquetStorage(env.acquisition_folder) # we read from acquisition folder
-        self.write_storage = ParquetStorage(env.validated_folder) # we write to the validation folder
+        self.acq_store = ParquetStorage(env.acquisition_folder) # we read from acquisition folder
+        self.val_store = ParquetStorage(env.validated_folder) # we write to the validation folder
         self.tickers = loader.load_tickers()
         self.acq_cfg = loader.load_acquisition_config()
 
@@ -99,17 +99,17 @@ class Validate:
             for ticker in self.tickers:
                 log_prefix = f"{ticker} | {cfg.name} | "
                 # skip any tickers in the list that have not been acquired
-                if not self.read_storage.exists(cfg.name, ticker):
+                if not self.acq_store.exists(cfg.name, ticker):
                     self.logger.info(f"{log_prefix} not yet acquired")
                     continue
 
                 # read the table and append a validation record
                 self.logger.info(f"{log_prefix} validating")
-                df = self.read_storage.read_df(cfg.name, ticker)
+                df = self.acq_store.read_df(cfg.name, ticker)
                 records.append({
                     "table_name": cfg.name,
                     "ticker": ticker,
-                    "last_update": self.read_storage.last_update(cfg.name, ticker),
+                    "last_update": self.acq_store.last_update(cfg.name, ticker),
                     "oldest_record": self._get_oldest_record( log_prefix,df, cfg.date_column),
                     "newest_record": self._get_newest_record( log_prefix,df, cfg.date_column),
                     "missing_quarters": self._count_missing_quarters(log_prefix, df, cfg.date_column),
@@ -118,12 +118,16 @@ class Validate:
 
         # Write validation records and clean ticker list
         df_records = pd.DataFrame(records)
-        self.write_storage.write_df(df_records, "acquisition/VALIDATION", index=False)
+        self.val_store.write_df(df_records, "acquisition/VALIDATION", index=False)
 
         clean = self._get_clean_tickers(df_records)
-        self.write_storage.write_df(pd.DataFrame(clean), "acquisition/TICKERS_TO_TRANSFORM", index=False)
+        self.val_store.write_df(pd.DataFrame(clean), "acquisition/TICKERS_TO_TRANSFORM", index=False)
 
 
 if __name__ == "__main__":
-    validator = Validate()
-    validator.validate()
+   # validator = Validate()
+   # validator.validate()
+
+    c = ConfigLoader()
+    l = c.load_acquisition_config()
+    print(l)

@@ -16,7 +16,18 @@
       "name": "Validate",
       "type": "python",                    // ← use the Python extension’s debugger
       "request": "launch",
-      "module": "strawberry.acquisition.validate",
+      "module": "strawberry.validation.validate",
+      "justMyCode": true,
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    },
+    {
+      "name": "ETL",
+      "type": "python",                    // ← use the Python extension’s debugger
+      "request": "launch",
+      "module": "strawberry.validation.etl",
       "justMyCode": true,
       "console": "integratedTerminal",
       "env": {
