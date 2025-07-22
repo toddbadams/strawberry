@@ -15,16 +15,14 @@ from .injestor import (
 class Acquire:
 
     def __init__(self):
-        logger = LoggerFactory().create_logger(__name__)
-        loader = ConfigLoader(logger)
-        env = loader.environment()
+        self.logger = LoggerFactory().create_logger(__name__)
+        self.config = ConfigLoader()
+        self.env = self.config.environment()
+        self.tickers = self.config.tickers()
+        self.acq_cfg = self.config.acquisition() 
 
-        self.logger = logger
-        self.env = env
-        self.api = AlphaVantageAPI(env.alpha_vantage_api_key, env.alpha_vantage_url)
-        self.storage = ParquetStorage(env.acquisition_folder)
-        self.tickers = loader.load_tickers()
-        self.acq_cfg = loader.load_acquisition_config() 
+        self.api = AlphaVantageAPI(self.env.alpha_vantage_api_key, self.env.alpha_vantage_url)
+        self.storage = ParquetStorage(self.env.acquisition_folder)
         self.injestor_map = {
             'Injestor': Injestor,
             'PriceInjestor': PriceInjestor,
@@ -46,6 +44,7 @@ class Acquire:
         try:
             df = injestor.injest(table_name, attr, ticker)
             self.storage.write_df(df, table_name, ["symbol"], index=False)
+            self.logger.info(f"{log_prefix} acquired")
             return True
 
         except DataNotFoundError as e:
@@ -58,7 +57,7 @@ class Acquire:
 
     def acquire(self):
         # Build ingestion steps dynamically from JSON config
-        steps = [(self._get_injestor(cfg.injestor), cfg.name, cfg.attribute) for cfg in self.acq_cfg]
+        steps = [(self._get_injestor(cfg.injestor), cfg.name, cfg.attribute) for cfg in self.acq_cfg.tables]
 
         for ticker in self.tickers:
             self.logger.info(f"Acquiring {ticker}")
