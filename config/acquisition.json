@@ -15,193 +15,231 @@
         {
           "name": "fiscalDateEnding",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "reportedCurrency",
-          "type": "float",
-          "nullable": false
+          "type": "string",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalAssets",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalCurrentAssets",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "cashAndCashEquivalentsAtCarryingValue",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "cashAndShortTermInvestments",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "inventory",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "currentNetReceivables",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalNonCurrentAssets",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "propertyPlantEquipment",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "accumulatedDepreciationAmortizationPPE",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "intangibleAssets",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "intangibleAssetsExcludingGoodwill",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "goodwill",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "investments",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "longTermInvestments",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "shortTermInvestments",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "otherCurrentAssets",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "otherNonCurrentAssets",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalLiabilities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalCurrentLiabilities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "currentAccountsPayable",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "deferredRevenue",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "currentDebt",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "shortTermDebt",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalNonCurrentLiabilities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "capitalLeaseObligations",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "longTermDebt",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "currentLongTermDebt",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "longTermDebtNoncurrent",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "shortLongTermDebtTotal",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "otherCurrentLiabilities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "otherNonCurrentLiabilities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalShareholderEquity",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "treasuryStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "retainedEarnings",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "commonStock",
-          "type": "int",
-          "nullable": false
+          "type": "integer",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "commonStockSharesOutstanding",
-          "type": "int",
-          "nullable": false
+          "type": "integer",
+          "nullable": true,
+          "null_action": null
         }
       ]
     },
@@ -213,148 +251,177 @@
         {
           "name": "fiscalDateEnding",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "reportedCurrency",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "operatingCashflow",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "paymentsForOperatingActivities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "proceedsFromOperatingActivities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "changeInOperatingLiabilities",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "changeInOperatingAssets",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "depreciationDepletionAndAmortization",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "capitalExpenditures",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "changeInReceivables",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "changeInInventory",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "profitLoss",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "cashflowFromInvestment",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "cashflowFromFinancing",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "proceedsFromRepaymentsOfShortTermDebt",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "paymentsForRepurchaseOfCommonStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "paymentsForRepurchaseOfEquity",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "paymentsForRepurchaseOfPreferredStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "dividendPayout",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "dividendPayoutCommonStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "dividendPayoutPreferredStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "proceedsFromIssuanceOfCommonStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "proceedsFromIssuanceOfLongTermDebtAndCapitalSecuritiesNet",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "proceedsFromIssuanceOfPreferredStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "proceedsFromRepurchaseOfEquity",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "proceedsFromSaleOfTreasuryStock",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "changeInCashAndCashEquivalents",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "changeInExchangeRate",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "netIncome",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         }
       ]
     },
@@ -366,31 +433,36 @@
         {
           "name": "ex_dividend_date",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "declaration_date",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "record_date",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "payment_date",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "amount",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         }
       ]
     },
@@ -402,39 +474,46 @@
         {
           "name": "fiscalDateEnding",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "reportedDate",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "reportedEPS",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "estimatedEPS",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "surprise",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "surprisePercentage",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "reportTime",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         }
       ]
     },
@@ -446,133 +525,159 @@
         {
           "name": "fiscalDateEnding",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "reportedCurrency",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "grossProfit",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "totalRevenue",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "costOfRevenue",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "costofGoodsAndServicesSold",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "operatingIncome",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "sellingGeneralAndAdministrative",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "researchAndDevelopment",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "operatingExpenses",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "investmentIncomeNet",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "netInterestIncome",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "interestIncome",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "interestExpense",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "nonInterestIncome",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "otherNonOperatingIncome",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "depreciation",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "depreciationAndAmortization",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "incomeBeforeTax",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "incomeTaxExpense",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "interestAndDebtExpense",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "netIncomeFromContinuingOperations",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "comprehensiveIncomeNetOfTax",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "ebit",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "ebitda",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "netIncome",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         }
       ]
     },
@@ -584,43 +689,51 @@
         {
           "name": "transaction_date",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": false,
+          "null_action": "prior_value"
         },
         {
           "name": "ticker",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "executive",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "executive_title",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "security_type",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "acquisition_or_disposal",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "shares",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "share_price",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         }
       ]
     },
@@ -632,280 +745,335 @@
         {
           "name": "Symbol",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "AssetType",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Name",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Description",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "CIK",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Exchange",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Currency",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Country",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Sector",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Industry",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Address",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "OfficialSite",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "FiscalYearEnd",
           "type": "string",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "LatestQuarter",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "MarketCapitalization",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "EBITDA",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "PERatio",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "PEGRatio",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "BookValue",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "DividendPerShare",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "DividendYield",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "EPS",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "RevenuePerShareTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "ProfitMargin",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "OperatingMarginTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "ReturnOnAssetsTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "ReturnOnEquityTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "RevenueTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "GrossProfitTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "DilutedEPSTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "QuarterlyEarningsGrowthYOY",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "QuarterlyRevenueGrowthYOY",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "AnalystTargetPrice",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "AnalystRatingStrongBuy",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "AnalystRatingBuy",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "AnalystRatingHold",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "AnalystRatingSell",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "AnalystRatingStrongSell",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "TrailingPE",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "ForwardPE",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "PriceToSalesRatioTTM",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "PriceToBookRatio",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "EVToRevenue",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "EVToEBITDA",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "Beta",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "52WeekHigh",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "52WeekLow",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "50DayMovingAverage",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "200DayMovingAverage",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "SharesOutstanding",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "SharesFloat",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "PercentInsiders",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "PercentInstitutions",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "DividendDate",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "ExDividendDate",
           "type": "date",
-          "format": "yyyy-MM-dd",
-          "nullable": false
+          "format": "%Y-%m-%d",
+          "nullable": true,
+          "null_action": null
         }
       ]
     },
@@ -919,37 +1087,44 @@
         {
           "name": "1. open",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "2. high",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "3. low",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "4. close",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "5. adjusted close",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "6. volume",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         },
         {
           "name": "7. dividend amount",
           "type": "float",
-          "nullable": false
+          "nullable": true,
+          "null_action": null
         }
       ]
     }

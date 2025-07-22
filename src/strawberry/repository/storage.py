@@ -10,9 +10,9 @@ from strawberry.config.config_loader import ConfigLoader
 class ParquetStorage:
 
     def __init__(self, folder: str):
-        logger = LoggerFactory().create_logger(__name__)
-        loader = ConfigLoader()
-        self.env = loader.environment()
+        self.logger = LoggerFactory().create_logger(__name__)
+        self.config = ConfigLoader()
+        self.env = self.config.environment()
         self.engine: str = "pyarrow"
         self.folder = folder
 
@@ -63,9 +63,9 @@ class ParquetStorage:
         return any(p.glob("*.parquet"))
 
     def write_df(self, df: pd.DataFrame, table_name: str, partition_cols: list[str] = None, index: bool = False):
-        root = self._table_path(table_name)
-        root.parent.mkdir(parents=True, exist_ok=True)
-        df.to_parquet(str(root), engine=self.engine, partition_cols=partition_cols, index=index)
+        path = self._table_path(table_name)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_parquet(str(path), engine=self.engine, partition_cols=partition_cols, index=index)
 
     def read_df(self, table_name: str, ticker: Optional[str] = None) -> pd.DataFrame:        # Base directory for this table
         table_dir = self._table_path(table_name)

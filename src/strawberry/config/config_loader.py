@@ -46,7 +46,7 @@ class ConfigLoader:
 
         return rules
            
-    def load_acquisition_config(self) -> dto.AcquisitionConfig:
+    def acquisition(self) -> dto.AcquisitionConfig:
         p = os.path.join(self.env.config_path, "acquisition.json")
         # Use the top-level AcquisitionConfig loader to parse tables
         acquisition_config = dto.AcquisitionConfig.load_from_file(p)
@@ -66,7 +66,7 @@ class ConfigLoader:
 
         return tables
 
-    def load_tickers(self) -> list[str]:
+    def tickers(self) -> list[str]:
         tickers: list[str] = []
         path = os.path.join(self.env.config_path, "tickers.csv")
         

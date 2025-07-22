@@ -11,6 +11,7 @@ class ColumnConfig:
     type: str
     format: Optional[str] = None
     nullable: bool = True
+    null_action: str = None
     regex: Optional[str] = None
     min: Optional[float] = None
     max: Optional[float] = None
@@ -22,6 +23,7 @@ class ColumnConfig:
             type=d['type'],
             format=d.get('format'),
             nullable=d.get('nullable', True),
+            null_action=d['null_action'],
             regex=d.get('regex'),
             min=d.get('min'),
             max=d.get('max')

@@ -15,14 +15,14 @@ class App:
         self.logger = factory.create_logger(__name__)
 
         # configuration
-        self.config = ConfigLoader(self.logger)
+        self.config = ConfigLoader()
 
         # repositories
         self.acq_store = ParquetStorage(self.config.env.acquisition_folder)
         self.val_store = ParquetStorage(self.config.env.validated_folder)
 
         # acquisition tables
-        self.acq_tables = self.config.load_acquisition_config()
+        self.acq_tables = self.config.acquisition()
 
         # table name /  tickers / data frame
         self.selected_table = None
@@ -115,7 +115,7 @@ class App:
         # build pages dict: name -> render(name)
         pages: dict[str, callable] = {
                 cfg.name: partial(self.table_event_handler, cfg.name)
-                for cfg in self.acq_tables
+                for cfg in self.acq_tables.tables
             }
 
         # add the special handler for your monthly-adjusted time series
@@ -142,6 +142,8 @@ class App:
                 on_click=r_fn
             )
         st.sidebar.button(label="validation", type="primary", use_container_width=True, on_click=self.validation_button)
-    
-App().startup()
+
+
+if __name__ == "__main__":   
+    App().startup()
 

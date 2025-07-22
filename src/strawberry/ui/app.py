@@ -14,7 +14,7 @@ class App:
     self.logger = factory.create_logger(__name__)
 
     # configuration
-    self.config_loader = ConfigLoader(self.logger)
+    self.config_loader = ConfigLoader()
 
     # data storage
     self.storage = ParquetStorage(self.config_loader.env.output_path)

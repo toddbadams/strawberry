@@ -16,10 +16,10 @@ class ParquetETL:
     def __init__(self):
         
         # logging and configuration
-        self.logger = LoggerFactory(e='DEV', default_level=logging.INFO).create_logger(__name__)
+        self.logger = LoggerFactory().create_logger(__name__)
         self.config = ConfigLoader()
         self.env = self.config.environment()
-        cfg = self.config.load_acquisition_config()
+        cfg = self.config.acquisition()
         self.defaults = cfg.defaults
         self.tables = cfg.tables
 
