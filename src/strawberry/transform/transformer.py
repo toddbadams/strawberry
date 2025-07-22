@@ -1,16 +1,32 @@
 import pandas as pd
-import logging
 
-import config as config
-from repository.storage import ParquetStorage
+
+from strawberry.config.config_loader import ConfigLoader
+from strawberry.config.dtos import ConsolidationTableConfig
+from strawberry.repository.storage import ParquetStorage
+from strawberry.logging.logger_factory import LoggerFactory
 
 
 class StockTransformer:
 
-    def __init__(self, ps: ParquetStorage, logger: logging.Logger):
-        self.storage = ps
-        self.logger = logger
+    # tables to transform into a consolidated table - tbd move to config
+    TABLES = ["OVERVIEW", "BALANCE_SHEET", "CASH_FLOW", "DIVIDENDS",
+            "EARNINGS", "INCOME_STATEMENT", "INSIDER_TRANSACTIONS",
+            "TIME_SERIES_MONTHLY_ADJUSTED"]
+    
+    def __init__(self):
+        self.logger = LoggerFactory().create_logger(__name__)
+        self.config = ConfigLoader()
+        self.env = self.config.environment()
+        self.cfg = self.config.consolidation()
 
+        self.trn_store = ParquetStorage(self.env.transformed_folder) # we write to the transformed folder
+        self.val_store = ParquetStorage(self.env.validated_folder) # we read from the validated folder        
+        
+        # get a common set of tickers from the validation folder
+        self.tickers = {t: set(self.val_store.get_tickers(t)) for t in self.TABLES}
+        self.tickers = set.intersection(*self.tickers.values()) if self.tickers else set()
+        self.tickers = sorted(self.tickers)
 
     def _insider_transform(self, df: pd.DataFrame, date_col: str) -> pd.DataFrame:
         df = df.copy()
@@ -52,41 +68,55 @@ class StockTransformer:
             .rename(columns={date_col: 'qtr_end_date', 'share_price': 'share_price'})
         )
         return df
-        
-    def run(self, df: pd.DataFrame, config: config.ConsolidationTableConfig, ticker: str) -> pd.DataFrame:
-        # if the file does not exist, return the incomming DataFrame
-        if not self.storage.exists(config.name, ticker):
-            self.logger.warning(f"Acquisition table: {config.name} does NOT exist, cannot consolidate")
-            return df
-        
-        df2 = self.storage.read_df(config.name, ticker)
+
+
+    def _consolidate_table(self, table: ConsolidationTableConfig, ticker: str) -> pd.DataFrame:       
+        df = self.storage.read_df(table.name, ticker)
 
         # get required columns
-        df2 = df2[config.in_names()]        
+        df = df[table.in_names()]        
 
         # rename columns
-        df2.rename(columns=config.in_to_out_map(), inplace=True)
+        df.rename(columns=table.in_to_out_map(), inplace=True)
 
         # convert date
-        dates = config.date_out_names()
+        dates = table.date_out_names()
         for item in dates:
-            df2[item] = pd.to_datetime(df2[item], errors='coerce')  
+            df[item] = pd.to_datetime(df[item], errors='coerce')  
         
         # convert to number
-        for item in config.number_out_names():
-            df2[item] = pd.to_numeric(df2[item], errors='coerce')
+        for item in table.number_out_names():
+            df[item] = pd.to_numeric(df[item], errors='coerce')
 
         # SPECIAL CASES:
-        if config.name == 'INSIDER_TRANSACTIONS':
-            df2 = self._insider_transform(df2, dates[0])
+        if table.name == 'INSIDER_TRANSACTIONS':
+            df = self._insider_transform(df, dates[0])
 
-        if config.name == 'DIVIDENDS':
-            df2 = self._dividen_transform(df2, dates[0])
+        if table.name == 'DIVIDENDS':
+            df = self._dividen_transform(df, dates[0])
 
-        if config.name == 'TIME_SERIES_MONTHLY_ADJUSTED':
-            df2 = self._pricing_transform(df2, dates[0])
+        if table.name == 'TIME_SERIES_MONTHLY_ADJUSTED':
+            df = self._pricing_transform(df, dates[0])
               
-        self.logger.info(f"Table {config.name} transformed for {ticker}.")
-        return df2 if df.empty else df.merge(df2, on=dates[0], how="left")
+        self.logger.info(f"Table {table.name} consolidated for {ticker}.")
+        return df if df.empty else df.merge(df, on=dates[0], how="left")
+    
 
-   
+    def _consoliate_ticker(self, ticker: str):
+        df = pd.DataFrame()
+        df['symbol'] = ticker
+        for table in self.cfg:
+            df = df.merge(self._consolidate_table(table, ticker))
+            
+        # save the file in the transformed folder
+        self.trn_store.write_df(df, "CONSOLIDATED", ["symbol"])
+        self.logger.info(f"{ticker} | consolidated and saved to transformed folder")
+       
+
+    def run(self):
+        for ticker in self.tickers:
+            self._consoliate_ticker(ticker)
+
+if __name__ == "__main__":
+   t = StockTransformer()
+   t.run()   

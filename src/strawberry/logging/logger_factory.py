@@ -9,20 +9,20 @@ class LoggerFactory:
     def create_logger(self, name: str, level: int = None) -> logging.Logger:
         lvl = level or self.default_level
 
-        # 1. Grab (or create) your logger
+        # Grab (or create) the logger
         logger = logging.getLogger(name)
         logger.setLevel(lvl)
 
-        # 2. Create a console handler that writes to stdout
+        # Create a console handler that writes to stdout
         console = logging.StreamHandler(sys.stdout)
         console.setLevel(lvl)
 
-        # 3. Define a nice format
+        # Define a nice format
         fmt = "%(asctime)s | %(levelname)-5s | %(name)s | %(message)s"
         formatter = logging.Formatter(fmt)
         console.setFormatter(formatter)
 
-        # 4. Attach the handler if it's not already there
+        # Attach the handler if it's not already there
         if not any(isinstance(h, logging.StreamHandler) for h in logger.handlers):
             logger.addHandler(console)
 

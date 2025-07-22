@@ -20,6 +20,7 @@ class App:
         # repositories
         self.acq_store = ParquetStorage(self.config.env.acquisition_folder)
         self.val_store = ParquetStorage(self.config.env.validated_folder)
+        self.trn_store = ParquetStorage(self.config.env.transformed_folder)
 
         # acquisition tables
         self.acq_tables = self.config.acquisition()
@@ -104,6 +105,11 @@ class App:
         t = self.val_store.read_df("TICKERS_TO_TRANSFORM")
         st.dataframe(t, use_container_width=True, height=1000)
 
+    def dim_stocks_button(self):
+        v = self.trn_store.read_df("DIM_STOCKS")
+        st.dataframe(v, use_container_width=True, height=1000)
+
+
     def startup(self):
         # page configuration
         st.set_page_config(page_title="Acquisition Data Viewer",
@@ -142,6 +148,7 @@ class App:
                 on_click=r_fn
             )
         st.sidebar.button(label="validation", type="primary", use_container_width=True, on_click=self.validation_button)
+        st.sidebar.button(label="dim stocks", type="primary", use_container_width=True, on_click=self.dim_stocks_button)
 
 
 if __name__ == "__main__":   

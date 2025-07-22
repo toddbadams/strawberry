@@ -24,10 +24,10 @@
       }
     },
     {
-      "name": "ETL",
+      "name": "Transform",
       "type": "python",                    // ← use the Python extension’s debugger
       "request": "launch",
-      "module": "strawberry.validation.etl",
+      "module": "strawberry.transform.transformer",
       "justMyCode": true,
       "console": "integratedTerminal",
       "env": {
@@ -35,7 +35,18 @@
       }
     },
     {
-      "name": "Debug UI",
+      "name": "Dim Stocks",
+      "type": "python",                    // ← use the Python extension’s debugger
+      "request": "launch",
+      "module": "strawberry.transform.dim_stocks",
+      "justMyCode": true,
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    },
+    {
+      "name": "UI",
       "type": "python",
       "request": "launch",
       "module": "streamlit",
@@ -46,11 +57,11 @@
       }
     },
     {
-      "name": "Acq Data Viewer",
+      "name": "Data Viewer",
       "type": "python",
       "request": "launch",
       "module": "streamlit",
-      "args": ["run", "${workspaceFolder}/src/strawberry/acquisition/data_viewer.py"],
+      "args": ["run", "${workspaceFolder}/src/strawberry/ui/data_viewer.py"],
       "console": "integratedTerminal",
       "env": {
         "PYTHONPATH": "${workspaceFolder}/src"

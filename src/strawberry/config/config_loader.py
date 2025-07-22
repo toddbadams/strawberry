@@ -53,9 +53,9 @@ class ConfigLoader:
         self.logger.info(f"Loaded {len(acquisition_config.tables)} acquisition table configs from {p}")
         return acquisition_config
     
-    def load_table_consolidation_config(self) -> list[dto.ConsolidationTableConfig]:
-        p = os.path.join(self.env.config_path, "consolidation.json")
-        with open(p, "r", encoding="utf-8") as f:
+    def consolidation(self) -> list[dto.ConsolidationTableConfig]:
+        path = os.path.join(self.env.config_path, "consolidation.json")
+        with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         tables = []
@@ -64,7 +64,19 @@ class ConfigLoader:
             tables.append(dto.ConsolidationTableConfig(name=item["name"], 
                                                    columns=[dto.ColumnConfig(**column) for column in item["columns"]]))
 
+        self.logger.info(f"Loaded {len(tables)} acquisition table config from {path}")
         return tables
+
+    def dim_stock(self) -> dto.ConsolidateColumnConfig:
+        path = os.path.join(self.env.config_path, "dim_stocks.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)        
+            
+        table = dto.ConsolidationTableConfig(name=data["name"], 
+                                                   columns=[dto.ConsolidateColumnConfig(**column) for column in data["columns"]])
+
+        self.logger.info(f"Loaded dim_stocks table config from {path}")
+        return table
 
     def tickers(self) -> list[str]:
         tickers: list[str] = []
@@ -80,8 +92,8 @@ class ConfigLoader:
         return tickers
     
     def load_dividend_params(self) -> list[dto.DividendScoreParameter]:
-        p = os.path.join(self.env.config_path, "dividend_score.json")
-        with open(p, "r", encoding="utf-8") as f:
+        path = os.path.join(self.env.config_path, "dividend_score.json")
+        with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         params = []
@@ -104,11 +116,12 @@ class ConfigLoader:
                                                  weight=item["weight"],
                                                  chart=chart))
 
+        self.logger.info(f"Loaded {len(params)} dividend parameters from {path}")
         return params
 
     def load_dividend_score_rules(self) -> list[dto.RuleConfig]:
-        p = os.path.join(self.env.config_path, "dividend_score_rules.json")
-        with open(p, "r", encoding="utf-8") as f:
+        path = os.path.join(self.env.config_path, "dividend_score_rules.json")
+        with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         rules = []
@@ -122,6 +135,7 @@ class ConfigLoader:
             )
             rules.append(rule_card)
 
+        self.logger.info(f"Loaded {len(rules)} rules from {path}")
         return rules
     
     # Helper to fetch required vars and raise if missing

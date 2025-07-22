@@ -1,4 +1,4 @@
-from .ColumnConfig import ColumnConfig
+from .ColumnConfig import ConsolidateColumnConfig
 
 
 from dataclasses import dataclass
@@ -7,7 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class ConsolidationTableConfig:
     name: str
-    columns: list[ColumnConfig]
+    columns: list[ConsolidateColumnConfig]
 
     def in_names(self) -> list[str]:
         return [col.in_name for col in self.columns]

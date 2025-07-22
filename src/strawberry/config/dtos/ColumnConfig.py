@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class ColumnConfig:
+class ConsolidateColumnConfig:
     in_name: str
     out_name: str
     type: str
