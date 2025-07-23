@@ -53,8 +53,8 @@ class ConfigLoader:
         self.logger.info(f"Loaded {len(acquisition_config.tables)} acquisition table configs from {p}")
         return acquisition_config
     
-    def consolidation(self) -> list[dto.ConsolidationTableConfig]:
-        path = os.path.join(self.env.config_path, "consolidation.json")
+    def fact_qtr_financials(self) -> list[dto.ConsolidationTableConfig]:
+        path = os.path.join(self.env.config_path, "fact_qtr_financials.json")
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
@@ -62,7 +62,7 @@ class ConfigLoader:
 
         for item in data:
             tables.append(dto.ConsolidationTableConfig(name=item["name"], 
-                                                   columns=[dto.ColumnConfig(**column) for column in item["columns"]]))
+                                                   columns=[dto.ConsolidateColumnConfig(**column) for column in item["columns"]]))
 
         self.logger.info(f"Loaded {len(tables)} acquisition table config from {path}")
         return tables

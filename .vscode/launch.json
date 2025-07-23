@@ -24,10 +24,10 @@
       }
     },
     {
-      "name": "Transform",
+      "name": "Fact Q Financials",
       "type": "python",                    // ← use the Python extension’s debugger
       "request": "launch",
-      "module": "strawberry.transform.transformer",
+      "module": "strawberry.transform.fact_qtr_financials",
       "justMyCode": true,
       "console": "integratedTerminal",
       "env": {

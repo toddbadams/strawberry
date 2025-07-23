@@ -1,13 +1,13 @@
 from .ColumnConfig import ConsolidateColumnConfig
-
-
 from dataclasses import dataclass
-
 
 @dataclass
 class ConsolidationTableConfig:
     name: str
     columns: list[ConsolidateColumnConfig]
+
+    def table_names(self) -> list[str]:
+        return [self.name in self]
 
     def in_names(self) -> list[str]:
         return [col.in_name for col in self.columns]

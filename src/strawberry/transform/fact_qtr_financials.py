@@ -7,24 +7,20 @@ from strawberry.repository.storage import ParquetStorage
 from strawberry.logging.logger_factory import LoggerFactory
 
 
-class StockTransformer:
-
-    # tables to transform into a consolidated table - tbd move to config
-    TABLES = ["OVERVIEW", "BALANCE_SHEET", "CASH_FLOW", "DIVIDENDS",
-            "EARNINGS", "INCOME_STATEMENT", "INSIDER_TRANSACTIONS",
-            "TIME_SERIES_MONTHLY_ADJUSTED"]
-    
+class FactQrtFinancials:
+  
     def __init__(self):
         self.logger = LoggerFactory().create_logger(__name__)
         self.config = ConfigLoader()
         self.env = self.config.environment()
-        self.cfg = self.config.consolidation()
+        self.cfg = self.config.fact_qtr_financials()
+        tables = [x.name for x in self.cfg]
 
         self.trn_store = ParquetStorage(self.env.transformed_folder) # we write to the transformed folder
         self.val_store = ParquetStorage(self.env.validated_folder) # we read from the validated folder        
         
         # get a common set of tickers from the validation folder
-        self.tickers = {t: set(self.val_store.get_tickers(t)) for t in self.TABLES}
+        self.tickers = {t: set(self.val_store.get_tickers(t)) for t in tables}
         self.tickers = set.intersection(*self.tickers.values()) if self.tickers else set()
         self.tickers = sorted(self.tickers)
 
@@ -71,7 +67,7 @@ class StockTransformer:
 
 
     def _consolidate_table(self, table: ConsolidationTableConfig, ticker: str) -> pd.DataFrame:       
-        df = self.storage.read_df(table.name, ticker)
+        df = self.val_store.read_df(table.name, ticker)
 
         # get required columns
         df = df[table.in_names()]        
@@ -118,5 +114,5 @@ class StockTransformer:
             self._consoliate_ticker(ticker)
 
 if __name__ == "__main__":
-   t = StockTransformer()
+   t = FactQrtFinancials()
    t.run()   
