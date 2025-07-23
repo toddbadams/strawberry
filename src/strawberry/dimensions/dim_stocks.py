@@ -77,9 +77,12 @@ class DimStocks:
         # save the file in the transformed folder
         self.trn_store.write_df(df, "DIM_STOCKS")
         self.logger.info(f"{log_prefix} | consolidated and saved to transformed folder")
-       
 
-    def run(self):
+    def transform_ticker(self, ticker: str):
+        self.logger.info("do stuff")
+
+
+    def main(self):
         for ticker in self.tickers:
             self._transform_table(self.cfg, ticker)
 

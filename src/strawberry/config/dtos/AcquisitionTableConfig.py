@@ -74,7 +74,10 @@ class AcquisitionConfig:
     """
     defaults: Dict[str, Any]
     tables: List[AcquisitionTableConfig]
-
+   
+    def table_names(self) -> list[str]:
+        return [t.name for t in self.tables]
+    
     @staticmethod
     def load_from_file(path: str) -> 'AcquisitionConfig':
         """

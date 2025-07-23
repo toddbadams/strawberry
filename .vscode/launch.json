@@ -3,44 +3,44 @@
   "configurations": [
     {
       "name": "Acquire",
-      "type": "python",                    // ← use the Python extension’s debugger
+      "type": "python",
       "request": "launch",
       "module": "strawberry.acquisition.acquire",
-      "justMyCode": true,
       "console": "integratedTerminal",
+      "justMyCode": true,
       "env": {
         "PYTHONPATH": "${workspaceFolder}/src"
       }
     },
     {
       "name": "Validate",
-      "type": "python",                    // ← use the Python extension’s debugger
+      "type": "python",
       "request": "launch",
       "module": "strawberry.validation.validate",
-      "justMyCode": true,
       "console": "integratedTerminal",
+      "justMyCode": true,
       "env": {
         "PYTHONPATH": "${workspaceFolder}/src"
       }
     },
     {
       "name": "Fact Q Financials",
-      "type": "python",                    // ← use the Python extension’s debugger
+      "type": "python",
       "request": "launch",
-      "module": "strawberry.transform.fact_qtr_financials",
-      "justMyCode": true,
+      "module": "strawberry.dimensions.fact_qtr_financials",
       "console": "integratedTerminal",
+      "justMyCode": true,
       "env": {
         "PYTHONPATH": "${workspaceFolder}/src"
       }
     },
     {
       "name": "Dim Stocks",
-      "type": "python",                    // ← use the Python extension’s debugger
+      "type": "python",
       "request": "launch",
-      "module": "strawberry.transform.dim_stocks",
-      "justMyCode": true,
+      "module": "strawberry.dimensions.dim_stocks",
       "console": "integratedTerminal",
+      "justMyCode": true,
       "env": {
         "PYTHONPATH": "${workspaceFolder}/src"
       }
@@ -50,8 +50,12 @@
       "type": "python",
       "request": "launch",
       "module": "streamlit",
-      "args": ["run", "${workspaceFolder}/src/ui/app.py"],
+      "args": [
+        "run",
+        "${workspaceFolder}/src/strawberry/ui/app.py"
+      ],
       "console": "integratedTerminal",
+      "justMyCode": true,
       "env": {
         "PYTHONPATH": "${workspaceFolder}/src"
       }
@@ -61,11 +65,53 @@
       "type": "python",
       "request": "launch",
       "module": "streamlit",
-      "args": ["run", "${workspaceFolder}/src/strawberry/ui/data_viewer.py"],
+      "args": [
+        "run",
+        "${workspaceFolder}/src/strawberry/ui/data_viewer.py"
+      ],
       "console": "integratedTerminal",
+      "justMyCode": true,
       "env": {
         "PYTHONPATH": "${workspaceFolder}/src"
       }
+    },
+    {
+      "name": "Prefect Server",
+      "type": "python",
+      "request": "launch",
+      "module": "prefect.cli",
+      "args": [
+        "server",
+        "start",
+        "--port",
+        "4200"
+      ],
+      "console": "integratedTerminal",
+      "env": {
+        "PREFECT_HOME": "${workspaceFolder}\\.prefect"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Prefect Flow",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/strawberry/prefect_stocks/flow.py",
+      "console": "integratedTerminal",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PREFECT_API_URL": "http://127.0.0.1:4200/api"
+      },
+      "justMyCode": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Server + Flow",
+      "configurations": [
+        "Prefect Server",
+        "Prefect Flow"
+      ]
     }
   ]
 }

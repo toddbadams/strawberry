@@ -9,7 +9,7 @@ from strawberry.config.config_loader import ConfigLoader
 
 class ParquetStorage:
 
-    def __init__(self, folder: str):
+    def __init__(self, folder: Path):
         self.logger = LoggerFactory().create_logger(__name__)
         self.config = ConfigLoader()
         self.env = self.config.environment()
@@ -61,6 +61,16 @@ class ParquetStorage:
 
         # Any .parquet files present?
         return any(p.glob("*.parquet"))
+
+    def all_exist(self, table_names: list[str], ticker: str | None = None) -> bool:
+        """
+        Return True only if *all* given tables exist (optionally within the same ticker partition).
+        Empty iterable returns False by default.
+        """
+        table_names = list(table_names)
+        if not table_names:
+            return False
+        return all(self.exists(t, ticker) for t in table_names)
 
     def write_df(self, df: pd.DataFrame, table_name: str, partition_cols: list[str] = None, index: bool = False):
         path = self._table_path(table_name)

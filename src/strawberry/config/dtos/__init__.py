@@ -1,7 +1,6 @@
-from .AcquisitionTableConfig import AcquisitionConfig, AcquisitionTableConfig, ColumnConfig as SchemaColumnConfig
+from .AcquisitionTableConfig import AcquisitionConfig, AcquisitionTableConfig, ColumnConfig 
 from .ChartConfig import ChartConfig
-from .ColumnConfig import ConsolidateColumnConfig 
-from .ConsolidationTableConfig import ConsolidationTableConfig
+from .ConsolidationTableConfig import ConsolidationTableConfig, ConsolidateColumnConfig
 from .DividendScoreParameter import DividendScoreParameter
 from .Environment import Environment
 from .RuleConfig import RuleConfig

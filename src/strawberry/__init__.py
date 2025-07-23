@@ -5,7 +5,7 @@ __all__ = [
     "config",
     "repository",
     "scoring",
-    "transform",
+    "dimensions",
     "ui",
     "logging_helpers",
 ]

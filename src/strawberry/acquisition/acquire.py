@@ -4,13 +4,8 @@ from strawberry.config.config_loader import ConfigLoader
 from strawberry.repository.storage import ParquetStorage
 from strawberry.logging.logger_factory import LoggerFactory
 
-from .alpha_vantage_api import AlphaVantageAPI
-from .injestor import (
-    Injestor,
-    PriceInjestor,
-    DataNotFoundError,
-    APILimitReachedError,
-)
+from .alpha_vantage_api import APILimitReachedError, AlphaVantageAPI, DataNotFoundError
+from .injestor import Injestor, PriceInjestor
 
 class Acquire:
 
@@ -27,6 +22,9 @@ class Acquire:
             'Injestor': Injestor,
             'PriceInjestor': PriceInjestor,
         }
+        
+        # Build ingestion steps dynamically from JSON config
+        self.steps = [(self._get_injestor(cfg.injestor), cfg.name, cfg.attribute) for cfg in self.acq_cfg.tables]
 
     def _get_injestor(self, injestor_name: str):
         try:
@@ -55,21 +53,31 @@ class Acquire:
             self.logger.warning(f"{log_prefix}{e}")
             raise
 
-    def acquire(self):
-        # Build ingestion steps dynamically from JSON config
-        steps = [(self._get_injestor(cfg.injestor), cfg.name, cfg.attribute) for cfg in self.acq_cfg.tables]
+    def acquire_ticker(self, ticker: str) -> Path:
+        self.logger.info(f"Acquiring {ticker}")
+        for inj, name, attr in self.steps:
+            if not self._ingest_step(inj, name, attr, ticker):
+                break
+        return self.env.acquisition_folder
 
+    def tickers_not_acquired(self, tickers: list[str]) -> list[str]:
+        """
+            Return a set of tickers from the inputed tickers that have not yet been acquired
+        """
+        tables = self.acq_cfg.table_names()
+        not_acquired = []
+        for t in tickers:
+            if not self.storage.all_exist(tables, t):
+                not_acquired.append(t)
+
+        return not_acquired
+
+    def main(self):
         for ticker in self.tickers:
-            self.logger.info(f"Acquiring {ticker}")
-            for inj, name, attr in steps:
-                try:
-                    if not self._ingest_step(inj, name, attr, ticker):
-                        break
-                except APILimitReachedError:
-                    return
+            self.acquire_ticker(ticker)
 
 
 if __name__ == "__main__":
     acquirer = Acquire()
-    acquirer.acquire()
+    acquirer.main()
 

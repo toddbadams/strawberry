@@ -1,5 +1,14 @@
 import requests
 
+# define your new exceptions
+class DataNotFoundError(Exception):
+    """Raised when the API returns no data for a given ticker."""
+    pass
+
+class APILimitReachedError(Exception):
+    """Raised when the AlphaVantage API limit is reached."""
+    pass
+
 class AlphaVantageAPI:
     """
     Simple client for Alpha Vantage REST API.
@@ -27,6 +36,11 @@ class AlphaVantageAPI:
         resp = requests.get(self.base_url, params=params) 
         resp.raise_for_status()
         data = resp.json()
-        if not data:
-            raise ValueError(f"Empty response from Alpha Vantage: {resp.text}")
+        # ensure we have data to proceed
+        if data is None:
+            raise DataNotFoundError(f"{symbol} | {function} | Alpha Vantage - No data found.") 
+        
+        # ensure we have not reached API limit
+        if 'Information' in data:
+            raise APILimitReachedError(f"{symbol} | {function} | Alpha Vantage API limit reached.")
         return data

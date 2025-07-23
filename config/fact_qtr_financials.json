@@ -1,148 +1,68 @@
 [
-    {
-        "name": "BALANCE_SHEET",
-        "columns": [{
-            "in_name": "fiscalDateEnding",
-            "out_name": "qtr_end_date",
-            "type": "date"
-        },{
-            "in_name": "totalAssets",
-            "out_name": "total_assets",
-            "type": "number"
-        },{
-            "in_name": "commonStockSharesOutstanding",
-            "out_name": "shares_outstanding",
-            "type": "number"
-        },{
-            "in_name": "shortTermDebt",
-            "out_name": "short_term_debt",
-            "type": "number"
-        },{
-            "in_name": "longTermDebt",
-            "out_name": "long_term_debt",
-            "type": "number"
-        },{
-            "in_name": "totalShareholderEquity",
-            "out_name": "total_shareholder_equity",
-            "type": "number"
-        },{
-            "in_name": "cashAndCashEquivalentsAtCarryingValue",
-            "out_name": "cash_and_cash_equivalents",
-            "type": "number"
-        },{
-            "in_name": "currentNetReceivables",
-            "out_name": "current_net_receivables",
-            "type": "number"
-        },{
-            "in_name": "totalCurrentLiabilities",
-            "out_name": "current_liabilities",
-            "type": "number"
-        }]
-    },{
-        "name": "CASH_FLOW",
-        "columns": [{
-            "in_name": "fiscalDateEnding",
-            "out_name": "qtr_end_date",
-            "type": "date"
-        },{
-            "in_name": "operatingCashflow",
-            "out_name": "operating_cashflow",
-            "type": "number"
-        },{
-            "in_name": "capitalExpenditures",
-            "out_name": "capital_expenditures",
-            "type": "number"
-        }]
-    },{
-        "name": "DIVIDENDS",
-        "columns": [{
-            "in_name": "ex_dividend_date",
-            "out_name": "qtr_end_date",
-            "type": "date"
-        },{
-            "in_name": "amount",
-            "out_name": "dividend",
-            "type": "number"
-        }]
-    },{
-        "name": "EARNINGS",
-        "columns": [{
-            "in_name": "fiscalDateEnding",
-            "out_name": "qtr_end_date",
-            "type": "date"
-        },{
-            "in_name": "reportedEPS",
-            "out_name": "eps",
-            "type": "number"
-        },{
-            "in_name": "estimatedEPS",
-            "out_name": "estimated_eps",
-            "type": "number"
-        },{
-            "in_name": "surprisePercentage",
-            "out_name": "surprise_eps_pct",
-            "type": "number"
-        }]
-    },{
-        "name": "INCOME_STATEMENT",
-        "columns": [{
-            "in_name": "fiscalDateEnding",
-            "out_name": "qtr_end_date",
-            "type": "date"
-        },{
-            "in_name": "totalRevenue",
-            "out_name": "revenue",
-            "type": "number"
-        },{
-            "in_name": "netIncome",
-            "out_name": "net_income",
-            "type": "number"
-        },{
-            "in_name": "ebit",
-            "out_name": "ebit",
-            "type": "number"
-        },{
-            "in_name": "ebitda",
-            "out_name": "ebitda",
-            "type": "number"
-        },{
-            "in_name": "incomeTaxExpense",
-            "out_name": "income_tax_expense",
-            "type": "number"
-        },{
-            "in_name": "incomeBeforeTax",
-            "out_name": "income_before_tax",
-            "type": "number"
-        },{
-            "in_name": "interestExpense",
-            "out_name": "interest_expense",
-            "type": "number"
-        }]
-    },{
-        "name": "INSIDER_TRANSACTIONS",
-        "columns": [{
-            "in_name": "transaction_date",
-            "out_name": "qtr_end_date",
-            "type": "date"
-        },{
-            "in_name": "acquisition_or_disposal",
-            "out_name": "acquisition_or_disposal",
-            "type": "object"
-        },{
-            "in_name": "shares",
-            "out_name": "insider_shares",
-            "type": "number"
-        }]
-    },{
-        "name": "TIME_SERIES_MONTHLY_ADJUSTED",
-        "columns": [{
-            "in_name": "date",
-            "out_name": "qtr_end_date",
-            "type": "date"
-        },{
-            "in_name": "5. adjusted close",
-            "out_name": "share_price",
-            "type": "number"
-        }]
-    }
+  {
+    "name": "BALANCE_SHEET",
+    "columns": [
+      {"in_name": "fiscalDateEnding", "out_name": "qtr_end_date", "type": "date"},
+      {"in_name": "totalAssets", "out_name": "total_assets", "type": "number"},
+      {"in_name": "commonStockSharesOutstanding", "out_name": "shares_outstanding", "type": "number"},
+      {"in_name": "shortTermDebt", "out_name": "short_term_debt", "type": "number"},
+      {"in_name": "longTermDebt", "out_name": "long_term_debt", "type": "number"},
+      {"in_name": "totalShareholderEquity", "out_name": "total_shareholder_equity", "type": "number"},
+      {"in_name": "cashAndCashEquivalentsAtCarryingValue", "out_name": "cash_and_cash_equivalents", "type": "number"},
+      {"in_name": "currentNetReceivables", "out_name": "current_net_receivables", "type": "number"},
+      {"in_name": "totalCurrentLiabilities", "out_name": "current_liabilities", "type": "number"}
+    ]
+  },
+  {
+    "name": "CASH_FLOW",
+    "columns": [
+      {"in_name": "fiscalDateEnding", "out_name": "qtr_end_date", "type": "date"},
+      {"in_name": "operatingCashflow", "out_name": "operating_cashflow", "type": "number"},
+      {"in_name": "capitalExpenditures", "out_name": "capital_expenditures", "type": "number"}
+    ]
+  },
+  {
+    "name": "DIVIDENDS",
+    "columns": [
+      {"in_name": "ex_dividend_date", "out_name": "qtr_end_date", "type": "date"},
+      {"in_name": "amount", "out_name": "dividend", "type": "number"}
+    ]
+  },
+  {
+    "name": "EARNINGS",
+    "columns": [
+      {"in_name": "fiscalDateEnding", "out_name": "qtr_end_date", "type": "date"},
+      {"in_name": "reportedEPS", "out_name": "eps", "type": "number"},
+      {"in_name": "estimatedEPS", "out_name": "estimated_eps", "type": "number"},
+      {"in_name": "surprisePercentage", "out_name": "surprise_eps_pct", "type": "number"}
+    ]
+  },
+  {
+    "name": "INCOME_STATEMENT",
+    "columns": [
+      {"in_name": "fiscalDateEnding", "out_name": "qtr_end_date", "type": "date"},
+      {"in_name": "totalRevenue", "out_name": "revenue", "type": "number"},
+      {"in_name": "netIncome", "out_name": "net_income", "type": "number"},
+      {"in_name": "ebit", "out_name": "ebit", "type": "number"},
+      {"in_name": "ebitda", "out_name": "ebitda", "type": "number"},
+      {"in_name": "incomeTaxExpense", "out_name": "income_tax_expense", "type": "number"},
+      {"in_name": "incomeBeforeTax", "out_name": "income_before_tax", "type": "number"},
+      {"in_name": "interestExpense", "out_name": "interest_expense", "type": "number"}
+    ]
+  },
+  {
+    "name": "INSIDER_TRANSACTIONS",
+    "columns": [
+      {"in_name": "transaction_date", "out_name": "qtr_end_date", "type": "date"},
+      {"in_name": "acquisition_or_disposal", "out_name": "acquisition_or_disposal", "type": "object"},
+      {"in_name": "shares", "out_name": "insider_shares", "type": "number"}
+    ]
+  },
+  {
+    "name": "TIME_SERIES_MONTHLY_ADJUSTED",
+    "columns": [
+      {"in_name": "date", "out_name": "qtr_end_date", "type": "date"},
+      {"in_name": "5. adjusted close", "out_name": "share_price", "type": "number"}
+    ]
+  }
 ]

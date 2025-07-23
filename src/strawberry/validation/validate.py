@@ -128,6 +128,10 @@ class Validate:
         e_df = pd.DataFrame(exceptions, ['table', 'ticker', 'error'])
         self.val_store.write_df(e_df, "EXCEPTIONS")
 
+    def validate_ticker(self, ticker: str):
+        self.logger.info("doing stuff")
+
+        
 if __name__ == "__main__":
    validator = Validate()
    validator.validate()
