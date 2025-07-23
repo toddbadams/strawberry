@@ -16,7 +16,7 @@ class DimStocks:
         self.env = self.config.environment()
         self.cfg = self.config.dim_stock()
 
-        self.trn_store = ParquetStorage(self.env.transformed_folder) # we write to the transformed folder
+        self.dim_store = ParquetStorage(self.env.dim_stocks_folder) # we write to the transformed folder
         self.val_store = ParquetStorage(self.env.validated_folder) # we read from the validated folder        
         
         # get a set of tickers from the validation folder
@@ -55,7 +55,7 @@ class DimStocks:
             df[col.out_name] = self._transform_column(log_prefix, df[col.out_name], col)
 
         # save the file in the transformed folder
-        self.trn_store.write_df(df, "DIM_STOCKS")
+        self.dim_store.write_df(df, "DIM_STOCKS")
         self.logger.info(f"{ticker} | consolidated and saved to transformed folder")
 
 
@@ -75,7 +75,7 @@ class DimStocks:
             df[col.out_name] = self._transform_column(log_prefix, df[col.out_name], col)
 
         # save the file in the transformed folder
-        self.trn_store.write_df(df, "DIM_STOCKS")
+        self.dim_store.write_df(df, "DIM_STOCKS")
         self.logger.info(f"{log_prefix} | consolidated and saved to transformed folder")
 
     def transform_ticker(self, ticker: str):

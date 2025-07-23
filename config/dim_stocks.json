@@ -1,60 +1,282 @@
-{
-    "name": "OVERVIEW",
-    "columns": [
-        { "in_name": "Symbol",                       "out_name": "symbol",                        "type": "string" },
-        { "in_name": "AssetType",                    "out_name": "asset_type",                    "type": "string" },
-        { "in_name": "Name",                         "out_name": "name",                          "type": "string" },
-        { "in_name": "Description",                  "out_name": "description",                   "type": "string" },
-        { "in_name": "CIK",                          "out_name": "cik",                           "type": "string" },
-        { "in_name": "Exchange",                     "out_name": "exchange",                      "type": "string" },
-        { "in_name": "Currency",                     "out_name": "currency",                      "type": "string" },
-        { "in_name": "Country",                      "out_name": "country",                       "type": "string" },
-        { "in_name": "Sector",                       "out_name": "sector",                        "type": "string" },
-        { "in_name": "Industry",                     "out_name": "industry",                      "type": "string" },
-        { "in_name": "Address",                      "out_name": "address",                       "type": "string" },
-        { "in_name": "OfficialSite",                 "out_name": "official_site",                 "type": "string" },
-        { "in_name": "FiscalYearEnd",                "out_name": "fiscal_year_end",               "type": "string" },
-        { "in_name": "LatestQuarter",                "out_name": "latest_quarter",                "type": "date" },
-        { "in_name": "MarketCapitalization",         "out_name": "market_capitalization",         "type": "integer" },
-        { "in_name": "EBITDA",                       "out_name": "ebitda",                        "type": "integer" },
-        { "in_name": "PERatio",                      "out_name": "pe_ratio",                      "type": "float" },
-        { "in_name": "PEGRatio",                     "out_name": "peg_ratio",                     "type": "float" },
-        { "in_name": "BookValue",                    "out_name": "book_value",                    "type": "float" },
-        { "in_name": "DividendPerShare",             "out_name": "dividend_per_share",            "type": "float" },
-        { "in_name": "DividendYield",                "out_name": "dividend_yield",                "type": "float" },
-        { "in_name": "EPS",                          "out_name": "eps",                           "type": "float" },
-        { "in_name": "RevenuePerShareTTM",           "out_name": "revenue_per_share_ttm",         "type": "float" },
-        { "in_name": "ProfitMargin",                 "out_name": "profit_margin",                 "type": "float" },
-        { "in_name": "OperatingMarginTTM",           "out_name": "operating_margin_ttm",          "type": "float" },
-        { "in_name": "ReturnOnAssetsTTM",            "out_name": "return_on_assets_ttm",          "type": "float" },
-        { "in_name": "ReturnOnEquityTTM",            "out_name": "return_on_equity_ttm",          "type": "float" },
-        { "in_name": "RevenueTTM",                   "out_name": "revenue_ttm",                   "type": "integer" },
-        { "in_name": "GrossProfitTTM",               "out_name": "gross_profit_ttm",              "type": "integer" },
-        { "in_name": "DilutedEPSTTM",                "out_name": "diluted_eps_ttm",               "type": "float" },
-        { "in_name": "QuarterlyEarningsGrowthYOY",   "out_name": "quarterly_earnings_growth_yoy", "type": "float" },
-        { "in_name": "QuarterlyRevenueGrowthYOY",    "out_name": "quarterly_revenue_growth_yoy",  "type": "float" },
-        { "in_name": "AnalystTargetPrice",           "out_name": "analyst_target_price",          "type": "float" },
-        { "in_name": "AnalystRatingStrongBuy",       "out_name": "analyst_rating_strong_buy",     "type": "integer" },
-        { "in_name": "AnalystRatingBuy",             "out_name": "analyst_rating_buy",            "type": "integer" },
-        { "in_name": "AnalystRatingHold",            "out_name": "analyst_rating_hold",           "type": "integer" },
-        { "in_name": "AnalystRatingSell",            "out_name": "analyst_rating_sell",           "type": "integer" },
-        { "in_name": "AnalystRatingStrongSell",      "out_name": "analyst_rating_strong_sell",    "type": "integer" },
-        { "in_name": "TrailingPE",                   "out_name": "trailing_pe",                   "type": "float" },
-        { "in_name": "ForwardPE",                    "out_name": "forward_pe",                    "type": "float" },
-        { "in_name": "PriceToSalesRatioTTM",         "out_name": "price_to_sales_ratio_ttm",      "type": "float" },
-        { "in_name": "PriceToBookRatio",             "out_name": "price_to_book_ratio",           "type": "float" },
-        { "in_name": "EVToRevenue",                  "out_name": "ev_to_revenue",                 "type": "float" },
-        { "in_name": "EVToEBITDA",                   "out_name": "ev_to_ebitda",                  "type": "float" },
-        { "in_name": "Beta",                         "out_name": "beta",                          "type": "float" },
-        { "in_name": "52WeekHigh",                   "out_name": "52_week_high",                  "type": "float" },
-        { "in_name": "52WeekLow",                    "out_name": "52_week_low",                   "type": "float" },
-        { "in_name": "50DayMovingAverage",           "out_name": "50_day_moving_average",         "type": "float" },
-        { "in_name": "200DayMovingAverage",          "out_name": "200_day_moving_average",        "type": "float" },
-        { "in_name": "SharesOutstanding",            "out_name": "shares_outstanding",            "type": "integer" },
-        { "in_name": "SharesFloat",                  "out_name": "shares_float",                  "type": "integer" },
-        { "in_name": "PercentInsiders",              "out_name": "percent_insiders",              "type": "float" },
-        { "in_name": "PercentInstitutions",          "out_name": "percent_institutions",          "type": "float" },
-        { "in_name": "DividendDate",                 "out_name": "dividend_date",                 "type": "date" },
-        { "in_name": "ExDividendDate",               "out_name": "ex_dividend_date",              "type": "date" }
-    ]
-}
+[
+    {
+        "name": "OVERVIEW",
+        "columns": [
+            {
+                "in_name": "Symbol",
+                "out_name": "symbol",
+                "type": "string"
+            },
+            {
+                "in_name": "AssetType",
+                "out_name": "asset_type",
+                "type": "string"
+            },
+            {
+                "in_name": "Name",
+                "out_name": "name",
+                "type": "string"
+            },
+            {
+                "in_name": "Description",
+                "out_name": "description",
+                "type": "string"
+            },
+            {
+                "in_name": "CIK",
+                "out_name": "cik",
+                "type": "string"
+            },
+            {
+                "in_name": "Exchange",
+                "out_name": "exchange",
+                "type": "string"
+            },
+            {
+                "in_name": "Currency",
+                "out_name": "currency",
+                "type": "string"
+            },
+            {
+                "in_name": "Country",
+                "out_name": "country",
+                "type": "string"
+            },
+            {
+                "in_name": "Sector",
+                "out_name": "sector",
+                "type": "string"
+            },
+            {
+                "in_name": "Industry",
+                "out_name": "industry",
+                "type": "string"
+            },
+            {
+                "in_name": "Address",
+                "out_name": "address",
+                "type": "string"
+            },
+            {
+                "in_name": "OfficialSite",
+                "out_name": "official_site",
+                "type": "string"
+            },
+            {
+                "in_name": "FiscalYearEnd",
+                "out_name": "fiscal_year_end",
+                "type": "string"
+            },
+            {
+                "in_name": "LatestQuarter",
+                "out_name": "latest_quarter",
+                "type": "date"
+            },
+            {
+                "in_name": "MarketCapitalization",
+                "out_name": "market_capitalization",
+                "type": "integer"
+            },
+            {
+                "in_name": "EBITDA",
+                "out_name": "ebitda",
+                "type": "integer"
+            },
+            {
+                "in_name": "PERatio",
+                "out_name": "pe_ratio",
+                "type": "float"
+            },
+            {
+                "in_name": "PEGRatio",
+                "out_name": "peg_ratio",
+                "type": "float"
+            },
+            {
+                "in_name": "BookValue",
+                "out_name": "book_value",
+                "type": "float"
+            },
+            {
+                "in_name": "DividendPerShare",
+                "out_name": "dividend_per_share",
+                "type": "float"
+            },
+            {
+                "in_name": "DividendYield",
+                "out_name": "dividend_yield",
+                "type": "float"
+            },
+            {
+                "in_name": "EPS",
+                "out_name": "eps",
+                "type": "float"
+            },
+            {
+                "in_name": "RevenuePerShareTTM",
+                "out_name": "revenue_per_share_ttm",
+                "type": "float"
+            },
+            {
+                "in_name": "ProfitMargin",
+                "out_name": "profit_margin",
+                "type": "float"
+            },
+            {
+                "in_name": "OperatingMarginTTM",
+                "out_name": "operating_margin_ttm",
+                "type": "float"
+            },
+            {
+                "in_name": "ReturnOnAssetsTTM",
+                "out_name": "return_on_assets_ttm",
+                "type": "float"
+            },
+            {
+                "in_name": "ReturnOnEquityTTM",
+                "out_name": "return_on_equity_ttm",
+                "type": "float"
+            },
+            {
+                "in_name": "RevenueTTM",
+                "out_name": "revenue_ttm",
+                "type": "integer"
+            },
+            {
+                "in_name": "GrossProfitTTM",
+                "out_name": "gross_profit_ttm",
+                "type": "integer"
+            },
+            {
+                "in_name": "DilutedEPSTTM",
+                "out_name": "diluted_eps_ttm",
+                "type": "float"
+            },
+            {
+                "in_name": "QuarterlyEarningsGrowthYOY",
+                "out_name": "quarterly_earnings_growth_yoy",
+                "type": "float"
+            },
+            {
+                "in_name": "QuarterlyRevenueGrowthYOY",
+                "out_name": "quarterly_revenue_growth_yoy",
+                "type": "float"
+            },
+            {
+                "in_name": "AnalystTargetPrice",
+                "out_name": "analyst_target_price",
+                "type": "float"
+            },
+            {
+                "in_name": "AnalystRatingStrongBuy",
+                "out_name": "analyst_rating_strong_buy",
+                "type": "integer"
+            },
+            {
+                "in_name": "AnalystRatingBuy",
+                "out_name": "analyst_rating_buy",
+                "type": "integer"
+            },
+            {
+                "in_name": "AnalystRatingHold",
+                "out_name": "analyst_rating_hold",
+                "type": "integer"
+            },
+            {
+                "in_name": "AnalystRatingSell",
+                "out_name": "analyst_rating_sell",
+                "type": "integer"
+            },
+            {
+                "in_name": "AnalystRatingStrongSell",
+                "out_name": "analyst_rating_strong_sell",
+                "type": "integer"
+            },
+            {
+                "in_name": "TrailingPE",
+                "out_name": "trailing_pe",
+                "type": "float"
+            },
+            {
+                "in_name": "ForwardPE",
+                "out_name": "forward_pe",
+                "type": "float"
+            },
+            {
+                "in_name": "PriceToSalesRatioTTM",
+                "out_name": "price_to_sales_ratio_ttm",
+                "type": "float"
+            },
+            {
+                "in_name": "PriceToBookRatio",
+                "out_name": "price_to_book_ratio",
+                "type": "float"
+            },
+            {
+                "in_name": "EVToRevenue",
+                "out_name": "ev_to_revenue",
+                "type": "float"
+            },
+            {
+                "in_name": "EVToEBITDA",
+                "out_name": "ev_to_ebitda",
+                "type": "float"
+            },
+            {
+                "in_name": "Beta",
+                "out_name": "beta",
+                "type": "float"
+            },
+            {
+                "in_name": "52WeekHigh",
+                "out_name": "52_week_high",
+                "type": "float"
+            },
+            {
+                "in_name": "52WeekLow",
+                "out_name": "52_week_low",
+                "type": "float"
+            },
+            {
+                "in_name": "50DayMovingAverage",
+                "out_name": "50_day_moving_average",
+                "type": "float"
+            },
+            {
+                "in_name": "200DayMovingAverage",
+                "out_name": "200_day_moving_average",
+                "type": "float"
+            },
+            {
+                "in_name": "SharesOutstanding",
+                "out_name": "shares_outstanding",
+                "type": "integer"
+            },
+            {
+                "in_name": "SharesFloat",
+                "out_name": "shares_float",
+                "type": "integer"
+            },
+            {
+                "in_name": "PercentInsiders",
+                "out_name": "percent_insiders",
+                "type": "float"
+            },
+            {
+                "in_name": "PercentInstitutions",
+                "out_name": "percent_institutions",
+                "type": "float"
+            },
+            {
+                "in_name": "DividendDate",
+                "out_name": "dividend_date",
+                "type": "date"
+            },
+            {
+                "in_name": "ExDividendDate",
+                "out_name": "ex_dividend_date",
+                "type": "date"
+            }
+        ]
+    }
+]

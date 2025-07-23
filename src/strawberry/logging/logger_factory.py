@@ -20,9 +20,8 @@ class _NameAdapter(logging.LoggerAdapter):
         return f"{self._name} | {msg}", kwargs
 
 class LoggerFactory:
-    def __init__(self, e: str = 'DEV', default_level: int = logging.INFO):
+    def __init__(self, default_level: int = logging.INFO):
         self.default_level = default_level
-        self.env = e
 
     def create_logger(self, name: str, level: Optional[int] = None) -> logging.Logger:
         lvl = level or self.default_level

@@ -9,11 +9,13 @@ class Injestor():
   
     def injest(self, name: str, attr: str, ticker: str):        
         data = self.alpha_vantage.fetch(name, ticker)
+        # ensure we have data
+        if not data:
+            return None
                 
         # create data frame 
         df = pd.DataFrame([data]) if attr is None else pd.DataFrame(data[attr])
         df['symbol'] = ticker
-
         return df
     
 
@@ -33,6 +35,7 @@ class PriceInjestor(Injestor):
         Transposed (and returned shape):
 
         """
-        df = super().injest(name, attr, ticker)                
-        df.rename(columns={'index': 'date'}, inplace=True)
+        df = super().injest(name, attr, ticker) 
+        if not df == None:                       
+            df.rename(columns={'index': 'date'}, inplace=True)
         return df

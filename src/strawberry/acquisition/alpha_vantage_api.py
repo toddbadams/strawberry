@@ -1,4 +1,5 @@
 import requests
+from strawberry.logging.logger_factory import LoggerFactory
 
 # define your new exceptions
 class DataNotFoundError(Exception):
@@ -16,6 +17,7 @@ class AlphaVantageAPI:
 
     def __init__(self, api_key: str,
                  base_url: str = "https://www.alphavantage.co/query"):
+        self.logger = LoggerFactory().create_logger(__name__)
         self.api_key = api_key
         self.base_url = base_url
         self.api_limit = 25
@@ -38,9 +40,14 @@ class AlphaVantageAPI:
         data = resp.json()
         # ensure we have data to proceed
         if data is None:
-            raise DataNotFoundError(f"{symbol} | {function} | Alpha Vantage - No data found.") 
+            m = f"{symbol} | {function} | Alpha Vantage - No data found."
+            self.logger.warning(m)
+            raise DataNotFoundError(m) 
         
         # ensure we have not reached API limit
         if 'Information' in data:
-            raise APILimitReachedError(f"{symbol} | {function} | Alpha Vantage API limit reached.")
+            self.calls -= 1
+            m = f"{symbol} | {function} | API calls: {self.calls} | Alpha Vantage API limit reached."
+            self.logger.warning(m)
+            return None
         return data

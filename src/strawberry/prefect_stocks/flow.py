@@ -1,79 +1,81 @@
-from prefect import flow, task 
+from prefect import flow, task
 
 from strawberry.acquisition.acquire import Acquire
-from strawberry.acquisition.alpha_vantage_api import APILimitReachedError, DataNotFoundError
 from strawberry.config.config_loader import ConfigLoader
 from strawberry.validation.validate import Validate
 from strawberry.dimensions.dim_stocks import DimStocks
+from strawberry.logging.logger_factory import LoggerFactory
 
-@task
-def read_tickers_to_acquire() -> list[str]:
-    tickers = ConfigLoader().tickers()
-    # given the full list of tickers reduce to only those not yet acquired
-    tickers = Acquire().tickers_not_acquired(tickers)
-    # limit to the first two for now
-    tickers = tickers[:2]
-    return tickers
+class PrefectPipeline:
 
-@task
-def acquire_stock(ticker: str) -> str:
-    return Acquire().acquire_ticker(ticker=ticker)
+    def __init__(self):
+        self.logger = LoggerFactory().create_logger(__name__)
+        self.config = ConfigLoader()
+        self.tickers = self.config.tickers()
+        self.acquire = Acquire()
+        self.validate = Validate()
+        self.dim_stock = DimStocks()
 
-@task
-def validate_stock(ticker: str) -> str:
-    return Validate().validate_ticker(ticker=ticker)
+    @task
+    def read_tickers_to_acquire(self) -> list[str]:
+        # given the full list of tickers reduce to only those not yet acquired
+        tickers = self.acquire.tickers_not_acquired(self.tickers)
+        # limit to the first two for now
+        tickers = tickers[:2]
+        return tickers
 
-@task
-def dimension_stock(ticker: str) -> str:
-    return DimStocks().transform_ticker(ticker=ticker)
+    @task
+    def acquire_stock(self, ticker: str) -> bool:
+        return self.acquire.acquire_ticker(ticker=ticker)
+
+    @task
+    def validate_stock(self, ticker: str) -> bool:
+        return self.validate.validate_ticker(ticker=ticker)
+
+    @task
+    def dimension_stock(self, ticker: str) -> bool:
+        return self.dim_stock.transform_ticker(ticker=ticker)
+
+    @task
+    def fact_qtr_financials(self, ticker: str) -> bool:
+        return True
+
+    @task
+    def fact_qtr_ratios(self, ticker: str) -> bool:
+        return True
+
+    @task
+    def fact_qtr_dividend_scores(self, ticker: str) -> bool:
+        return True
+
+    @task
+    def fact_qtr_alpha_scores(self, ticker: str) -> bool:
+        return True
 
 
-@task
-def fact_qtr_financials(ticker: str) -> str:
-    return None
+    @flow  # (task_runner=ConcurrentTaskRunner())
+    def pipeline(self):
+        tickers = self.read_tickers_to_acquire()
 
-@task
-def fact_qtr_ratios(ticker: str) -> str:
-    return None
+        # Fan-out: launch per-ticker sub-graph
+        results = []
+        for t in tickers:
+            res = self.ticker_pipeline(ticker=t)
+            results.append(res)
 
-@task
-def fact_qtr_dividend_scores(ticker: str) -> str:
-    return None
+        return results
 
-@task
-def fact_qtr_alpha_scores(ticker: str) -> str:
-    return None
+    @flow
+    def ticker_pipeline(self, ticker: str):
+        if not self.acquire_stock.submit(ticker): return
+        if not self.validate_stock.submit(ticker): return
+        if not self.dimension_stock.submit(ticker): return
+        if not self.fact_qtr_financials.submit(ticker): return
+        if not self.fact_qtr_ratios.submit(ticker): return
+        if not self.fact_qtr_dividend_scores.submit(ticker): return
+        if not self.fact_qtr_alpha_scores.submit(ticker): return
 
-
-@flow  # (task_runner=ConcurrentTaskRunner())
-def stock_pipeline_flow():
-    tickers = read_tickers_to_acquire()
-
-    # Fan-out: launch per-ticker sub-graph
-    results = []
-    for t in tickers:
-        res = per_ticker_chain(ticker=t)
-        results.append(res)
-
-    return results
-
-@flow
-def per_ticker_chain(ticker: str):
-    try:
-        act = acquire_stock.submit(ticker)
-    except (APILimitReachedError, DataNotFoundError) as e:
-        return
-    
-    val = validate_stock.submit(ticker)
-    dim = dimension_stock.submit(ticker)
-    fin = fact_qtr_financials.submit(ticker)
-    ratios = fact_qtr_ratios.submit(ticker)
-    div = fact_qtr_dividend_scores.submit(ticker)
-    alpha = fact_qtr_alpha_scores.submit(ticker)
-    return {"ticker": ticker, "acquire": act, "validate": val,
-            "dim": dim, "financials": fin, "ratios": ratios,
-            "dividends": div, "alpha": alpha}
 
 if __name__ == "__main__":
-   results = stock_pipeline_flow()
-   print(results)
+   p = PrefectPipeline()
+   p.pipeline()

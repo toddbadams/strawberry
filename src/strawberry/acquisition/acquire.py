@@ -1,11 +1,9 @@
-from pathlib import Path
 
 from strawberry.config.config_loader import ConfigLoader
 from strawberry.repository.storage import ParquetStorage
 from strawberry.logging.logger_factory import LoggerFactory
-
-from .alpha_vantage_api import APILimitReachedError, AlphaVantageAPI, DataNotFoundError
-from .injestor import Injestor, PriceInjestor
+from strawberry.acquisition.alpha_vantage_api import AlphaVantageAPI
+from strawberry.acquisition.injestor import Injestor, PriceInjestor
 
 class Acquire:
 
@@ -37,28 +35,29 @@ class Acquire:
 
         if self.storage.exists(table_name, ticker):
             self.logger.info(f"{log_prefix} already exists")
+            #to do: merge the request with existing data
             return True
 
-        try:
-            df = injestor.injest(table_name, attr, ticker)
-            self.storage.write_df(df, table_name, ["symbol"], index=False)
-            self.logger.info(f"{log_prefix} acquired")
-            return True
+        df = injestor.injest(table_name, attr, ticker)
 
-        except DataNotFoundError as e:
-            self.logger.warning(f"{log_prefix}{e}")
-            return False
+        # if not data, then return a False to indicate did not complete
+        if df == None: return False
 
-        except APILimitReachedError as e:
-            self.logger.warning(f"{log_prefix}{e}")
-            raise
+        self.storage.write_df(df, table_name, ["symbol"], index=False)
+        self.logger.info(f"{log_prefix} acquired")
+        return True
 
-    def acquire_ticker(self, ticker: str) -> Path:
+    def acquire_ticker(self, ticker: str) -> bool:
         self.logger.info(f"Acquiring {ticker}")
         for inj, name, attr in self.steps:
             if not self._ingest_step(inj, name, attr, ticker):
-                break
-        return self.env.acquisition_folder
+                # tables did not load, issue logged
+                self.logger.warning(f"Failed to acquire {ticker}")
+                return False
+
+        self.logger.info(f"Successfully acquired {ticker}")
+        return True
+
 
     def tickers_not_acquired(self, tickers: list[str]) -> list[str]:
         """
@@ -69,12 +68,14 @@ class Acquire:
         for t in tickers:
             if not self.storage.all_exist(tables, t):
                 not_acquired.append(t)
-
+        
+        self.logger.info(f"{len(not_acquired)} tickers not aquired.")
         return not_acquired
 
     def main(self):
-        for ticker in self.tickers:
-            self.acquire_ticker(ticker)
+        for ticker in self.tickers_not_acquired(self.tickers):
+            if not self.acquire_ticker(ticker):
+                return
 
 
 if __name__ == "__main__":

@@ -28,7 +28,7 @@ class ConfigLoader:
 
     def dim_stock(self) -> dto.ConsolidateColumnConfig:
         path = os.path.join(self.env.config_path, "dim_stocks.json")
-        table = dto.ConsolidationTableConfig.load_from_file(path)
+        table = dto.ConsolidationTableConfig.load_from_file(path)[0]
         self.logger.info(f"Loaded -Dim Stocks- table configs from {path}")
         return table
 
