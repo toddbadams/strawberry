@@ -6,23 +6,26 @@
     "${workspaceFolder}\\src"
   ],
   // ---- Type checking / IntelliSense ----
-  // "python.analysis.typeCheckingMode": "basic",          // "strict" if you like pain
   "python.analysis.autoImportCompletions": true,
   // ---- Testing ----
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
     "tests"
-  ], // or your test dir
-  // ---- Linting ----
-  "python.linting.flake8Enabled": true,
-  "flake8.args": [
-    "--max-line-length=100",
-    "--extend-ignore=E203,W503"
   ],
   // ---- Formatting ----
   "editor.formatOnSave": true,
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": [
+    "--line-length",
+    "100"
+  ],
+  // ---- Import sorting & Fix‑all on save ----
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
   },
   // ---- UI niceties ----
   "files.exclude": {
@@ -31,9 +34,6 @@
     ".venv": true
   },
   "search.useIgnoreFiles": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit" // run manually with Ctrl+Shift+P
-  },
   // ---- Jupyter/Notebooks (optional) ----
   "jupyter.askForKernelRestart": false,
   // ---- Env files (optional) ----

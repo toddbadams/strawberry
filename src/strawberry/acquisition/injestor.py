@@ -1,7 +1,5 @@
 import pandas as pd
-from .alpha_vantage_api import AlphaVantageAPI
-
-
+from strawberry.acquisition.alpha_vantage_api import AlphaVantageAPI
 
 class Injestor():
     def __init__(self, alpha_vantage: AlphaVantageAPI):

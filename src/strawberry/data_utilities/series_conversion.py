@@ -1,15 +1,66 @@
 import re
 import pandas as pd
+import logging
 from typing import Sequence, Optional
+
+from strawberry.config.dtos.AcquisitionTableConfig import ColumnConfig
+
 
 class SeriesConversion:
     """Utilities to coerce pandas Series to datetime/float/integer with consistent cleaning rules."""
-    
-    NONE_TOKENS: Sequence[str] = ("None", "none", "NULL", "", "-")
-    DATE_RE = re.compile(r'((?:00|19|20)\d{2}-\d{2}-\d{2})')  # first ISO-like date in string
 
-    def to_datetime(self,  series: pd.Series,  fmt: Optional[str] = "%Y-%m-%d",
-        *,  nullable: bool = True,  null_action: Optional[str] = None ) -> pd.Series:
+    NONE_TOKENS: Sequence[str] = ("None", "none", "NULL", "", "-")
+    DATE_RE = re.compile(
+        r"((?:00|19|20)\d{2}-\d{2}-\d{2})"
+    )  # first ISO-like date in string
+
+    def __init__(self):
+        # set up logger and type-to-function mapping
+        self.logger = logging.getLogger(__name__)
+        self._validators = {
+            "date": self._validate_date,
+            "float": self._validate_float,
+            "integer": self._validate_integer,
+        }
+
+    def _validate_date(self, series: pd.Series, col: ColumnConfig) -> pd.Series:
+        return self.to_datetime(
+            series,
+            fmt=col.format,
+            nullable=col.nullable,
+            null_action=col.null_action,
+        )
+
+    def _validate_float(self, series: pd.Series, col: ColumnConfig) -> pd.Series:
+        return self.to_float(series)
+
+    def _validate_integer(self, series: pd.Series, col: ColumnConfig) -> pd.Series:
+        return self.to_integer(series)
+
+    def validate_column(
+        self,
+        log_prefix: str,
+        series: pd.Series,
+        col: ColumnConfig,
+    ) -> pd.Series:
+        """
+        Dispatch conversion based on column configuration type, with logging on errors.
+        """
+        try:
+            validator = self._validators.get(col.type, lambda s, c: s)
+            return validator(series, col)
+        except (TypeError, ValueError) as e:
+            self.logger.warning(f"{log_prefix} {col.name} | {col.type} | {e}")
+            raise
+
+    def to_datetime(
+        self,
+        series: pd.Series,
+        fmt: Optional[str] = "%Y-%m-%d",
+        *,
+        nullable: bool = True,
+        null_action: Optional[str] = None,
+    ) -> pd.Series:
         """
         Convert a Series to datetime.
         - Strips tags/extra whitespace.

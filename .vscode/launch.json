@@ -79,7 +79,7 @@
       "name": "Prefect Server",
       "type": "python",
       "request": "launch",
-      "module": "prefect.cli",
+      "module": "prefect",
       "args": [
         "server",
         "start",

@@ -3,9 +3,7 @@ name = "strawberry"
 version = "0.1.0"
 description = "Acquisition and UI app for Strawberry project"
 authors = ["Todd <toddbadams@outlook.com>"]
-packages = [
-  { include = "strawberry", from = "src" }
-]
+packages = [{ include = "strawberry", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.13,<3.14"
@@ -19,12 +17,17 @@ altair = "^5.5.0"
 prefect = "^3.4.10"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.0"  # unit test
-flake8 = "^6.0"  # style guide
+pytest = "^7.0"
+flake8 = "^6.0"
+black = "^24.10.0"
+isort = "^5.12.0"
+mypy = "^1.6.0"
+# Optional
+# pylint = "^2.18.0"
 
 [tool.poetry.scripts]
 acquisition = "strawberry.acquisition.acq:main"
-ui          = "strawberry.ui.app:main"
+ui = "strawberry.ui.app:main"
 
 [build-system]
 requires = ["poetry-core"]
