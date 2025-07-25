@@ -2,6 +2,7 @@ from prefect import flow, task
 
 from strawberry.acquisition.acquire import Acquire
 from strawberry.config.config_loader import ConfigLoader
+from strawberry.dimensions.fact_qtr_financials import FactQrtFinancials
 from strawberry.validation.validate import Validate
 from strawberry.dimensions.dim_stocks import DimStocks
 from strawberry.logging.logger_factory import LoggerFactory
@@ -12,38 +13,36 @@ class PrefectPipeline:
     def __init__(self):
         self.logger = LoggerFactory().create_logger(__name__)
         self.config = ConfigLoader()
-        self.tickers = self.config.tickers()
-        self.acquire = Acquire()
-        self.validate = Validate()
-        self.dim_stock = DimStocks()
+        self.tickers = self.config.tickers()  # full list
+        self.acquire_srv = Acquire()
+        self.validate_srv = Validate()
+        self.dim_stock_srv = DimStocks()
+        self.fact_q_fin_srv = FactQrtFinancials()
 
     @task
     def read_tickers_to_acquire(self) -> list[str]:
         # given the full list of tickers reduce to only those not yet acquired
-        tickers = self.acquire.tickers_not_acquired(self.tickers)
-        # limit to the first two for now
-        tickers = tickers[:2]
-        return tickers
+        return self.acquire_srv.tickers_not_acquired(self.tickers)
 
     @task
     def read_tickers_to_validate(self) -> list[str]:
-        return self.validate.tickers_not_acquired(self.tickers)
+        return self.validate_srv.tickers_not_validated(self.tickers)
 
     @task
     def acquire_stock(self, ticker: str) -> bool:
-        return self.acquire.acquire_ticker(ticker=ticker)
+        return self.acquire_srv.acquire_ticker(ticker=ticker)
 
     @task
     def validate_stock(self, ticker: str) -> bool:
-        return self.validate.validate_ticker(ticker=ticker)
+        return self.validate_srv.validate_ticker(ticker=ticker)
 
     @task
-    def dimension_stock(self, ticker: str) -> bool:
-        return self.dim_stock.transform_ticker(ticker=ticker)
+    def dimension_stock(self) -> bool:
+        return self.dim_stock_srv.dimension_ticker()
 
     @task
     def fact_qtr_financials(self, ticker: str) -> bool:
-        return True
+        return self.fact_q_fin_srv.fact_ticker(ticker)
 
     @task
     def fact_qtr_ratios(self, ticker: str) -> bool:
@@ -59,51 +58,37 @@ class PrefectPipeline:
 
     @flow
     def pipeline(self):
+        # get a list of tickers to acquire
         tickers = self.read_tickers_to_acquire()
         for t in tickers:
-            self.acquire_ticker_pipeline(ticker=t)
-        self.validate_pipeline()
+            success = self.acquire_stock(t)
+            if not success:
+                # skip to validation
+                break
 
-    @flow
-    def validate_pipeline(self):
-        """
-        In this flow we validate any files that have been acquired but not yet validated
-        """
+        # validate any files that have been acquired but not yet validated
         tickers = self.read_tickers_to_validate()
         for t in tickers:
-            self.validate_ticker_pipeline(ticker=t)
+            self.validate_stock(t)
 
-    @flow
-    def acquire_ticker_pipeline(self, ticker: str):
-        if not self.acquire_stock.submit(ticker):
-            return
-        if not self.validate_stock.submit(ticker):
-            return
-        if not self.dimension_stock.submit(ticker):
-            return
-        if not self.fact_qtr_financials.submit(ticker):
-            return
-        if not self.fact_qtr_ratios.submit(ticker):
-            return
-        if not self.fact_qtr_dividend_scores.submit(ticker):
-            return
-        if not self.fact_qtr_alpha_scores.submit(ticker):
-            return
-
-    @flow
-    def validate_ticker_pipeline(self, ticker: str):
-        if not self.validate_stock.submit(ticker):
-            return
-        if not self.dimension_stock.submit(ticker):
-            return
-        if not self.fact_qtr_financials.submit(ticker):
-            return
-        if not self.fact_qtr_ratios.submit(ticker):
-            return
-        if not self.fact_qtr_dividend_scores.submit(ticker):
-            return
-        if not self.fact_qtr_alpha_scores.submit(ticker):
-            return
+        # Dimensions are run across all validated tables
+        self.dimension_stock()
+        tickers = self.dim_stock_srv.tickers_dimensioned()
+        for t in tickers:
+            self.fact_qtr_financials(t)
+        """
+            for t in self.dim_stock_srv.tickers_dimensioned():
+            if not self.dimension_stock.submit(ticker):
+                return
+            if not self.fact_qtr_financials.submit(ticker):
+                return
+            if not self.fact_qtr_ratios.submit(ticker):
+                return
+            if not self.fact_qtr_dividend_scores.submit(ticker):
+                return
+            if not self.fact_qtr_alpha_scores.submit(ticker):
+                return
+        """
 
 
 if __name__ == "__main__":

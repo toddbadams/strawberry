@@ -6,12 +6,14 @@ from strawberry.repository.storage import ParquetStorage
 from strawberry.acquisition.acquire import Acquire
 from strawberry.validation.validate import Validate
 from strawberry.logging.logger_factory import LoggerFactory
+from strawberry.ui.stock_view_app import StockView
 
 
 class DataApp:
     # Class-level constants
-    PAGES = ["Screener", "Data Viewer"]
+    PAGES = ["Screener", "Stock View", "Data Viewer"]
     SECTIONS = ["Acquired", "Validated", "Dimensions"]
+    DIMENSIONS = ["DIM_STOCKS"]
 
     def __init__(self):
         # Initialize logger
@@ -28,7 +30,7 @@ class DataApp:
         # Initialize storage backends
         self.acq_store = ParquetStorage(Path(self.env.acquisition_folder))
         self.val_store = ParquetStorage(Path(self.env.validated_folder))
-        self.dim_store = ParquetStorage(Path(self.env.validated_folder))
+        self.dim_store = ParquetStorage(Path(self.env.dim_stocks_folder))
         self.logger.info("Parquet storage backends initialized")
 
         # Data loaders
@@ -50,6 +52,7 @@ class DataApp:
         # Define pages
         pages = [
             st.Page(self.screener_page, title="Screener", url_path="screener"),
+            st.Page(StockView().render, title="Stock View", url_path="stock-view"),
             st.Page(self.data_viewer_page, title="Data Viewer", url_path="data-viewer"),
         ]
 
@@ -107,9 +110,8 @@ class DataApp:
 
     def _display_dimensions(self):
         """Handles the Dimensions section"""
-        tables = ["Stocks"]
-        self.logger.debug(f"Available dimensions: {tables}")
-        table = st.sidebar.selectbox("Select dimension", tables)
+        self.logger.debug(f"Available dimensions: {self.DIMENSIONS}")
+        table = st.sidebar.selectbox("Select dimension", self.DIMENSIONS)
         self.logger.info(f"Selected dimension: {table}")
 
         df = self.dim_store.read_df(table)

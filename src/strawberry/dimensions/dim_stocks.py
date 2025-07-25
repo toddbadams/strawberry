@@ -1,92 +1,64 @@
 import pandas as pd
 
-
 from strawberry.config.config_loader import ConfigLoader
-from strawberry.config.dtos import  ConsolidationTableConfig, ConsolidateColumnConfig
 from strawberry.data_utilities.series_conversion import SeriesConversion
 from strawberry.repository.storage import ParquetStorage
 from strawberry.logging.logger_factory import LoggerFactory
 
 
 class DimStocks:
-    
+
+    TABLE_NAME = "DIM_STOCKS"
+
     def __init__(self):
         self.logger = LoggerFactory().create_logger(__name__)
         self.config = ConfigLoader()
         self.env = self.config.environment()
         self.cfg = self.config.dim_stock()
+        self.series = SeriesConversion()
 
-        self.dim_store = ParquetStorage(self.env.dim_stocks_folder) # we write to the transformed folder
-        self.val_store = ParquetStorage(self.env.validated_folder) # we read from the validated folder        
-        
+        self.dim_store = ParquetStorage(self.env.dim_stocks_folder)
+        self.val_store = ParquetStorage(self.env.validated_folder)
+
         # get a set of tickers from the validation folder
         self.tickers = self.val_store.get_tickers(self.cfg.name)
         self.tickers = sorted(self.tickers)
 
-        self.clean = SeriesConversion()        
-    
-    def _transform_column(self, log_prefix: str, series: pd.Series, col: ConsolidateColumnConfig) -> pd.Series:
-        try:
-            if col.type == "date":
-                new_series = self.clean.to_datetime(series)
-            elif col.type == "float":
-                new_series = self.clean.to_float(series)
-            elif col.type == "integer":
-                new_series = self.clean.to_integer(series)
-            else:
-                new_series = series
-            return new_series
-        except (TypeError, ValueError) as e:
-            self.logger.warning(f"{log_prefix} {col.out_name}  | {col.type} | {str(e)}")
-            raise
+        self.clean = SeriesConversion()
 
-    def _transform_table(self, table: ConsolidationTableConfig, ticker: str) -> pd.DataFrame:    
-        log_prefix = f"{ticker} | {table.name} | "   
-        df = self.val_store.read_df(table.name, ticker)
+    def tickers_dimensioned(self) -> list[str]:
+        return self.dim_store.unique_column_list(self.TABLE_NAME, "symbol")
 
-         # get required columns
-        df = df[table.in_names()]        
+    def tickers_not_dimensioned(self, tickers: list[str]) -> list[str]:
+        """
+        Return a list of tickers from the input tickers that have not yet been dimensioned.
+        """
+        # Get already dimensioned tickers from the dimension store
+        dimensioned_tickers = self.dim_store.unique_column_list(
+            self.TABLE_NAME, "symbol"
+        )
+        # Filter and return tickers not present in the dimensioned list
+        return [ticker for ticker in tickers if ticker not in dimensioned_tickers]
 
-        # rename columns
-        df.rename(columns=table.in_to_out_map(), inplace=True)
+    def dimension_ticker(self):
+        log_prefix = f" {self.cfg.name} | "
 
-        # convert and clean the columns
-        for col in table.columns:
-            df[col.out_name] = self._transform_column(log_prefix, df[col.out_name], col)
+        # read the table from the validation folder
+        df = self.val_store.read_df(self.cfg.name)
 
-        # save the file in the transformed folder
-        self.dim_store.write_df(df, "DIM_STOCKS")
-        self.logger.info(f"{ticker} | consolidated and saved to transformed folder")
-
-
-    def transform_table2(self) -> pd.DataFrame:   
-        table = self.cfg 
-        log_prefix = f" {table.name} | "   
-        df = self.val_store.read_df(table.name)
-
-         # get required columns
-        df = df[table.in_names()]        
+        # get required columns
+        df = df[self.cfg.in_names()]
 
         # rename columns
-        df.rename(columns=table.in_to_out_map(), inplace=True)
+        df.rename(columns=self.cfg.in_to_out_map(), inplace=True)
 
-        # convert and clean the columns
-        for col in table.columns:
-            df[col.out_name] = self._transform_column(log_prefix, df[col.out_name], col)
-
-        # save the file in the transformed folder
-        self.dim_store.write_df(df, "DIM_STOCKS")
+        self.dim_store.update(self.TABLE_NAME, "symbol", df)
         self.logger.info(f"{log_prefix} | consolidated and saved to transformed folder")
 
-    def transform_ticker(self, ticker: str):
-        self.logger.info("do stuff")
-
-
     def main(self):
-        for ticker in self.tickers:
-            self._transform_table(self.cfg, ticker)
+        self.dimension_ticker()
 
-        
+
 if __name__ == "__main__":
-   t = DimStocks()
-   t.transform_table2()   
+    t = DimStocks()
+    t.main()

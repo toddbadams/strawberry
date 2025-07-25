@@ -13,38 +13,52 @@ class ConfigLoader:
     def __init__(self):
         self.logger = LoggerFactory().create_logger(__name__)
         self.env = dto.Environment.load()
-           
+
     def acquisition(self) -> dto.AcquisitionConfig:
         p = os.path.join(self.env.config_path, "acquisition.json")
         acquisition_config = dto.AcquisitionConfig.load_from_file(p)
-        self.logger.info(f"Loaded {len(acquisition_config.tables)} acquisition table configs from {p}")
+        self.logger.info(
+            f"Loaded {len(acquisition_config.tables)} acquisition table configs from {p}"
+        )
         return acquisition_config
-    
-    def fact_qtr_financials(self) -> list[dto.ConsolidationTableConfig]:
+
+    def fact_qtr_financials(self) -> list[dto.ValTableConfig]:
         path = os.path.join(self.env.config_path, "fact_qtr_financials.json")
-        tables = dto.ConsolidationTableConfig.load_from_file(path)
+        tables = dto.ValTableConfig.load_from_file(path)
         self.logger.info(f"Loaded -Fact Qtrly Financials- table configs from {path}")
         return tables
 
-    def dim_stock(self) -> dto.ConsolidateColumnConfig:
+    def dim_stock(self) -> dto.ValTableConfig:
         path = os.path.join(self.env.config_path, "dim_stocks.json")
-        table = dto.ConsolidationTableConfig.load_from_file(path)[0]
+        table = dto.ValTableConfig.load_from_file(path)[0]
         self.logger.info(f"Loaded -Dim Stocks- table configs from {path}")
+        return table
+
+    def fact_qtr_income(self) -> dto.FactTableConfig:
+        path = os.path.join(self.env.config_path, "fact_qtr_income_statement.json")
+        table = dto.FactTableConfig.load_from_file(path)
+        self.logger.info(f"Loaded -FACT Qrt Income Statement- config from {path}")
+        return table
+
+    def fact_qtr_balance(self) -> dto.FactTableConfig:
+        path = os.path.join(self.env.config_path, "fact_qtr_balance_sheet.json")
+        table = dto.FactTableConfig.load_from_file(path)
+        self.logger.info(f"Loaded -FACT Qrt Balance Statment- config from {path}")
         return table
 
     def tickers(self) -> list[str]:
         tickers: list[str] = []
         path = os.path.join(self.env.config_path, "tickers.csv")
-        
+
         with open(path, newline="") as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 if row:  # skip empty rows
                     tickers.append(row[0])
-        
+
         self.logger.info(f"Loaded {len(tickers)} tickers from {path}")
         return tickers
-    
+
     def load_dividend_params(self) -> list[dto.DividendScoreParameter]:
         path = os.path.join(self.env.config_path, "dividend_score.json")
         with open(path, "r", encoding="utf-8") as f:
@@ -53,22 +67,28 @@ class ConfigLoader:
         params = []
 
         for item in data:
-            chart = dto.ChartConfig(title=item["chart"]["title"],
-                                metrics=item["chart"]["metrics"],
-                                metric_labels=item["chart"]["metric_labels"],
-                                y_label=item["chart"]["y_label"],
-                                y_axis_format=item["chart"]["y_axis_format"],
-                                y_axis_min=item["chart"]["y_axis_min"],
-                                y_axis_max=item["chart"]["y_axis_max"],
-                                x_axis_range=item["chart"]["x_axis_range"])
-            params.append(dto.DividendScoreParameter(name=item["name"],
-                                                 description=item["description"],
-                                                 raw_column_name=item["raw_column_name"],
-                                                 raw_value=0,
-                                                 score_column_name=item["score_column_name"],
-                                                 score_value=0,
-                                                 weight=item["weight"],
-                                                 chart=chart))
+            chart = dto.ChartConfig(
+                title=item["chart"]["title"],
+                metrics=item["chart"]["metrics"],
+                metric_labels=item["chart"]["metric_labels"],
+                y_label=item["chart"]["y_label"],
+                y_axis_format=item["chart"]["y_axis_format"],
+                y_axis_min=item["chart"]["y_axis_min"],
+                y_axis_max=item["chart"]["y_axis_max"],
+                x_axis_range=item["chart"]["x_axis_range"],
+            )
+            params.append(
+                dto.DividendScoreParameter(
+                    name=item["name"],
+                    description=item["description"],
+                    raw_column_name=item["raw_column_name"],
+                    raw_value=0,
+                    score_column_name=item["score_column_name"],
+                    score_value=0,
+                    weight=item["weight"],
+                    chart=chart,
+                )
+            )
 
         self.logger.info(f"Loaded {len(params)} dividend parameters from {path}")
         return params
@@ -83,15 +103,12 @@ class ConfigLoader:
         for item in data:
             charts = []
             rule_card = dto.RuleConfig(
-                head=item["head"],
-                subhead=item["subhead"],
-                charts=charts
+                head=item["head"], subhead=item["subhead"], charts=charts
             )
             rules.append(rule_card)
 
         self.logger.info(f"Loaded {len(rules)} rules from {path}")
         return rules
-            
+
     def environment(self) -> dto.Environment:
         return self.env
-

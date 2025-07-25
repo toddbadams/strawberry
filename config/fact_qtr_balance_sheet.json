@@ -1,0 +1,350 @@
+{
+    "val_table_name": "BALANCE_SHEET",
+    "fact_table_name": "FACT_QTR_BALANCE_SHEET",
+    "display_name": "Balance Sheet",
+    "date_col_name": "fiscalDateEnding",
+    "columns": [
+        {
+            "data_col_name": "fiscalDateEnding",
+            "display_name": "Fiscal Date Ending",
+            "type": "%s",
+            "format": "plain",
+            "indent": 0,
+            "isMetric": false,
+            "tooltip": "The fiscal period end date"
+        },
+        {
+            "data_col_name": "reportedCurrency",
+            "display_name": "Reported Currency",
+            "type": "%s",
+            "format": "plain",
+            "indent": 0,
+            "isMetric": false,
+            "tooltip": "Currency used in reporting"
+        },
+        {
+            "data_col_name": "totalAssets",
+            "display_name": "Total Assets",
+            "type": "%,.2f",
+            "format": "bold",
+            "indent": 0,
+            "isMetric": true,
+            "tooltip": "Sum of current and non-current assets"
+        },
+        {
+            "data_col_name": "totalCurrentAssets",
+            "display_name": "Current Assets",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 1,
+            "isMetric": true,
+            "tooltip": "Assets expected to be converted to cash within one year"
+        },
+        {
+            "data_col_name": "cashAndCashEquivalentsAtCarryingValue",
+            "display_name": "Cash & Equivalents",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Cash and equivalents on hand at carrying value"
+        },
+        {
+            "data_col_name": "cashAndShortTermInvestments",
+            "display_name": "Cash & Short-Term Investments",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Cash and liquid investments"
+        },
+        {
+            "data_col_name": "inventory",
+            "display_name": "Inventory",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Raw materials, work-in-progress and finished goods"
+        },
+        {
+            "data_col_name": "currentNetReceivables",
+            "display_name": "Net Receivables",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Accounts receivable less allowances"
+        },
+        {
+            "data_col_name": "totalNonCurrentAssets",
+            "display_name": "Non-Current Assets",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 1,
+            "isMetric": false,
+            "tooltip": "Assets not expected to be liquidated within a year"
+        },
+        {
+            "data_col_name": "propertyPlantEquipment",
+            "display_name": "Property, Plant & Equipment",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Tangible fixed assets"
+        },
+        {
+            "data_col_name": "accumulatedDepreciationAmortizationPPE",
+            "display_name": "Accumulated Depreciation",
+            "type": "%,.2f",
+            "format": "italic",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Depreciation and amortization on PPE"
+        },
+        {
+            "data_col_name": "intangibleAssets",
+            "display_name": "Intangible Assets",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Non-physical assets"
+        },
+        {
+            "data_col_name": "intangibleAssetsExcludingGoodwill",
+            "display_name": "Intangibles (Ex. Goodwill)",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "All intangibles except goodwill"
+        },
+        {
+            "data_col_name": "goodwill",
+            "display_name": "Goodwill",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Premium paid on acquisitions"
+        },
+        {
+            "data_col_name": "investments",
+            "display_name": "Investments",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "All financial investments"
+        },
+        {
+            "data_col_name": "longTermInvestments",
+            "display_name": "Long-Term Investments",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Investments held for more than a year"
+        },
+        {
+            "data_col_name": "shortTermInvestments",
+            "display_name": "Short-Term Investments",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Investments maturing within a year"
+        },
+        {
+            "data_col_name": "otherCurrentAssets",
+            "display_name": "Other Current Assets",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Miscellaneous current assets"
+        },
+        {
+            "data_col_name": "otherNonCurrentAssets",
+            "display_name": "Other Non-Current Assets",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Miscellaneous non-current assets"
+        },
+        {
+            "data_col_name": "totalLiabilities",
+            "display_name": "Total Liabilities",
+            "type": "%,.2f",
+            "format": "bold",
+            "indent": 0,
+            "isMetric": true,
+            "tooltip": "Sum of current and non-current liabilities"
+        },
+        {
+            "data_col_name": "totalCurrentLiabilities",
+            "display_name": "Current Liabilities",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 1,
+            "isMetric": true,
+            "tooltip": "Obligations due within one year"
+        },
+        {
+            "data_col_name": "currentAccountsPayable",
+            "display_name": "Accounts Payable",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Short-term obligations to creditors"
+        },
+        {
+            "data_col_name": "deferredRevenue",
+            "display_name": "Deferred Revenue",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Payments received before delivering goods/services"
+        },
+        {
+            "data_col_name": "currentDebt",
+            "display_name": "Current Debt",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Short-term borrowings"
+        },
+        {
+            "data_col_name": "shortTermDebt",
+            "display_name": "Short-Term Debt",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Debt due within one year"
+        },
+        {
+            "data_col_name": "totalNonCurrentLiabilities",
+            "display_name": "Non-Current Liabilities",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 1,
+            "isMetric": false,
+            "tooltip": "Long-term financial obligations"
+        },
+        {
+            "data_col_name": "capitalLeaseObligations",
+            "display_name": "Capital Lease Obligations",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Leases classified as capital"
+        },
+        {
+            "data_col_name": "longTermDebt",
+            "display_name": "Long-Term Debt",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Debt maturing beyond one year"
+        },
+        {
+            "data_col_name": "currentLongTermDebt",
+            "display_name": "Current Portion of Long-Term Debt",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Portion of long-term debt due within a year"
+        },
+        {
+            "data_col_name": "longTermDebtNoncurrent",
+            "display_name": "Non-Current Long-Term Debt",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Long-term debt excluding current portion"
+        },
+        {
+            "data_col_name": "shortLongTermDebtTotal",
+            "display_name": "Total Short & Long-Term Debt",
+            "type": "%,.2f",
+            "format": "bold",
+            "indent": 1,
+            "isMetric": false,
+            "tooltip": "Sum of all borrowings"
+        },
+        {
+            "data_col_name": "otherCurrentLiabilities",
+            "display_name": "Other Current Liabilities",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Other obligations due within a year"
+        },
+        {
+            "data_col_name": "otherNonCurrentLiabilities",
+            "display_name": "Other Non-Current Liabilities",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 2,
+            "isMetric": false,
+            "tooltip": "Other long-term liabilities"
+        },
+        {
+            "data_col_name": "totalShareholderEquity",
+            "display_name": "Shareholder Equity",
+            "type": "%,.2f",
+            "format": "bold",
+            "indent": 0,
+            "isMetric": true,
+            "tooltip": "Residual interest in the assets after liabilities"
+        },
+        {
+            "data_col_name": "treasuryStock",
+            "display_name": "Treasury Stock",
+            "type": "%,.2f",
+            "format": "italic",
+            "indent": 1,
+            "isMetric": false,
+            "tooltip": "Repurchased stock held by the company"
+        },
+        {
+            "data_col_name": "retainedEarnings",
+            "display_name": "Retained Earnings",
+            "type": "%,.2f",
+            "format": "plain",
+            "indent": 1,
+            "isMetric": false,
+            "tooltip": "Accumulated net income retained"
+        },
+        {
+            "data_col_name": "commonStock",
+            "display_name": "Common Stock",
+            "type": "%d",
+            "format": "plain",
+            "indent": 1,
+            "isMetric": false,
+            "tooltip": "Nominal value of issued common shares"
+        },
+        {
+            "data_col_name": "commonStockSharesOutstanding",
+            "display_name": "Shares Outstanding",
+            "type": "%d",
+            "format": "plain",
+            "indent": 1,
+            "isMetric": false,
+            "tooltip": "Number of shares held by investors"
+        }
+    ]
+}

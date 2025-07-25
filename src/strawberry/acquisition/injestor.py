@@ -1,24 +1,25 @@
 import pandas as pd
 from strawberry.acquisition.alpha_vantage_api import AlphaVantageAPI
 
-class Injestor():
+
+class Injestor:
     def __init__(self, alpha_vantage: AlphaVantageAPI):
         self.alpha_vantage = alpha_vantage
-  
-    def injest(self, name: str, attr: str, ticker: str):        
+
+    def injest(self, name: str, attr: str, ticker: str):
         data = self.alpha_vantage.fetch(name, ticker)
         # ensure we have data
         if not data:
-            return None
-                
-        # create data frame 
+            return pd.DataFrame()
+
+        # create data frame
         df = pd.DataFrame([data]) if attr is None else pd.DataFrame(data[attr])
-        df['symbol'] = ticker
+        df["symbol"] = ticker
         return df
-    
+
 
 class PriceInjestor(Injestor):
-  
+
     def injest(self, name: str, attr: str, ticker: str):
         """
         API Shape:
@@ -33,7 +34,7 @@ class PriceInjestor(Injestor):
         Transposed (and returned shape):
 
         """
-        df = super().injest(name, attr, ticker) 
-        if not df == None:                       
-            df.rename(columns={'index': 'date'}, inplace=True)
+        df = super().injest(name, attr, ticker)
+        if not df.empty:
+            df.rename(columns={"index": "date"}, inplace=True)
         return df

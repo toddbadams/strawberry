@@ -1,3 +1,4 @@
+import pandas as pd
 from strawberry.config.config_loader import ConfigLoader
 from strawberry.repository.storage import ParquetStorage
 from strawberry.logging.logger_factory import LoggerFactory
@@ -71,10 +72,10 @@ class Acquire:
             # to do: merge the request with existing data
             return True
 
-        df = injestor.injest(table_name, attr, ticker)
+        df: pd.DataFrame = injestor.injest(table_name, attr, ticker)
 
         # if not data, then return a False to indicate did not complete
-        if df == None:
+        if df.empty:
             return False
 
         self.storage.write_df(df, table_name, ["symbol"], index=False)

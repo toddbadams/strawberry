@@ -1,8 +1,8 @@
-import pandas as pd
 import numpy as np
+from sqlalchemy import true
 
 from strawberry.config.config_loader import ConfigLoader
-from strawberry.config.dtos import AcquisitionTableConfig, ColumnConfig
+from strawberry.config.dtos import AcquisitionTableConfig
 from strawberry.data_utilities.series_conversion import SeriesConversion
 from strawberry.repository.storage import ParquetStorage
 from strawberry.logging.logger_factory import LoggerFactory
@@ -34,7 +34,7 @@ class Validate:
         self.logger.info(f"{len(validated_tickers)} tickers validated.")
         return validated_tickers
 
-    def tickers_not_acquired(self, tickers: list[str]) -> list[str]:
+    def tickers_not_validated(self, tickers: list[str]) -> list[str]:
         """
         Return a set of tickers from the inputed tickers that have not yet been acquired
         """
@@ -58,15 +58,19 @@ class Validate:
 
     def validate_table(
         self, log_prefix: str, table: AcquisitionTableConfig, ticker: str
-    ):
+    ) -> bool:
         df = self.acq_store.read_df(table.name, ticker)
         for col in table.columns:
+            if col.name not in df:
+                self.logger.warning(f"{log_prefix} {col.name} does not exist.")
+                return False
             df[col.name] = self.series.validate_column(log_prefix, df[col.name], col)
 
         # add a symbol column and store in validation directory
         df["symbol"] = ticker
         self.val_store.write_df(df, table.name, ["symbol"])
         self.logger.info(f"{log_prefix} validated")
+        return true
 
     def validate(self):
         for ticker in self.tickers:
@@ -87,7 +91,10 @@ class Validate:
                     continue
 
                 # validate the table
-                self.validate_table(log_prefix, table, ticker)
+                if self.validate_table(log_prefix, table, ticker):
+                    self.logger.info(f"{log_prefix} successfully validated")
+                else:
+                    self.logger.warning(f"{log_prefix} failed to validate")
 
             except (TypeError, ValueError) as e:
                 exceptions = np.append(exceptions, [table.name, ticker, str(e)])
