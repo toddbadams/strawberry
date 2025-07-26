@@ -13,7 +13,7 @@ from strawberry.logging.logger_factory import LoggerFactory
 class AppServices:
     def __init__(self, caller_name: str):
         self.logger = LoggerFactory().create_logger(caller_name)
-        self.logger.info(f"Initializing")
+        self.logger.info(f"Initializing Service")
 
         # Load configuration and environment
         self.config = ConfigLoader()
