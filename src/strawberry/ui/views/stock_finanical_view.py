@@ -17,7 +17,7 @@ class FinancialView(BaseView):
         self.date_ranges = self.chart.RANGES
 
     def render(self, ticker: str):
-        df = self.dim_store.read_df(self.table_cfg.fact_table_name, ticker)
+        df = self.srv.dim_store.read_df(self.table_cfg.fact_table_name, ticker)
         if df is None or df.empty:
             st.warning("No data found.")
             return

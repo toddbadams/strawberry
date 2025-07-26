@@ -34,7 +34,7 @@ class StockView(BaseView):
         }
 
     def render(self):
-        ticker = st.sidebar.selectbox("Select Ticker", self.dim_stock_tickers)
+        ticker = st.sidebar.selectbox("Select Ticker", self.srv.dim_stock_tickers)
 
         # Filter the stock row from full_df based on selected ticker
         df = self.srv.filter_dim_stocks_by_ticker(ticker)

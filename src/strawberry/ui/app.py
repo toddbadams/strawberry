@@ -24,7 +24,6 @@ class DataApp:
     def __init__(self):
         # Initialize logger
         self.logger = LoggerFactory().create_logger(self.__class__.__name__)
-        self.logger.info("Initializing UI Application")
 
         self.srv = self.get_services()
         placeholder = PlaceholderView(self.srv)

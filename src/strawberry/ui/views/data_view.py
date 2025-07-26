@@ -40,7 +40,7 @@ class DataView(BaseView):
         df = (
             self.srv.acq_store.read_df(table, ticker)
             if section == self.SECTIONS[0]
-            else self.val_store.read_df(table, ticker)
+            else self.srv.val_store.read_df(table, ticker)
         )
         rows = len(df) if df is not None else 0
         self.logger.info(f"Loaded DataFrame with {rows} rows")
