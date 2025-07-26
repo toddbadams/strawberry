@@ -69,6 +69,9 @@ class FactQrtFinancials:
 
     def _consolidate_table(self, table: ValTableConfig, ticker: str) -> pd.DataFrame:
         df = self.val_store.read_df(table.name, ticker)
+        if df is None or df.empty:
+            self.logger.warning(f"Table {table.name} is empty for {ticker}.")
+            return pd.DataFrame()
 
         # get required columns
         df = df[table.in_names()]
@@ -99,7 +102,7 @@ class FactQrtFinancials:
         for table in self.cfg:
             df2 = self._consolidate_table(table, ticker)
             if not df2.empty:
-                df = df.merge(df2)
+                df = df.merge(df2) if not df.empty else df2
             else:
                 self.logger.warning(f"{ticker} | FACT Qtrly Financials FAILED")
                 return False

@@ -35,13 +35,13 @@ class Acquire:
         Return a set of tickers from the inputed tickers that have been acquired
         """
         tables = self.acq_cfg.table_names()
-        acquired = []
+        acq_tickers = []
         for t in tickers:
             if self.storage.all_exist(tables, t):
-                acquired.append(t)
+                acq_tickers.append(t)
 
-        self.logger.info(f"{len(acquired)} tickers aquired.")
-        return acquired
+        self.logger.info(f"{len(acq_tickers)} tickers aquired.")
+        return sorted(acq_tickers)
 
     def tickers_not_acquired(self, tickers: list[str]) -> list[str]:
         """

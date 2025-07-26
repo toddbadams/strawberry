@@ -13,14 +13,18 @@ class ConfigLoader:
     def __init__(self):
         self.logger = LoggerFactory().create_logger(__name__)
         self.env = dto.Environment.load()
+        # cache to avoid reloading
+        self._acquisition_config = None
 
     def acquisition(self) -> dto.AcquisitionConfig:
         p = os.path.join(self.env.config_path, "acquisition.json")
-        acquisition_config = dto.AcquisitionConfig.load_from_file(p)
+        if self._acquisition_config is not None:
+            return self._acquisition_config
+        self._acquisition_config = dto.AcquisitionConfig.load_from_file(p)
         self.logger.info(
-            f"Loaded {len(acquisition_config.tables)} acquisition table configs from {p}"
+            f"Loaded {len(self._acquisition_config.tables)} acquisition table configs from {p}"
         )
-        return acquisition_config
+        return self._acquisition_config
 
     def fact_qtr_financials(self) -> list[dto.ValTableConfig]:
         path = os.path.join(self.env.config_path, "fact_qtr_financials.json")
@@ -57,7 +61,7 @@ class ConfigLoader:
                     tickers.append(row[0])
 
         self.logger.info(f"Loaded {len(tickers)} tickers from {path}")
-        return tickers
+        return sorted(tickers)
 
     def load_dividend_params(self) -> list[dto.DividendScoreParameter]:
         path = os.path.join(self.env.config_path, "dividend_score.json")

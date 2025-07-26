@@ -32,7 +32,7 @@ class Validate:
             if self.val_store.all_exist(tables, ticker)
         ]
         self.logger.info(f"{len(validated_tickers)} tickers validated.")
-        return validated_tickers
+        return sorted(validated_tickers)
 
     def tickers_not_validated(self, tickers: list[str]) -> list[str]:
         """
